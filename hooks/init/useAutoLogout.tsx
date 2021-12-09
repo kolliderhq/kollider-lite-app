@@ -1,16 +1,15 @@
 import React from 'react';
 
-import { CONTEXTS } from 'constants/contexts';
-import { SETTINGS } from 'constants/misc/settings';
-import { USER_TYPES } from 'constants/user';
-
-import { defaultLocalStore } from 'contexts/custom/localStore';
-import { setApiKey } from 'contexts/modules/connection';
-import { setInitNotifications } from 'contexts/modules/notifications';
-import { setUserLogout } from 'contexts/modules/user';
-import { storeDispatch } from 'contexts/store';
-import { initTradingObj, updateTradingStore } from 'contexts/tradingStore';
-import { useAppDispatch, useAppSelector } from 'hooks/redux';
+import { CONTEXTS, SETTINGS, USER_TYPES } from 'consts';
+import {
+	defaultLocalStore,
+	setApiKey,
+	setInitNotifications,
+	setInitPositions,
+	setUserLogout,
+	storeDispatch,
+} from 'contexts';
+import { useAppDispatch, useAppSelector } from 'hooks';
 
 // import { displayToast } from 'utils/toast';
 
@@ -49,7 +48,5 @@ export const logOutFunc = () => {
 	defaultLocalStore.cookieUnset(CONTEXTS.LOCAL_STORAGE.FULL_USER_REFRESH);
 	storeDispatch(setUserLogout());
 	storeDispatch(setApiKey(''));
-	const obj = { ...initTradingObj };
-	// delete obj.lastMatches;
-	updateTradingStore(obj);
+	storeDispatch(setInitPositions());
 };

@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { RAW_GEOLOCATION } from 'constants/api';
-
 import axios from 'axios';
 
+import { RAW_GEOLOCATION } from 'consts/api';
 import { setAllowedIp } from 'contexts/modules/misc';
 import { useAppDispatch } from 'hooks/redux';
 

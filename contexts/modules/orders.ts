@@ -21,7 +21,7 @@ export enum InputError {
 	LEVERAGE = 'Leverage',
 }
 
-export interface InitState {
+interface InitState {
 	inputError: InputError;
 	order: Order;
 }

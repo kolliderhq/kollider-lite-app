@@ -12,7 +12,7 @@ export interface InvoiceData {
 	a: boolean;
 }
 
-export interface InitState {
+interface InitState {
 	viewing: boolean;
 	settlement: Nullable<Settlement>;
 	invoices: Record<string, Nullable<InvoiceData>>;

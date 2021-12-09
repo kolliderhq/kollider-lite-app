@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { UI } from 'constants/misc/UI';
-
 import map from 'lodash-es/map';
 
+import { UI } from 'consts/misc/UI';
 import { useAppSelector } from 'hooks/redux';
 
-export default function useSymbols() {
+export function useSymbols() {
 	const { symbols, symbolIndex, symbolData } = useAppSelector(state => state.symbols);
 	const symbolsDisplay = React.useMemo(() => map(symbols, v => v.split('.')?.[0]), [symbols]);
 	const symbolsAssets = React.useMemo(

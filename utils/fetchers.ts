@@ -1,5 +1,3 @@
-import { API } from 'constants/api';
-
 import axios from 'axios';
 import empty from 'is-empty';
 import each from 'lodash-es/each';
@@ -8,6 +6,7 @@ import map from 'lodash-es/map';
 import merge from 'lodash-es/merge';
 import Router from 'next/router';
 
+import { API } from 'consts/api';
 import { postRequest } from 'utils/api';
 import { LOG, LOG3, LOG4 } from 'utils/debug';
 import { CustomError } from 'utils/error';

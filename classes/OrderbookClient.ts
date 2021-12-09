@@ -1,10 +1,9 @@
-import { CHANNELS, CHANNEL_OPTIONS } from 'constants/websocket';
-
 import empty from 'is-empty';
 import every from 'lodash-es/every';
 
 import { ClientState } from 'classes/ClientState';
 import { baseSocketClient } from 'classes/SocketClient';
+import { CHANNELS, CHANNEL_OPTIONS } from 'consts';
 import { batchProcessOrder, setOrderbook } from 'contexts/custom/orderbook';
 import { getHiddenVisChange, getIsDocumentHidden } from 'utils/scripts';
 

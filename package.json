@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^1.4.2",
     "@reduxjs/toolkit": "^1.6.2",
     "axios": "^0.24.0",
     "big.js": "^6.1.1",

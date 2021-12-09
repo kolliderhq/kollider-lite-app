@@ -1,5 +1,3 @@
-import { API, API_NAMES } from 'constants/api';
-
 import { sort } from 'fast-sort';
 import each from 'lodash-es/each';
 import isArray from 'lodash-es/isArray';
@@ -7,7 +5,9 @@ import isFunction from 'lodash-es/isFunction';
 import isNil from 'lodash-es/isNil';
 import isObject from 'lodash-es/isObject';
 
-import { LOG, LOG2, LOG4 } from '../debug';
+import { API, API_NAMES } from 'consts/api';
+import { LOG, LOG2, LOG4 } from 'utils/debug';
+
 import { CustomError } from '../error';
 import { camelCaseAllKeys } from '../format';
 import { deepFreeze, mapKeyValues } from '../scripts';

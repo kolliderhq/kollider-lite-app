@@ -13,7 +13,7 @@ interface InitMisc {
 
 	utmSource: string;
 	symbolLoad: string;
-	confirmation: Confirmation;
+	// confirmation: Confirmation; -> reduced to
 }
 
 const initialState: InitMisc = {
@@ -21,11 +21,6 @@ const initialState: InitMisc = {
 
 	utmSource: '',
 	symbolLoad: '',
-	confirmation: {
-		title: '',
-		content: '',
-		callback: () => {},
-	},
 };
 
 export const miscSlice = createSlice({
@@ -41,12 +36,9 @@ export const miscSlice = createSlice({
 		setSymbolLoad: (state, action: PayloadAction<string>) => {
 			state.symbolLoad = action.payload;
 		},
-		setConfirmation: (state, action: PayloadAction<Partial<Confirmation>>) => {
-			state.confirmation = { ...state.confirmation, ...action.payload };
-		},
 	},
 });
 
-export const { setAllowedIp, setUtmSource, setSymbolLoad, setConfirmation } = miscSlice.actions;
+export const { setAllowedIp, setUtmSource, setSymbolLoad } = miscSlice.actions;
 
 export default miscSlice.reducer;

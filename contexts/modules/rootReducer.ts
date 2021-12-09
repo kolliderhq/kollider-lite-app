@@ -5,6 +5,7 @@ import invoicesReducers from './invoices';
 import miscReducers from './misc';
 import notificationsReducers from './notifications';
 import ordersReducers from './orders';
+import settingsReducers from './settings';
 import symbolsReducers from './symbols';
 import userReducers from './user';
 
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
 	misc: miscReducers,
 	user: userReducers,
 	notifications: notificationsReducers,
+	settings: settingsReducers,
 });
 
 export default rootReducer;
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootReducerState = ReturnType<typeof rootReducer>;

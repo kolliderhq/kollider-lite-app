@@ -1,8 +1,6 @@
-import { GENERAL } from 'constants/misc/general';
-import { USER_TYPES } from 'constants/user';
-
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { GENERAL, USER_TYPES } from 'consts';
 import { WithdrawalLimitInfo } from 'utils/refiners/sockets';
 
 interface IUserState {

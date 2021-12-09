@@ -1,7 +1,6 @@
-import { TIME } from 'constants/time';
-
 import { DeepReadonly } from 'ts-essentials';
 
+import { TIME } from 'consts/time';
 import { applyOptionalParams } from 'utils/api';
 import { deepFreeze } from 'utils/scripts';
 
@@ -70,7 +69,7 @@ if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
 	}
 }
 
-export const END_POINTS: Record<string, string> = Object.freeze({
+const END_POINTS: Record<string, string> = Object.freeze({
 	BACK: back,
 	RAW_GITHUB: 'https://raw.githubusercontent.com/kolliderhq/resources/main',
 	SERVERLESS: '/api',

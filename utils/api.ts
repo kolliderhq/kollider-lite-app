@@ -3,11 +3,11 @@ import each from 'lodash-es/each';
 import isArray from 'lodash-es/isArray';
 import isFunction from 'lodash-es/isFunction';
 
+import { LOG3 } from 'utils/debug';
 import { makeFetchUrl } from 'utils/fetchers';
 import { apiRefiner } from 'utils/refiners/api';
 
-import { API } from '../constants/api';
-import { LOG3 } from './debug';
+import { API } from '../consts/api';
 import { CustomError } from './error';
 import { mapKeyValues } from './scripts';
 

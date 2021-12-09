@@ -1,5 +1,4 @@
-import { TIME } from 'constants/time';
-
+import { TIME } from 'consts/time';
 import { deepFreeze } from 'utils/scripts';
 
 const K = 1000;

@@ -12,8 +12,8 @@ import WebSocket, { Options as WebSocketOptions } from 'reconnecting-websocket';
 
 import { LOG, LOG2, LOG3, LOG4, LOG5 } from 'utils/debug';
 
-import { END_POINTS, MESSAGE_TYPES, WS } from '../constants/websocket';
-import { setIsWsAuthenticated } from '../contexts/modules/connection';
+import { MESSAGE_TYPES, SOCKET_END_POINTS, WS } from '../consts';
+import { setIsWsAuthenticated, setIsWsConnected } from '../contexts/modules/connection';
 import { storeDispatch } from '../contexts/store';
 import { bodyParamsValidation } from '../utils/api';
 import { wsDataRefiner } from '../utils/refiners/sockets';
@@ -32,7 +32,7 @@ const defaultOptions = Object.freeze({
 
 const BASE_WS_CLIENT = {
 	name: 'client',
-	base: END_POINTS.BACK,
+	base: SOCKET_END_POINTS.BACK,
 	customOptions: {},
 };
 
@@ -40,6 +40,7 @@ class SocketClient extends EventEmitter {
 	private _localEmitter = new EventEmitter();
 	private _socket: WebSocket | undefined;
 
+	private _socketConnected = false;
 	private _socketAuthenticated = false;
 
 	private _channelMap = new Map(); //  keeps track of which channels are sub to which symbol
@@ -71,11 +72,12 @@ class SocketClient extends EventEmitter {
 
 		this._socket.addEventListener('open', e => {
 			LOG('open', `${this._clientOptions.name} WS event open`);
-			openCallback();
+			console.log('subscribing to dummy...');
+			openCallback(e);
 		});
 		this._socket.addEventListener('close', e => {
 			LOG4(e?.reason, `${this._clientOptions.name} WS event close`);
-			storeDispatch(setIsWsAuthenticated(false));
+			storeDispatch(setIsWsConnected(false));
 			this.setSocketAuth = false;
 		});
 		this._socket.addEventListener('error', e => {

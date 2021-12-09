@@ -1,10 +1,10 @@
-import chalk from 'chalk';
+import { Chalk } from 'chalk';
 import isObject from 'lodash-es/isObject';
 
-const ctx = new chalk.Instance({ level: 1 });
+const ctx = new Chalk({ level: 1 });
 
-const log = (level, message, title) => {
-	if (level < process.env.NEXT_PUBLIC_DEBUG_MODE) return;
+const log = (level: number, message: any, title?: string) => {
+	if (level < Number(process.env.NEXT_PUBLIC_DEBUG_MODE)) return;
 	if (isObject(message)) {
 		log(level, `==${title ? title : `[LVL - ${level}]`}==`);
 		console.log(message);

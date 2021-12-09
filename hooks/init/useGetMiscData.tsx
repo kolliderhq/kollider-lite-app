@@ -1,13 +1,12 @@
 import * as React from 'react';
 
-import { API_NAMES } from 'constants/api';
-
 import { sort } from 'fast-sort';
 import findIndex from 'lodash-es/findIndex';
 import keys from 'lodash-es/keys';
 import useSWR from 'swr';
 
 import { orderbook } from 'classes/Orderbook';
+import { API_NAMES } from 'consts/api';
 import { addSymbols, setSymbolData, setSymbolIndex } from 'contexts/modules/symbols';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { getSWROptions } from 'utils/fetchers';

@@ -21,7 +21,7 @@ if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
 	}
 }
 
-export const END_POINTS = Object.freeze({ BACK: back });
+export const SOCKET_END_POINTS = Object.freeze({ BACK: back });
 
 export const CHANNEL_OPTIONS = {
 	ORDERBOOK_LEVEL2: {
@@ -32,6 +32,7 @@ export const CHANNEL_OPTIONS = {
 export enum CHANNELS {
 	TICKER = 'ticker',
 	ORDERBOOK_LEVEL2 = 'orderbook_level2',
+	INDEX_VALUES = 'index_values',
 	POSITION_STATES = 'position_states',
 }
 
@@ -65,7 +66,7 @@ export enum WS_CUSTOM_TYPES {
 }
 
 interface IWS {
-	END_POINTS: typeof END_POINTS;
+	END_POINTS: typeof SOCKET_END_POINTS;
 	MESSAGES: Record<
 		string,
 		{
@@ -79,7 +80,7 @@ interface IWS {
 }
 
 export const WS: IWS = Object.freeze({
-	END_POINTS,
+	END_POINTS: SOCKET_END_POINTS,
 	MESSAGES: {
 		ORDER: {
 			type: 'order',

@@ -1,5 +1,3 @@
-import { CHANNELS, CHANNEL_OPTIONS, MESSAGE_TYPES, TRADING_TYPES, WS, WS_CUSTOM_TYPES } from 'constants/websocket';
-
 import empty from 'is-empty';
 import capitalize from 'lodash-es/capitalize';
 import each from 'lodash-es/each';
@@ -8,6 +6,7 @@ import keys from 'lodash-es/keys';
 import lowerCase from 'lodash-es/lowerCase';
 import map from 'lodash-es/map';
 
+import { CHANNELS, CHANNEL_OPTIONS, MESSAGE_TYPES, TRADING_TYPES, WS, WS_CUSTOM_TYPES } from 'consts/websocket';
 import { LOG3, LOG5 } from 'utils/debug';
 
 import { add, divide } from '../Big';
@@ -58,7 +57,7 @@ export interface RAW_BALANCES extends SocketMsgWrapper {
 	};
 }
 
-export interface SBalances {
+export interface Balances {
 	cash: string;
 	crossMargin: string;
 	isolatedMargin: {
@@ -79,7 +78,7 @@ refiner.set(TRADING_TYPES.BALANCES, (balances: RAW_BALANCES) => {
 			isolatedMargin: balances.data.isolated_margin,
 			orderMargin: balances.data.order_margin,
 			crossMargin: balances.data.cross_margin,
-		} as SBalances,
+		} as Balances,
 	};
 });
 

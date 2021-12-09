@@ -9,7 +9,7 @@ export interface ServerNotice {
 	a: boolean;
 }
 
-export interface InitState {
+interface InitState {
 	toasts: Toast[];
 	serverNotices: ServerNotice[]; //	not used atm
 }

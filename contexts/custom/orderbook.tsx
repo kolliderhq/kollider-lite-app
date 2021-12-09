@@ -12,7 +12,7 @@ import toPlainObject from 'lodash-es/toPlainObject';
 
 import { Orderbook } from 'classes/Orderbook';
 import useIsWindowVisible from 'hooks/useIsWindowVisible';
-import useSymbols from 'hooks/useSymbols';
+import { useSymbols } from 'hooks/useSymbols';
 import { createAccumulatedArray } from 'utils/complexSort';
 
 export const useOrderbookData = () => {

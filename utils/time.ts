@@ -1,8 +1,7 @@
-import { TIME } from 'constants/time';
-
 import moment from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 
+import { TIME } from 'consts/time';
 import { divide } from 'utils/Big';
 
 moment.extend(timezone);

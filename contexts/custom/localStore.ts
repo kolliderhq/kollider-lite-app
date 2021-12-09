@@ -1,21 +1,16 @@
+import cookie from 'js-cookie';
 import each from 'lodash-es/each';
 import keys from 'lodash-es/keys';
 // eslint-disable-next-line prettier/prettier
 import store, { StoreAPI } from 'store2'; //	srsly wtf
 
-import cookie from 'js-cookie';
-
-import { GENERAL } from '../../constants/misc/general';
+import { GENERAL } from '../../consts/misc/general';
 
 class LocalStore {
 	private _currentStore: StoreAPI;
 	constructor(namespace = GENERAL.LOCAL_STORAGE_NAMESPACES.DEFAULT) {
 		this.get = this.get.bind(this);
 		this._currentStore = store.namespace(namespace);
-		const all = this._currentStore.getAll();
-		each(keys(all), key => {
-			this.migrateJwtsFromLocalStoreToCookies(key);
-		});
 	}
 
 	/**
@@ -82,17 +77,6 @@ class LocalStore {
 			return;
 		}
 		this._currentStore.remove(key);
-	}
-
-	/**
-	 * @desc migrates sensitive information to cookies instead of local storage
-	 * @param key
-	 */
-	migrateJwtsFromLocalStoreToCookies(key: string) {
-		if (key.includes('USER') && this._currentStore.has(key)) {
-			this.cookieSet(key, this._currentStore.get(key));
-			this._currentStore.remove(key);
-		}
 	}
 }
 

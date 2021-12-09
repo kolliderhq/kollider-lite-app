@@ -3,9 +3,12 @@ import React from 'react';
 import empty from 'is-empty';
 import { useRouter } from 'next/router';
 
+import { USER_TYPES } from 'consts/user';
 import useAutoLogout from 'hooks/init/useAutoLogout';
 import { useCheckIpLocation } from 'hooks/init/useCheckIpLocation';
 import useGetMiscData from 'hooks/init/useGetMiscData';
+import { useGetOrderbookData } from 'hooks/init/useGetOrderbookData';
+import { useInitialize } from 'hooks/init/useInitialize';
 import useQuerySideEffects from 'hooks/init/useQuerySideEffects';
 import { useAppSelector } from 'hooks/redux';
 
@@ -38,6 +41,7 @@ export const DataInit = () => {
 	return (
 		<>
 			{afterhydration}
+			{afterHistoryLoad}
 			{afterSymbolLoad}
 		</>
 	);
@@ -50,13 +54,16 @@ const RunOnHydration = () => {
 };
 
 const RunOnHistoryLoad = () => {
-	//	authenticate user
-	//	init socket data
-	//	automatic refresh JWT
+	useInitialize(); //	authenticate user -> done before loading screen
+
 	return <></>;
 };
 
 const RunOnSymbolLoad = () => {
+	//	trading listener
+
 	useAutoLogout();
+	useGetOrderbookData(); //	init socket data
+	//	useWebln
 	return <></>;
 };

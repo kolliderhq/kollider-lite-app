@@ -12,12 +12,6 @@ export const UI = deepFreeze({
 		Bid: 'text-green-400',
 		Ask: 'text-red-400',
 	},
-	FLASH: {
-		ACTIVE: Number(process.env.NEXT_PUBLIC_FLASH) !== 0,
-		LIMIT_TRADE: 5,
-		LIMIT_ORDER: 12,
-		TIMEOUT: 200,
-	},
 	TOAST: {
 		AUTOCLOSE: {
 			SHORT: 2000,

@@ -44,44 +44,7 @@ refiner.set(WS_CUSTOM_TYPES.SUSPENDED_SYMBOL, v => {
 	return v;
 });
 
-export interface RAW_BALANCES extends SocketMsgWrapper {
-	data: {
-		cash: string;
-		cross_margin: string;
-		isolated_margin: {
-			[symbol: string]: string;
-		};
-		order_margin: {
-			[symbol: string]: string;
-		};
-	};
-}
-
-export interface Balances {
-	cash: string;
-	crossMargin: string;
-	isolatedMargin: {
-		[symbol: string]: string;
-	};
-	orderMargin: {
-		[symbol: string]: string;
-	};
-}
-
 //  trading related types
-refiner.set(TRADING_TYPES.BALANCES, (balances: RAW_BALANCES) => {
-	LOG3(balances.data, 'balances');
-	return {
-		...balances,
-		data: {
-			cash: balances.data.cash,
-			isolatedMargin: balances.data.isolated_margin,
-			orderMargin: balances.data.order_margin,
-			crossMargin: balances.data.cross_margin,
-		} as Balances,
-	};
-});
-
 refiner.set(TRADING_TYPES.TRADE, v => {
 	LOG3(v.data, 'Trade');
 	const data = v.data;
@@ -222,6 +185,44 @@ refiner.set(TRADING_TYPES.WITHDRAWAL_REJECTION, v => {
 	return v;
 });
 
+// CHANNELS
+export interface RAW_BALANCES extends SocketMsgWrapper {
+	data: {
+		cash: string;
+		cross_margin: string;
+		isolated_margin: {
+			[symbol: string]: string;
+		};
+		order_margin: {
+			[symbol: string]: string;
+		};
+	};
+}
+
+export interface Balances {
+	cash: string;
+	crossMargin: string;
+	isolatedMargin: {
+		[symbol: string]: string;
+	};
+	orderMargin: {
+		[symbol: string]: string;
+	};
+}
+
+refiner.set(CHANNELS.BALANCES, (balances: RAW_BALANCES) => {
+	LOG3(balances.data, 'balances');
+	return {
+		...balances,
+		data: {
+			cash: balances.data.cash,
+			isolatedMargin: balances.data.isolated_margin,
+			orderMargin: balances.data.order_margin,
+			crossMargin: balances.data.cross_margin,
+		} as Balances,
+	};
+});
+
 export interface PositionState {
 	backruptcyPrice: string;
 	entryPrice: string;
@@ -268,6 +269,40 @@ refiner.set(CHANNELS.POSITION_STATES, v => {
 	return ret;
 });
 
+export interface IndexValues {
+	denom: string;
+	symbol: string;
+	value: number;
+}
+
+refiner.set(CHANNELS.INDEX_VALUES, v => {
+	// if (v.data?.symbol?.includes('BTC')) console.log('indexUpdate', v.data.value);
+	return {
+		data: {
+			denom: v.data?.denom,
+			symbol: String(v.data?.symbol).substr(1, v.data?.symbol?.length),
+			value: v.data?.value,
+		} as IndexValues,
+		seq: v?.seq,
+		type: v?.type,
+	};
+});
+
+interface RawMarkPrice extends SocketMsgWrapper {
+	data: {
+		price: string;
+		symbol: string;
+	};
+}
+refiner.set(CHANNELS.MARK_PRICE, (msg: RawMarkPrice) => {
+	return {
+		...msg,
+		data: {
+			[msg.data.symbol]: msg.data.price,
+		},
+	};
+});
+
 refiner.set(CHANNELS.ORDERBOOK_LEVEL2, v => {
 	return {
 		...v,
@@ -308,10 +343,15 @@ refiner.set(CHANNEL_OPTIONS.ORDERBOOK_LEVEL2.customType, (res: Level2State) => {
 		return ret;
 	}
 	// LOG3(res, 'ORDERBOOK_LEVEL2 snapshot - ' + res.data?.seq_number);
-	const mid = divide(
-		add(Math.min(...map(keys(res.data?.asks), v => Number(v))), Math.max(...map(keys(res.data?.bids), v => Number(v)))),
-		2,
-		5
+	const mid = Number(
+		divide(
+			add(
+				Math.min(...map(keys(res.data?.asks), v => Number(v))),
+				Math.max(...map(keys(res.data?.bids), v => Number(v)))
+			),
+			2,
+			5
+		)
 	);
 	const ret = {
 		...res,

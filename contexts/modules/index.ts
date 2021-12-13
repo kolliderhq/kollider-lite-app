@@ -8,3 +8,5 @@ export * from './symbols';
 export * from './connection';
 export * from './rootReducer';
 export * from './trading';
+export * from './prices';
+export * from './settings';

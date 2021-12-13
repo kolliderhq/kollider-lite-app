@@ -10,6 +10,7 @@ import useGetMiscData from 'hooks/init/useGetMiscData';
 import { useGetOrderbookData } from 'hooks/init/useGetOrderbookData';
 import { useInitialize } from 'hooks/init/useInitialize';
 import useQuerySideEffects from 'hooks/init/useQuerySideEffects';
+import { useSocketData } from 'hooks/init/useSocketData';
 import { useAppSelector } from 'hooks/redux';
 
 export const DataInit = () => {
@@ -49,6 +50,7 @@ export const DataInit = () => {
 
 const RunOnHydration = () => {
 	useQuerySideEffects(); //  parse url queries
+	useSocketData();
 	useCheckIpLocation();
 	return <></>;
 };

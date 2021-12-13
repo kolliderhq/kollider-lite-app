@@ -18,3 +18,9 @@ export function useSymbols() {
 		[symbols, symbolData, symbolsDisplay, symbolsAssets, symbolIndex]
 	);
 }
+
+export function useSymbolPriceDp() {
+	const { symbols, symbolData, symbolIndex } = useAppSelector(state => state.symbols);
+	const symbol = symbols[symbolIndex];
+	return symbolData[symbol]?.priceDp;
+}

@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import includes from 'lodash-es/includes';
 
 import rootReducer from './modules/rootReducer';
 
@@ -9,8 +10,17 @@ if (process.env.NODE_ENV !== 'production') {
 		const logger = createLogger({
 			collapsed: true,
 			diff: true,
-			// predicate: (getState, action) =>
-			// 	!includes(['api/isOnline', 'trading/updateLastGraphData', 'orderbook/processOrder'], action.type),
+			predicate: (getState, action) =>
+				!includes(
+					[
+						'api/isOnline',
+						'trading/updateLastGraphData',
+						'orderbook/processOrder',
+						'prices/setIndexes',
+						'prices/setMarkprices',
+					],
+					action.type
+				),
 		});
 		reduxStore = configureStore({
 			reducer: rootReducer,

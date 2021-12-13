@@ -1,7 +1,17 @@
 import keys from 'lodash-es/keys';
 import map from 'lodash-es/map';
 
+import { divide, multiply } from 'utils/Big';
+
 import { FixedLengthArray } from './types/utils';
+
+export const dispSymbol = (txt: string): string => {
+	return `${txt.substr(0, txt.length - 3)}•${txt.substr(txt.length - 3)}`;
+};
+
+export const timestampByInterval = (timestamp: number, interval: number): number => {
+	return Number(multiply(Math.ceil(Number(divide(timestamp, interval, 1))), interval, 0));
+};
 
 export const mapKeyValues = <T>(obj: Record<any, T>, cb = (k: string, v: T) => undefined) =>
 	map(keys(obj), (key: string) => cb(key, obj[key]));

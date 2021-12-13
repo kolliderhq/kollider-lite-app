@@ -1,5 +1,6 @@
 import 'styles/tailwind.scss';
 import 'styles/globals.scss';
+import 'styles/styles.scss';
 
 import React from 'react';
 import { Provider } from 'react-redux';

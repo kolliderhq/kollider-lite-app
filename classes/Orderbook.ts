@@ -3,19 +3,30 @@ import { EventEmitter } from 'events';
 import each from 'lodash-es/each';
 import { v4 as uuidv4 } from 'uuid';
 
+import { FixedLengthArray } from 'utils/types/utils';
+
 export const getOrderbookInitSymbolState = () => ({
 	asks: [],
 	bids: [],
-	asksTotal: null,
-	bidsTotal: null,
-	mid: null,
-	prevMid: null,
+	asksTotal: NaN,
+	bidsTotal: NaN,
+	mid: NaN,
+	prevMid: NaN,
 });
+
+export type OrderRow = FixedLengthArray<[string, number, number]>;
+export interface TOrderbook {
+	asks: OrderRow[];
+	asksTotal: number;
+	bids: OrderRow[];
+	bidsTotal: number;
+	mid: number;
+	prevMid: number;
+}
 
 export class Orderbook {
 	public static instance;
-	private _orderbook: Record<string, ReturnType<typeof getOrderbookInitSymbolState>>;
-	private _flashObj: Record<string, Record<number, number>>;
+	private _orderbook: Record<string, TOrderbook>;
 	private _id: string;
 
 	public eventEmitter: EventEmitter;
@@ -26,9 +37,6 @@ export class Orderbook {
 		this._id = uuidv4();
 		this._orderbook = {
 			'BTCUSD.PERP': getOrderbookInitSymbolState(),
-		};
-		this._flashObj = {
-			'BTCUSD.PERP': {},
 		};
 		this.initEmitter();
 
@@ -43,7 +51,6 @@ export class Orderbook {
 			if (!orderbook.rawOrderbook?.[symbol]) {
 				this.updateRawOrderbook(symbol, getOrderbookInitSymbolState());
 			}
-			if (!this.flashObj?.[symbol]) this.updateFlashObj(symbol, {});
 		});
 	}
 
@@ -61,16 +68,8 @@ export class Orderbook {
 		return this._id;
 	}
 
-	get flashObj() {
-		return this._flashObj;
-	}
-
 	public updateRawOrderbook(symbol: string, value: any) {
 		this._orderbook[symbol] = value;
-	}
-
-	public updateFlashObj(symbol: string, value: any) {
-		this._flashObj[symbol] = value;
 	}
 
 	//	rushed into a class so not optimal
@@ -123,6 +122,7 @@ export class Orderbook {
 
 	public setOrderbookSnapshot(data, symbol: string) {
 		this.proxyOrderbook[symbol] = data;
+		console.log('orderbook snap>>', data);
 	}
 }
 

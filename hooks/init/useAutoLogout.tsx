@@ -5,7 +5,7 @@ import {
 	defaultLocalStore,
 	setApiKey,
 	setInitNotifications,
-	setInitPositions,
+	setInitTrading,
 	setUserLogout,
 	storeDispatch,
 } from 'contexts';
@@ -48,5 +48,5 @@ export const logOutFunc = () => {
 	defaultLocalStore.cookieUnset(CONTEXTS.LOCAL_STORAGE.FULL_USER_REFRESH);
 	storeDispatch(setUserLogout());
 	storeDispatch(setApiKey(''));
-	storeDispatch(setInitPositions());
+	storeDispatch(setInitTrading());
 };

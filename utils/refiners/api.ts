@@ -57,8 +57,8 @@ export interface PRODUCTS {
 }
 refiner.set(API_NAMES.PRODUCTS, (data: IPRODUCTS) => {
 	// console.log('products >>>>>', data);
-	const dataArr = mapKeyValues(data, (k, v) => v);
-	sort(dataArr).asc(v => v.symbol);
+	const arr = mapKeyValues(data, (k, v) => v);
+	const dataArr = sort(arr).asc(v => v.symbol);
 	const products = {};
 	// console.log('products data Array >>>>>', dataArr);
 	each(dataArr, v => {

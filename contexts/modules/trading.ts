@@ -26,8 +26,10 @@ export const tradingSlice = createSlice({
 	name: 'trading',
 	initialState,
 	reducers: {
-		setInitPositions: (state, action: PayloadAction<string[]>) => {
-			each(action.payload, symbol => (state.positions[symbol] = { quantity: '0' }));
+		setInitTrading: (state, action: PayloadAction<string[]>) => {
+			each(action.payload, symbol => {
+				state.positions[symbol] = { quantity: '0' };
+			});
 		},
 		setPositionsData: (state, action: PayloadAction<{ symbol: string; data: PositionState }>) => {
 			state.positions[action.payload.symbol] = action.payload.data;
@@ -41,5 +43,5 @@ export const tradingSlice = createSlice({
 	},
 });
 
-export const { setInitPositions, setPositionClosed, setPositionsData } = tradingSlice.actions;
+export const { setInitTrading, setPositionClosed, setPositionsData, setBalances } = tradingSlice.actions;
 export default tradingSlice.reducer;

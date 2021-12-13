@@ -33,11 +33,12 @@ export enum CHANNELS {
 	TICKER = 'ticker',
 	ORDERBOOK_LEVEL2 = 'orderbook_level2',
 	INDEX_VALUES = 'index_values',
+	MARK_PRICE = 'mark_prices',
 	POSITION_STATES = 'position_states',
+	BALANCES = 'balances', //	not really a channel but processed at the same place
 }
 
 export enum TRADING_TYPES {
-	BALANCES = 'balances',
 	FILL = 'fill',
 	TRADE = 'trade',
 	MATCH = 'match',

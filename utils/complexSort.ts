@@ -6,9 +6,9 @@ import reverse from 'lodash-es/reverse';
 
 export const sortObjByKeys = (inputObj: Record<string, unknown>, sortBy: ISortByObjectSorter<any>[]) => {
 	const objKeys = keys(inputObj);
-	sort(objKeys).by(sortBy);
+	const sorted = sort(objKeys).by(sortBy);
 	return reduce(
-		objKeys,
+		sorted,
 		(retArr, key) => {
 			return [...retArr, [key, inputObj[key]]];
 		},

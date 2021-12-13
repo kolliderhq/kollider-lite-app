@@ -12,11 +12,15 @@ import map from 'lodash-es/map';
 import reduce from 'lodash-es/reduce';
 import toString from 'lodash-es/toString';
 
-import { TBigInput, fixed, multiply } from 'utils/Big';
+import { TBigInput, divide, fixed, multiply } from 'utils/Big';
 
 import { parseTime } from './time';
 
 moment.extend(duration);
+
+export const applyDp = (value: TBigInput, dp: number): TBigInput => {
+	return divide(value, Math.pow(10, dp), dp);
+};
 
 export const getNumberColour = (value: TBigInput): string => {
 	if (Number(value) > 0.001) return 'text-green-400';

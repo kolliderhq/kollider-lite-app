@@ -96,5 +96,15 @@ module.exports = {
 				'0px 4px 5px rgba(0, 0, 0, 0.14), 0px 1px 10px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.2)',
 			none: '0px 0px 0px rgba(0,0,0,0)',
 		},
+		extend: {
+			letterSpacing: {
+				tightest: '-0.1em',
+			},
+			fontFamily: {
+				mono: ['SFMono', 'ui-monospace'],
+				sans: ['SFMono'],
+				serif: ['SFMono'],
+			},
+		},
 	},
 };

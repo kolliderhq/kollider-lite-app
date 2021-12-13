@@ -1,6 +1,5 @@
 /**
  * @desc same attempt as lastMatches
- * TODO : turn this into two classes, Orderbook.instance & flashes
  */
 
 import React from 'react';
@@ -8,9 +7,8 @@ import React from 'react';
 import empty from 'is-empty';
 import each from 'lodash-es/each';
 import map from 'lodash-es/map';
-import toPlainObject from 'lodash-es/toPlainObject';
 
-import { Orderbook } from 'classes/Orderbook';
+import { Orderbook, TOrderbook } from 'classes/Orderbook';
 import useIsWindowVisible from 'hooks/useIsWindowVisible';
 import { useSymbols } from 'hooks/useSymbols';
 import { createAccumulatedArray } from 'utils/complexSort';
@@ -32,53 +30,17 @@ export const useOrderbookData = () => {
 	}, [shouldUpdate, symbol]);
 };
 
-// compare the prevObj and newObj for changes and set the _flashObj to flash
-const updateFlashes = (prevObj, newObj, symbol) => {
-	// console.log('updateFlashes', prevObj, newObj);
-	const compPrevObj = {};
-	each([...prevObj.asks, ...prevObj.bids], v => (compPrevObj[v[0]] = v[1]));
-	const new_flashObj = {};
-	each([...newObj.asks, ...newObj.bids], v => {
-		const [price, value] = v;
-		if (!compPrevObj[price]) new_flashObj[price] = 1;
-		else if (compPrevObj[price] !== value) {
-			new_flashObj[price] = Orderbook.instance.flashObj[symbol][price]
-				? Orderbook.instance.flashObj[symbol][price] + 1
-				: 1;
-		}
-	});
-	Orderbook.instance.updateFlashObj(symbol, new_flashObj);
-};
-
-export const useFlashData = () => {
-	const [price, setPrice] = React.useState(null);
-	const { symbol } = useSymbols();
-	const visibility = useIsWindowVisible();
-	const [dummy, rerender] = React.useState(false);
-
-	React.useEffect(() => {
-		const listener = () => rerender(v => !v);
-		Orderbook.instance.eventEmitter.on(symbol, listener);
-		return () => Orderbook.instance.eventEmitter.removeListener(symbol, listener);
-	}, [symbol]);
-
-	const shouldUpdate = visibility ? dummy : '';
-	const ret = React.useMemo(() => Orderbook.instance.flashObj[symbol][price], [shouldUpdate, symbol, price]);
-
-	return [ret, setPrice];
-};
-
 export const useSelectedOrderbookData = select => {
 	const data = useOrderbookData();
 	return React.useMemo(() => data[select], [data, select]);
 };
 
-export const useOrderbookSelector = selector => {
+export function useOrderbookSelector<T>(selector: (data: TOrderbook) => T) {
 	const data = useOrderbookData();
 	// console.log(data);
 	const selectedData = selector(data);
-	return React.useMemo(() => selectedData, [selectedData]);
-};
+	return React.useMemo(() => selectedData, [selectedData]) as T;
+}
 
 export const setOrderbook = data => {
 	const symbol = data.symbol;
@@ -87,6 +49,7 @@ export const setOrderbook = data => {
 		{
 			asks: data.asks,
 			bids: data.bids,
+			prevMid: data.mid,
 			mid: data.mid,
 			asksTotal: data.asksTotal,
 			bidsTotal: data.bidsTotal,
@@ -105,7 +68,6 @@ export const batchProcessOrder = async (updateData, symbol) => {
 
 	if (empty(updateDataArr)) return;
 	calcAccum(newData);
-	updateFlashes(toPlainObject(Orderbook.instance.proxyOrderbook[symbol]), newData, symbol);
 
 	Orderbook.instance.setOrderbookSnapshot(newData, symbol);
 };
@@ -144,8 +106,11 @@ const batchOrderbookUpdator = (targetObj, updateArr) => {
 			Math.round(
 				((Number(targetObj.asks?.[targetObj.asks?.length - 1]?.[0]) + Number(targetObj.bids?.[0]?.[0])) / 2) * 100000
 			) / 100000;
+
 		if (targetObj.mid && newMid !== targetObj.mid) {
 			targetObj.prevMid = targetObj.mid;
+		} else if (!targetObj.prevMid) {
+			targetObj.prevMid = newMid;
 		}
 		targetObj.mid = newMid;
 	} else targetObj.mid = null;

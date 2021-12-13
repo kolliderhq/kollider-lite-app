@@ -5,11 +5,13 @@ import invoicesReducers from './invoices';
 import miscReducers from './misc';
 import notificationsReducers from './notifications';
 import ordersReducers from './orders';
+import pricesReducers from './prices';
 import settingsReducers from './settings';
 import symbolsReducers from './symbols';
 import userReducers from './user';
 
 const rootReducer = combineReducers({
+	prices: pricesReducers,
 	symbols: symbolsReducers,
 	orders: ordersReducers,
 	connection: connectionReducers,

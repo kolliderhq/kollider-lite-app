@@ -14,7 +14,7 @@ export interface ISymbolData {
 	riskLimit: string;
 }
 
-type TSymbolData = Record<string, ISymbolData>;
+export type TSymbolData = Record<string, ISymbolData>;
 
 interface StoreSymbolState {
 	symbolData: TSymbolData;

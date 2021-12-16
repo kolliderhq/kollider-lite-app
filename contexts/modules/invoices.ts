@@ -1,8 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import cloneDeep from 'lodash-es/cloneDeep';
 import each from 'lodash-es/each';
 
-import { Nullable } from '../../utils/types/utils';
+import { Nullable } from 'utils/types/utils';
 
 export interface Settlement {
 	a: boolean;

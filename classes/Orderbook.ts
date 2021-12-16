@@ -122,7 +122,7 @@ export class Orderbook {
 
 	public setOrderbookSnapshot(data, symbol: string) {
 		this.proxyOrderbook[symbol] = data;
-		console.log('orderbook snap>>', data);
+		// console.log('orderbook snap>>', data);
 	}
 }
 

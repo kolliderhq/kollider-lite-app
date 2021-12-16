@@ -4,7 +4,7 @@ import includes from 'lodash-es/includes';
 
 import { baseSocketClient } from 'classes/SocketClient';
 import { CHANNELS, MESSAGE_TYPES } from 'consts';
-import { setBalances, setPositionsData, storeDispatch } from 'contexts';
+import { setBalances, setMarkPrices, setPositionsData, storeDispatch } from 'contexts';
 import { setIndexes } from 'contexts/modules/prices';
 import { useAppSelector } from 'hooks/redux';
 import useIsWindowVisible from 'hooks/useIsWindowVisible';
@@ -52,7 +52,7 @@ const updateChannelData = (msg: any) => {
 	if (msg?.type === CHANNELS.MARK_PRICE) {
 		const symbol = msg.data?.symbol;
 		if (!symbol) return;
-		storeDispatch();
+		storeDispatch(setMarkPrices({ symbol, value: msg.data.price }));
 	} else if (msg?.type === CHANNELS.POSITION_STATES) {
 		const symbol = msg?.data?.symbol;
 		// console.log('positionStates update', msg);

@@ -44,7 +44,7 @@ export function useOrderbookSelector<T>(selector: (data: TOrderbook) => T) {
 
 export const setOrderbook = data => {
 	const symbol = data.symbol;
-	console.log('setOrderbook', data);
+	// console.log('setOrderbook', data);
 	Orderbook.instance.setOrderbookSnapshot(
 		{
 			asks: data.asks,

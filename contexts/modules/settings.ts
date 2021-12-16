@@ -17,7 +17,7 @@ const initialState: Settings = {
 	denom: 'SATS',
 
 	onlyWeblnIfEnabled: true, //	hides invoices if enabled
-	weblnAutoWithdraw: 0, //	auto withdrawal does not happen if enabled
+	weblnAutoWithdraw: 1, //	auto withdrawal does not happen if enabled
 	isToastsShown: true, //	not sure whether market makers will be here but ok
 	persisted: false,
 };

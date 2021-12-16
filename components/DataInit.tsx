@@ -12,6 +12,7 @@ import { useInitialize } from 'hooks/init/useInitialize';
 import useQuerySideEffects from 'hooks/init/useQuerySideEffects';
 import { useSocketData } from 'hooks/init/useSocketData';
 import { useAppSelector } from 'hooks/redux';
+import { useStatusChecker } from 'hooks/useStatusChecker';
 
 export const DataInit = () => {
 	const [loaded, setLoaded] = React.useState(false);
@@ -20,7 +21,7 @@ export const DataInit = () => {
 	}, []);
 
 	useGetMiscData();
-	//	useStatusChecker();
+	useStatusChecker();
 
 	const afterhydration = React.useMemo(() => {
 		if (!loaded) return;

@@ -28,6 +28,11 @@
   transition: max-width 0.3s ease-in-out;
 }
 
+.s-transition-maxheight {
+  transform: translate3d(0, 0, -0.1);
+  transition: max-height 0.25s ease-in-out;
+}
+
 .s-transition-maxheight-slow {
   transform: translate3d(0, 0, -0.1);
   transition: max-height 0.5s ease-in-out;

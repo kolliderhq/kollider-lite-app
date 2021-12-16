@@ -1,3 +1,4 @@
+import isNumber from 'lodash-es/isNumber';
 import keys from 'lodash-es/keys';
 import map from 'lodash-es/map';
 
@@ -15,6 +16,9 @@ export const timestampByInterval = (timestamp: number, interval: number): number
 
 export const mapKeyValues = <T>(obj: Record<any, T>, cb = (k: string, v: T) => undefined) =>
 	map(keys(obj), (key: string) => cb(key, obj[key]));
+
+export const isPositiveInteger = (input: unknown) =>
+	isNumber(input) && Number(input) >= 0 && !String(input).includes('.');
 
 export const deepFreeze = (obj: any) => {
 	Object.keys(obj).forEach(prop => {

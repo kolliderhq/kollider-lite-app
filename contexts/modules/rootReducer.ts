@@ -2,6 +2,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 
 import connectionReducers from './connection';
 import invoicesReducers from './invoices';
+import layoutReducers from './layout';
 import miscReducers from './misc';
 import notificationsReducers from './notifications';
 import ordersReducers from './orders';
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
 	user: userReducers,
 	notifications: notificationsReducers,
 	settings: settingsReducers,
+	layout: layoutReducers,
 });
 
 export default rootReducer;

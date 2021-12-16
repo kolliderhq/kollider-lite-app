@@ -22,3 +22,20 @@ export const UI = deepFreeze({
 		},
 	},
 });
+
+// dependant on UI actions
+export enum DIALOGS {
+	NONE,
+	LOGIN,
+	CLOSE_POSITION,
+	SWEEP_WALLET,
+	CHANGE_MARGIN_INVOICE,
+	SETTLE_INVOICE,
+	SETTINGS,
+}
+
+// stuff that is triggered and suddenly appear
+export enum POPUPS {
+	NONE,
+	INVOICE,
+}

@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { Nullable } from '../../utils/types/utils';
+import { Nullable } from 'utils/types/utils';
 
 export interface Confirmation {
 	title: string;

@@ -9,7 +9,7 @@ export default function Loader({ text }: { text?: string }) {
 				{text ? (
 					<div className="grid grid-rows-2 gap-4">
 						<div className="flex justify-center">
-							<TriangleSpinner color="#4B4ACF" height={50} width={50} />
+							<TriangleSpinner color="white" height={50} width={50} />
 						</div>
 						<div className="text-center">{text}</div>
 					</div>

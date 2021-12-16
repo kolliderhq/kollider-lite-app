@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash-es/cloneDeep';
+import toString from 'lodash-es/toString';
 
 import { optionalDecimal } from 'utils/format';
 
@@ -9,8 +10,8 @@ export enum Side {
 }
 
 export interface Order {
-	quantity: string;
-	leverage: string;
+	quantity: number;
+	leverage: number;
 	isInstant: boolean;
 }
 
@@ -29,8 +30,8 @@ interface InitState {
 const initialState: InitState = {
 	inputError: InputError.NONE,
 	order: {
-		quantity: '',
-		leverage: '1',
+		quantity: undefined, //	 deliberate undefined. null gets turned into a 0.
+		leverage: 1,
 		isInstant: true,
 	},
 };
@@ -50,19 +51,16 @@ export const ordersSlice = createSlice({
 			state.order = { ...initialState.order, leverage: pojoState.order.leverage };
 		},
 		setOrderQuantity: (state, action: PayloadAction<string>) => {
-			state.order.quantity = action.payload;
+			//	only undefined seems to empty it
+			if (action.payload === '') state.order.quantity = undefined;
+			else state.order.quantity = Number(action.payload);
 		},
-		setOrderLeverage: (state, action: PayloadAction<string>) => {
-			state.order.leverage = optionalDecimal(action.payload);
-		},
-		toggleOrderInstant: state => {
-			const pojoState = cloneDeep(state);
-			state.order.isInstant = !pojoState.order.isInstant;
+		setOrderLeverage: (state, action: PayloadAction<number>) => {
+			state.order.leverage = Number(optionalDecimal(toString(action.payload)));
 		},
 	},
 });
 
-export const { reinitOrder, setOrderLeverage, setOrderQuantity, setOrderInputError, toggleOrderInstant } =
-	ordersSlice.actions;
+export const { reinitOrder, setOrderLeverage, setOrderQuantity, setOrderInputError } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

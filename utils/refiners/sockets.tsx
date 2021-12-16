@@ -298,7 +298,8 @@ refiner.set(CHANNELS.MARK_PRICE, (msg: RawMarkPrice) => {
 	return {
 		...msg,
 		data: {
-			[msg.data.symbol]: msg.data.price,
+			symbol: msg.data.symbol,
+			price: msg.data.price,
 		},
 	};
 });

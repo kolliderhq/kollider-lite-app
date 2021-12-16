@@ -17,7 +17,8 @@ if (process.env.NODE_ENV !== 'production') {
 						'trading/updateLastGraphData',
 						'orderbook/processOrder',
 						'prices/setIndexes',
-						'prices/setMarkprices',
+						'prices/setMarkPrices',
+						'orders/setOrderLeverage',
 					],
 					action.type
 				),
@@ -34,7 +35,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export const storeDispatch = (...params: any[]) => reduxStore.dispatch(...params);
-export default reduxStore as any;
+export { reduxStore };
 
 export type RootState = ReturnType<typeof reduxStore.getState>;
 export type AppDispatch = typeof reduxStore.dispatch;

@@ -1,8 +1,64 @@
+import { DeepReadonly } from 'ts-essentials';
+
 import { TIME } from 'consts/time';
 import { deepFreeze } from 'utils/scripts';
 
 const K = 1000;
-export const SETTINGS = deepFreeze({
+export const SETTINGS: DeepReadonly<{
+	LIMITS: {
+		MARGIN_LIMIT: number;
+		ORDER_PREDICTION_STALE: number;
+		NUMBER: number;
+		UI_UPDATE_INTERVAL: number;
+		MAX_TIME_RANGE_TRADES_DIFF_MS: number;
+		MAX_TIME_RANGE_DEPOSITS_DIFF_MS: number;
+		INVOICE: number;
+		TOKEN_PERSIST: number;
+		WEBLN_WITHDRAW_TIMEOUT_MS: number;
+		TRADE_TABLE_MAX: number;
+		WITHDRAW_LIMIT: number;
+		JWT_REQUEST_THRESHOLD: number;
+		REQUEST_TRADES: number;
+	};
+	DASHBOARD_TIMESPANS: number[];
+	OHLC_INTERVALS: string[];
+	DASHBOARD_POINTS: number;
+	DASHBOARD_INTERVALS: string[];
+	OHLC_TIMESPANS: number[];
+	FEEDBACK_FISH_ID: string;
+	STEPS: {
+		'100': {
+			'0': { value: number };
+			'550': { value: number };
+			'850': { value: number };
+			'400': { value: number };
+			'700': { value: number };
+			'1000': { value: number };
+			'250': { value: number };
+			'120': { value: number };
+		};
+		'25': {
+			'0': { value: number };
+			'550': { value: number };
+			'850': { value: number };
+			'700': { value: number };
+			'1000': { value: number };
+			'380': { value: number };
+			'240': { value: number };
+			'120': { value: number };
+		};
+		'50': {
+			'0': { value: number };
+			'550': { value: number };
+			'850': { value: number };
+			'400': { value: number };
+			'700': { value: number };
+			'1000': { value: number };
+			'250': { value: number };
+			'120': { value: number };
+		};
+	};
+}> = deepFreeze({
 	LIMITS: {
 		UI_UPDATE_INTERVAL: 300,
 		WITHDRAW_LIMIT: 1000000000000 * K,

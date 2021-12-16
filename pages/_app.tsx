@@ -9,12 +9,11 @@ import { DefaultSeo } from 'next-seo';
 import type { AppProps } from 'next/app';
 import { SWRConfig } from 'swr';
 
+import { DataInit } from 'components/DataInit';
 import { PageWrapper } from 'components/wrappers/PageWrapper';
-import reduxStore from 'contexts/store';
+import { reduxStore } from 'contexts/store';
+import { defaultOnErrorRetry, fetcher } from 'utils/fetchers';
 import { googleTranslateException } from 'utils/misc';
-
-import { DataInit } from '../components/DataInit';
-import { defaultOnErrorRetry, fetcher } from '../utils/fetchers';
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const init = React.useMemo(() => <DataInit />, []);

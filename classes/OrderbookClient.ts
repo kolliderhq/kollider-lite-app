@@ -63,7 +63,6 @@ export class OrderbookClient {
 		//	redo sockets on refocus
 		const [hidden, visibilityChange] = getHiddenVisChange();
 		const handleVisChange = () => {
-			console.log('socket vis change');
 			if (document[hidden]) {
 				this.subUnsubChannels(false);
 			} else {

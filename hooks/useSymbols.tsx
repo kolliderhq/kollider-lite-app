@@ -3,6 +3,7 @@ import React from 'react';
 import map from 'lodash-es/map';
 
 import { UI } from 'consts/misc/UI';
+import { TSymbolData } from 'contexts';
 import { useAppSelector } from 'hooks/redux';
 
 export function useSymbols() {
@@ -16,7 +17,14 @@ export function useSymbols() {
 	return React.useMemo(
 		() => ({ symbols, symbolData, symbol: symbols[symbolIndex], symbolsDisplay, symbolsAssets, symbolIndex }),
 		[symbols, symbolData, symbolsDisplay, symbolsAssets, symbolIndex]
-	);
+	) as {
+		symbols: string[];
+		symbolData: TSymbolData;
+		symbol: string;
+		symbolsDisplay: string[];
+		symbolsAssets: string[];
+		symbolIndex: number;
+	};
 }
 
 export function useSymbolPriceDp() {

@@ -2,3 +2,24 @@
 .container-default {
   @apply w-full p-2 xs:p-5 rounded-md border border-gray-600 bg-gray-800 flex flex-col items-center
 }
+
+
+
+.input-default {
+  text-align: right;
+  background: inherit;
+  //overflow: hidden;
+  padding: 4px 20px 4px 8px;
+
+  &::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    font-size: 16px;
+    color: #7a859b; // gray-200
+  }
+
+  &:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    font-size: 16px;
+    color: #7a859b; // gray-200
+  }
+}

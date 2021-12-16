@@ -1,6 +1,6 @@
 import { deepFreeze } from 'utils/scripts';
 
-export const GENERAL = deepFreeze({
+export const GENERAL = Object.freeze({
 	DEFAULT: {
 		OBJ: {},
 		ARR: [],

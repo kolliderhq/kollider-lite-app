@@ -19,7 +19,7 @@ export const BaseDialog: FunctionComponent<BaseDialogProps> = ({
 	initialFocus,
 }) => {
 	return (
-		<React.Fragment>
+		<>
 			{isOpen ? (
 				<Dialog
 					as="div"
@@ -28,7 +28,7 @@ export const BaseDialog: FunctionComponent<BaseDialogProps> = ({
 					onClose={close}
 					initialFocus={initialFocus}>
 					<div className="p-5 flex items-center justify-center min-h-screen">
-						<Dialog.Overlay className="fixed inset-0 bg-black opacity-50 z-0" />
+						<Dialog.Overlay className="fixed inset-0 bg-black opacity-50 z-90" />
 						<div
 							style={dialogStyle}
 							className="relative w-4/5 max-w-sm min-w-xxs px-4 py-5 md:p-8 bg-surface shadow-elevation-24dp rounded-2xl z-10">
@@ -44,7 +44,7 @@ export const BaseDialog: FunctionComponent<BaseDialogProps> = ({
 					</div>
 				</Dialog>
 			) : null}
-		</React.Fragment>
+		</>
 	);
 };
 

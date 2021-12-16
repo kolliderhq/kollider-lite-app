@@ -1,5 +1,6 @@
 const widths = {
-	xxs: '320px',
+	xxxs: '320px',
+	xxs: '360px',
 	xs: '480px',
 	sm: '600px',
 };
@@ -96,9 +97,25 @@ module.exports = {
 				'0px 4px 5px rgba(0, 0, 0, 0.14), 0px 1px 10px rgba(0, 0, 0, 0.12), 0px 2px 4px rgba(0, 0, 0, 0.2)',
 			none: '0px 0px 0px rgba(0,0,0,0)',
 		},
+		zIndex: {
+			50: 50,
+			60: 60,
+			70: 70,
+			80: 80,
+			90: 90,
+			100: 100,
+		},
 		extend: {
 			letterSpacing: {
 				tightest: '-0.1em',
+			},
+			textColor: {
+				theme: {
+					main: '#7372f7', // 4B4ACF
+				},
+				gray: {
+					800: '#1d1f26',
+				},
 			},
 			fontFamily: {
 				mono: ['SFMono', 'ui-monospace'],

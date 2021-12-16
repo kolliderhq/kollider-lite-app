@@ -15,7 +15,6 @@ interface ConnectionState {
 	isWsAuthenticated: boolean;
 
 	isWeblnConnected: Nullable<boolean>;
-	webln: Nullable<WebLNProvider>;
 }
 
 const initialState: ConnectionState = {
@@ -30,7 +29,7 @@ const initialState: ConnectionState = {
 	isWsAuthenticated: false,
 
 	isWeblnConnected: null,
-	webln: null,
+	// webln is removed - instead it is re-requested each time it is used.z
 };
 
 export const connectionSlice = createSlice({
@@ -53,16 +52,16 @@ export const connectionSlice = createSlice({
 		setIsWsAuthenticated: (state, action: PayloadAction<boolean>) => {
 			state.isWsAuthenticated = action.payload;
 		},
-		setWebln: (state, action: PayloadAction<WebLNProvider>) => {
-			state.webln = action.payload;
-			state.isWeblnConnected = true;
+		setWeblnConnected: (state, action: PayloadAction<boolean>) => {
+			state.isWeblnConnected = action.payload;
 		},
-		setWeblnFailed: state => {
-			state.isWeblnConnected = false;
+		setServiceStatus: (state, action: PayloadAction<{ status: string; msg: string }>) => {
+			state.serviceStatus = action.payload;
 		},
 	},
 });
 
-export const { setIsOnline, setApiKey, setIsWsConnected, setIsWsAuthenticated, setWebln } = connectionSlice.actions;
+export const { setIsOnline, setApiKey, setIsWsConnected, setIsWsAuthenticated, setWeblnConnected, setServiceStatus } =
+	connectionSlice.actions;
 
 export default connectionSlice.reducer;

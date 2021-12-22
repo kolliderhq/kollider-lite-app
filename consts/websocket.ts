@@ -41,7 +41,6 @@ export enum CHANNELS {
 export enum TRADING_TYPES {
 	FILL = 'fill',
 	TRADE = 'trade',
-	MATCH = 'match',
 	ORDER_REJECTION = 'order_rejection',
 	LIQUIDITY_BUILDING = 'liquidity_building',
 	DONE = 'done',

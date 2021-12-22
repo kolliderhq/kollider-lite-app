@@ -9,33 +9,6 @@ import { divide, fixed, multiply } from 'utils/Big';
 import { applyDp, formatNumber } from 'utils/format';
 
 export function OrderInfo() {
-	const orderData = useAppSelector(state => state.orders.order);
-	const { bestAsk, bestBid } = useOrderbookSelector(askBidSelector);
-
-	const validOrder = orderData.leverage > 0 && orderData.quantity >= 1 && bestAsk && bestBid;
-	return (
-		<div className={cn(validOrder ? 'max-h-[1000px]' : 'max-h-0', 's-transition-maxheight overflow-hidden')}>
-			<section
-				className={cn(
-					's-transition-all w-full pt-10 pb-5 px-3 xs:px-5 xs:pt-12 xs:pb-6 rounded-md border border-gray-600 bg-gray-800 relative'
-				)}>
-				<div className="absolute left-[10px] top-[6px]">
-					<p className="text-gray-200 text-base tracking-widest">Order Info</p>
-				</div>
-				{validOrder ? <Content /> : <div className="h-[183px]" />}
-			</section>
-		</div>
-	);
-}
-
-interface SideBuyData {
-	margin: string;
-	orderValue: string;
-	fees: string;
-	isInaccurate: boolean;
-}
-
-const Content = () => {
 	const { quantity, leverage } = useAppSelector(state => state.orders.order);
 	const { bestAsk, bestBid, bestAskAmount, bestBidAmount } = useOrderbookSelector(askBidSelector);
 	const priceDp = useSymbolPriceDp();
@@ -63,10 +36,19 @@ const Content = () => {
 			</div>
 		</div>
 	);
-};
+}
 
-const getOrderValue = (price, priceDp, quantity) =>
-	multiply(divide(CURRENCY.SATS_PER_BTC, applyDp(price, priceDp), 10), quantity, 10);
+interface SideBuyData {
+	margin: string;
+	orderValue: string;
+	fees: string;
+	isInaccurate: boolean;
+}
+
+const getOrderValue = (price, priceDp, quantity) => {
+	const div = divide(CURRENCY.SATS_PER_BTC, applyDp(price ? price : 1, priceDp), 10);
+	return multiply(!isNaN(Number(div)) ? div : 0, quantity ? quantity : 0, 10);
+};
 
 const DisplayOrderData = ({ data, className = '' }: { data: SideBuyData; className?: string }) => {
 	return (

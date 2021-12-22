@@ -44,6 +44,11 @@ refiner.set(WS_CUSTOM_TYPES.SUSPENDED_SYMBOL, v => {
 	return v;
 });
 
+refiner.set(WS_CUSTOM_TYPES.LNURL_AUTH_CREDENTIALS, v => {
+	LOG3(v, 'LNURL_AUTH_CREDENTIALS');
+	return { ...v, data: camelCaseAllKeys(v.data) };
+});
+
 //  trading related types
 refiner.set(TRADING_TYPES.TRADE, v => {
 	LOG3(v.data, 'Trade');
@@ -144,7 +149,7 @@ export interface OrderInvoice {
 	invoice: string;
 	margin: string;
 	orderId: number;
-	string: string;
+	symbol: string;
 }
 refiner.set(TRADING_TYPES.ORDER_INVOICE, v => {
 	LOG3(v, 'order invoice');

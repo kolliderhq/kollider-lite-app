@@ -36,7 +36,7 @@ export const weblnWithdraw = async (inputState: {
 	return { error: 'Webln not detected', locked: true };
 };
 
-export const weblnSendPayment = async (invoice: string, finallyCallback: () => void) => {
+export const weblnSendPayment = async (invoice: string, finallyCallback?: () => void) => {
 	const webln = await weblnInit();
 	console.log('webln', webln);
 	if (webln) {

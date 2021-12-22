@@ -4,25 +4,50 @@ import includes from 'lodash-es/includes';
 
 import { baseSocketClient } from 'classes/SocketClient';
 import { CHANNELS, MESSAGE_TYPES } from 'consts';
-import { setBalances, setMarkPrices, setPositionsData, storeDispatch } from 'contexts';
+import {
+	setBalances,
+	setIsWsAuthenticated,
+	setIsWsConnected,
+	setMarkPrices,
+	setPositionsData,
+	storeDispatch,
+} from 'contexts';
 import { setIndexes } from 'contexts/modules/prices';
-import { useAppSelector } from 'hooks/redux';
+import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import useIsWindowVisible from 'hooks/useIsWindowVisible';
 
 const WATCH_TYPES = [CHANNELS.POSITION_STATES, CHANNELS.INDEX_VALUES, CHANNELS.MARK_PRICE];
 export function useSocketData() {
-	const [wsConnected, wsAuthenticated] = useAppSelector(state => [
+	const [wsConnected, wsAuthenticated, apiKey] = useAppSelector(state => [
 		state.connection.isWsConnected,
 		state.connection.isWsAuthenticated,
+		state.connection.apiKey,
 	]);
 	const visible = useIsWindowVisible();
+
+	const dispatch = useAppDispatch();
+	React.useEffect(() => {
+		if (!wsAuthenticated && apiKey !== '') {
+			baseSocketClient.authorizeClient(apiKey, () => {
+				dispatch(setIsWsAuthenticated(true));
+				baseSocketClient.socketSend(MESSAGE_TYPES.WITHDRAWAL_LIMIT_INFO, {}, null, null);
+				baseSocketClient.socketSend(MESSAGE_TYPES.POSITIONS, {}, null, null);
+
+				baseSocketClient.requestChannelSubscribe(CHANNELS.POSITION_STATES, []);
+			});
+		}
+	}, [wsAuthenticated, apiKey]);
 
 	React.useEffect(() => {
 		const channelListener = msg => {
 			if (!includes(WATCH_TYPES, msg?.type)) return;
 			updateChannelData(msg);
 		};
-		baseSocketClient.addEventListener(channelListener);
+		baseSocketClient.connect('', data => {
+			storeDispatch(setIsWsConnected(true));
+			baseSocketClient.addEventListener(channelListener);
+			baseSocketClient.requestChannelSubscribe(CHANNELS.POSITION_STATES, []);
+		});
 	}, []);
 
 	React.useEffect(() => {

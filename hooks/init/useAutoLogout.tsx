@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CONTEXTS, SETTINGS, USER_TYPES } from 'consts';
+import { CONTEXTS, SETTINGS, USER_TYPE } from 'consts';
 import {
 	defaultLocalStore,
 	setApiKey,
@@ -28,7 +28,7 @@ export default function useAutoLogout() {
 	}, []);
 
 	React.useEffect(() => {
-		if (userData.email === '' || userData.type === USER_TYPES.LIGHT) {
+		if (userData.email === '' || userData.type === USER_TYPE.LIGHT) {
 			clearTimeout(logoutTimeout);
 			return;
 		}

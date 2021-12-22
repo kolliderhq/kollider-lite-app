@@ -23,6 +23,11 @@ export const UI = deepFreeze({
 	},
 });
 
+export enum TABS {
+	ORDER_INFO,
+	POSITIONS,
+}
+
 // dependant on UI actions
 export enum DIALOGS {
 	NONE,

@@ -27,7 +27,9 @@ export const settingsSlice = createSlice({
 	initialState,
 	reducers: {
 		setPersistSettings: (state, action: PayloadAction<Settings>) => {
-			state = { ...toPlainObject(state), ...action.payload, persisted: true };
+			Object.keys(action.payload).forEach(key => {
+				state[key] = action.payload[key];
+			});
 		},
 		setFirstLoad: state => {
 			state.persisted = true;

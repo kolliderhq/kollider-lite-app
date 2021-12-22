@@ -97,6 +97,53 @@ const API: I_API = {
 			stale: API_TIME.SHORTEST,
 			allowNull: true,
 		},
+		REGISTER: {
+			route: () => `/auth/register`,
+			method: 'post',
+			base: END_POINTS.BACK,
+			stale: API_TIME.NONE,
+			createBody: params => {
+				if (params.utmSource !== '') {
+					return {
+						email: params.email,
+						password: params.password,
+						user_type: params.user_type,
+						username: params.username,
+						captcha_response: params.token,
+						client_name: params.utmSource,
+					};
+				}
+				return {
+					email: params.email,
+					password: params.password,
+					user_type: params.user_type,
+					username: params.username,
+					captcha_response: params.token,
+				};
+			},
+			customOptions: {
+				...postOptions,
+			},
+		},
+		LOGIN: {
+			route: () => `/auth/login`,
+			method: 'post',
+			base: END_POINTS.BACK,
+			stale: API_TIME.NONE,
+			createBody: params => ({
+				email: params.email,
+				password: params.password,
+				captcha_response: params.token,
+				type: 'normal',
+			}),
+			customOptions: {
+				...postOptions,
+				dedupingInterval: 0,
+				onError: (error, key, config) => {
+					return error;
+				},
+			},
+		},
 		WHOAMI: {
 			route: () => `/auth/whoami`,
 			method: 'get',

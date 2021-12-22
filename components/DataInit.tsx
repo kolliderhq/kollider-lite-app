@@ -3,7 +3,7 @@ import React from 'react';
 import empty from 'is-empty';
 import { useRouter } from 'next/router';
 
-import { USER_TYPES } from 'consts/user';
+import { USER_TYPE } from 'consts/user';
 import useAutoLogout from 'hooks/init/useAutoLogout';
 import { useCheckIpLocation } from 'hooks/init/useCheckIpLocation';
 import useGetMiscData from 'hooks/init/useGetMiscData';
@@ -11,6 +11,7 @@ import { useGetOrderbookData } from 'hooks/init/useGetOrderbookData';
 import { useInitialize } from 'hooks/init/useInitialize';
 import useQuerySideEffects from 'hooks/init/useQuerySideEffects';
 import { useSocketData } from 'hooks/init/useSocketData';
+import { useWebln } from 'hooks/init/useWebln';
 import { useAppSelector } from 'hooks/redux';
 import { useStatusChecker } from 'hooks/useStatusChecker';
 
@@ -67,6 +68,6 @@ const RunOnSymbolLoad = () => {
 
 	useAutoLogout();
 	useGetOrderbookData(); //	init socket data
-	//	useWebln
+	useWebln();
 	return <></>;
 };

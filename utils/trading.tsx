@@ -28,3 +28,16 @@ export const makeOrder = (obj: OrderTemplate) => {
 		timestamp: 0,
 	};
 };
+
+export interface ProcessedOrder {
+	quantity: number;
+	leverage: number;
+	order_type: string;
+	margin_type: string;
+	price: number;
+	settlement_type: string;
+	side: string;
+	ext_order_id: string;
+	symbol: string;
+	timestamp: number;
+}

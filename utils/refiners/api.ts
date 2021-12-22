@@ -27,6 +27,21 @@ refiner.set(API_NAMES.STATUS, (data: IStatus) => {
 	return ret;
 });
 
+refiner.set(API_NAMES.REGISTER, data => {
+	return { success: true };
+});
+
+interface ILogin {
+	token: string;
+	refresh: string;
+}
+refiner.set(API_NAMES.LOGIN, (data: ILogin) => {
+	return {
+		token: data.token,
+		refresh: data.refresh,
+	};
+});
+
 refiner.set(API_NAMES.WHOAMI, data => {
 	return {
 		userId: data?.id,

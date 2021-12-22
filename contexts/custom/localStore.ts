@@ -1,6 +1,5 @@
 import cookie from 'js-cookie';
-import each from 'lodash-es/each';
-import keys from 'lodash-es/keys';
+import isObject from 'lodash-es/isObject';
 // eslint-disable-next-line prettier/prettier
 import store, { StoreAPI } from 'store2'; //	srsly wtf
 
@@ -58,6 +57,9 @@ class LocalStore {
 	 */
 	// TODO : apply cookie expire according to jwt's expire time
 	cookieSet(key: string, value: any) {
+		if (isObject(value)) {
+			return cookie.set(key, JSON.stringify(value), { sameSite: 'strict', domain: window.location.hostname });
+		}
 		return cookie.set(key, value, { sameSite: 'strict', domain: window.location.hostname });
 	}
 

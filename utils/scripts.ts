@@ -10,6 +10,8 @@ export const dispSymbol = (txt: string): string => {
 	return `${txt.substr(0, txt.length - 3)}•${txt.substr(txt.length - 3)}`;
 };
 
+export const isNumber = (input: unknown) => !isNaN(Number(input));
+
 export const timestampByInterval = (timestamp: number, interval: number): number => {
 	return Number(multiply(Math.ceil(Number(divide(timestamp, interval, 1))), interval, 0));
 };

@@ -3,6 +3,7 @@ import * as React from 'react';
 import empty from 'is-empty';
 import { useRouter } from 'next/router';
 
+import { CONTEXTS } from 'consts';
 import { defaultLocalStore } from 'contexts/custom/localStore';
 import { setSymbolLoad, setUtmSource } from 'contexts/modules/misc';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
@@ -23,8 +24,8 @@ export default function useQuerySideEffects() {
 			return;
 		}
 		const token = history.query.token;
-		defaultLocalStore.cookieSet('FULL_USER_REFRESH', token);
-		defaultLocalStore.cookieSet('FULL_USER', {
+		defaultLocalStore.cookieSet(CONTEXTS.LOCAL_STORAGE.FULL_USER_REFRESH, token);
+		defaultLocalStore.cookieSet(CONTEXTS.LOCAL_STORAGE.FULL_USER, {
 			token: token,
 			email: '',
 			type: 'pro',

@@ -1,21 +1,16 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import each from 'lodash-es/each';
 
+import { OrderInvoice } from 'utils/refiners/sockets';
 import { Nullable } from 'utils/types/utils';
 
-export interface Settlement {
-	a: boolean;
-}
-
-export interface InvoiceData {
-	a: boolean;
-}
+export type Settlement = Record<string, unknown>;
 
 interface InitState {
 	viewing: boolean;
 	settlement: Nullable<Settlement>;
-	invoices: Record<string, Nullable<InvoiceData>>;
-	symbol: String; //	last symbol used
+	invoices: Record<string, OrderInvoice>;
+	symbol: string; //	last symbol used
 }
 
 const initialState: InitState = {
@@ -44,9 +39,13 @@ export const invoicesSlice = createSlice({
 			state.invoices[action.payload] = null;
 			state.viewing = false;
 		},
+		setNewInvoice: (state, action: PayloadAction<OrderInvoice>) => {
+			state.invoices[action.payload.symbol] = action.payload;
+			state.symbol = action.payload.symbol;
+		},
 	},
 });
 
-export const { setInitSymbols, setInvoiceSettled, setSettlement, setViewing } = invoicesSlice.actions;
+export const { setInitSymbols, setInvoiceSettled, setSettlement, setViewing, setNewInvoice } = invoicesSlice.actions;
 
 export default invoicesSlice.reducer;

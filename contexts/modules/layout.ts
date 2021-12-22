@@ -1,15 +1,17 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { DIALOGS, POPUPS } from 'consts';
+import { DIALOGS, POPUPS, TABS } from 'consts';
 
 interface InitLayout {
 	dialog: DIALOGS;
 	popup: POPUPS;
+	selectedTab: TABS;
 }
 
 const initialState: InitLayout = {
 	dialog: DIALOGS.NONE,
 	popup: POPUPS.NONE,
+	selectedTab: TABS.ORDER_INFO,
 };
 
 export const layoutSlice = createSlice({
@@ -29,9 +31,13 @@ export const layoutSlice = createSlice({
 		setPopupClose: state => {
 			state.popup = POPUPS.NONE;
 		},
+
+		setTab: (state, action: PayloadAction<TABS>) => {
+			state.selectedTab = action.payload;
+		},
 	},
 });
 
-export const { setDialog, setDialogClose, setPopup, setPopupClose } = layoutSlice.actions;
+export const { setDialog, setDialogClose, setPopup, setTab, setPopupClose } = layoutSlice.actions;
 
 export default layoutSlice.reducer;

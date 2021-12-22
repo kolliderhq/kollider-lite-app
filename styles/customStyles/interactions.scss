@@ -68,6 +68,12 @@
   filter: brightness(0%) invert(40%) sepia(77%) saturate(1054%) hue-rotate(215deg) brightness(99%) contrast(96%);
 }
 
+.s-filter-theme-main-hover {
+  &:hover {
+    filter: brightness(0%) invert(40%) sepia(77%) saturate(1054%) hue-rotate(215deg) brightness(99%) contrast(96%);
+  }
+}
+
 .s-shadow {
   box-shadow: 0 3px 6px 0 rgba(255, 255, 255, 0.1);
 }

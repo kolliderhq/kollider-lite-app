@@ -10,11 +10,13 @@ import noop from 'lodash-es/noop';
 import toPlainObject from 'lodash-es/toPlainObject';
 import WebSocket, { Options as WebSocketOptions } from 'reconnecting-websocket';
 
+import { setInstantOrder } from 'contexts';
 import { LOG, LOG2, LOG3, LOG4, LOG5 } from 'utils/debug';
+import { OrderTemplate, ProcessedOrder } from 'utils/trading';
 
 import { MESSAGE_TYPES, SOCKET_END_POINTS, WS } from '../consts';
 import { setIsWsAuthenticated, setIsWsConnected } from '../contexts/modules/connection';
-import { storeDispatch } from '../contexts/store';
+import { reduxStore, storeDispatch } from '../contexts/store';
 import { bodyParamsValidation } from '../utils/api';
 import { wsDataRefiner } from '../utils/refiners/sockets';
 
@@ -111,6 +113,13 @@ class SocketClient extends EventEmitter {
 	) {
 		const sendType = WS.MESSAGES[type]?.type;
 		const sendBody = bodyParamsValidation(type, body, WS.MESSAGES) as any;
+
+		//  save for later reference
+		if (body?.localSave) {
+			storeDispatch(
+				setInstantOrder({ order: body as OrderTemplate, extOrderId: (sendBody as ProcessedOrder).ext_order_id })
+			);
+		}
 
 		LOG(sendBody, `WS SEND - ${sendType}`);
 		(this._socket as WebSocket).send(

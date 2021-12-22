@@ -2,10 +2,12 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import each from 'lodash-es/each';
 
 import { Balances, PositionState } from 'utils/refiners/sockets';
+import { OrderTemplate } from 'utils/trading';
 
 interface InitState {
 	positions: Record<string, Partial<PositionState> & { quantity: string }>;
-	balances: Balances | {};
+	balances: Balances;
+	instantOrders: Record<string, Partial<OrderTemplate>>;
 }
 
 const initialState: InitState = {
@@ -20,6 +22,7 @@ const initialState: InitState = {
 		isolatedMargin: {},
 		orderMargin: {},
 	},
+	instantOrders: {},
 };
 
 export const tradingSlice = createSlice({
@@ -40,8 +43,17 @@ export const tradingSlice = createSlice({
 		setBalances: (state, action: PayloadAction<Balances>) => {
 			state.balances = { ...action.payload };
 		},
+		setInstantOrder: (state, action: PayloadAction<{ order: OrderTemplate; extOrderId: string }>) => {
+			const { order, extOrderId } = action.payload;
+			if (!state.instantOrders[order.symbol]) {
+				state.instantOrders[order.symbol] = {
+					[extOrderId]: order,
+				};
+			}
+		},
 	},
 });
 
-export const { setInitTrading, setPositionClosed, setPositionsData, setBalances } = tradingSlice.actions;
+export const { setInitTrading, setPositionClosed, setPositionsData, setBalances, setInstantOrder } =
+	tradingSlice.actions;
 export default tradingSlice.reducer;

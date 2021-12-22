@@ -18,9 +18,4 @@ export const GENERAL = Object.freeze({
 		DISCORD: 'https://discord.com/invite/bG7evExCWD',
 		TWITTER: 'https://twitter.com/kollider_trade',
 	},
-	USER_TYPES: {
-		LIGHT: 'light',
-		PRO: 'pro',
-		BUSINESS: 'business',
-	},
 });

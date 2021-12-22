@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import includes from 'lodash-es/includes';
 
+import { persistMiddleware } from 'contexts/middleware/persist-middleware';
+
 import rootReducer from './modules/rootReducer';
 
 let reduxStore: any;
@@ -25,13 +27,19 @@ if (process.env.NODE_ENV !== 'production') {
 		});
 		reduxStore = configureStore({
 			reducer: rootReducer,
-			middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger),
+			middleware: getDefaultMiddleware => getDefaultMiddleware().concat(logger, persistMiddleware),
 		});
 	} else {
-		reduxStore = configureStore({ reducer: rootReducer });
+		reduxStore = configureStore({
+			reducer: rootReducer,
+			middleware: getDefaultMiddleware => getDefaultMiddleware().concat(persistMiddleware),
+		});
 	}
 } else {
-	reduxStore = configureStore({ reducer: rootReducer });
+	reduxStore = configureStore({
+		reducer: rootReducer,
+		middleware: getDefaultMiddleware => getDefaultMiddleware().concat(persistMiddleware),
+	});
 }
 
 export const storeDispatch = (...params: any[]) => reduxStore.dispatch(...params);

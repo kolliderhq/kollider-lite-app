@@ -9,6 +9,7 @@ import ordersReducers from './orders';
 import pricesReducers from './prices';
 import settingsReducers from './settings';
 import symbolsReducers from './symbols';
+import tradingReducers from './trading';
 import userReducers from './user';
 
 const rootReducer = combineReducers({
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
 	notifications: notificationsReducers,
 	settings: settingsReducers,
 	layout: layoutReducers,
+	trading: tradingReducers,
 });
 
 export default rootReducer;

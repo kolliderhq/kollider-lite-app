@@ -19,7 +19,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 	const init = React.useMemo(() => <DataInit />, []);
 	return (
 		<Provider store={reduxStore}>
-			{init}
 			<SWRConfig
 				value={{
 					refreshInterval: 0,
@@ -36,6 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 						cardType: 'summary_large_image',
 					}}
 				/>
+				{init}
 				<PageWrapper>
 					<Component {...pageProps} />
 				</PageWrapper>

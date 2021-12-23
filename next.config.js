@@ -39,4 +39,7 @@ module.exports = withBundleAnalyzer({
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
+	typescript: {
+		ignoreBuildErrors: true,
+	},
 });

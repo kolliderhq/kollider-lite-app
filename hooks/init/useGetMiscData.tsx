@@ -24,12 +24,15 @@ export default function useGetMiscData() {
 
 	React.useEffect(() => {
 		if (!data) return;
-		dispatch(setSymbolData(data));
 		const symbolArr = [...Array.from(new Set(['BTCUSD.PERP', ...sort(keys(data)).asc(v => v)]))];
+		dispatch(setInitSymbols(symbolArr));
 		dispatch(addSymbols(symbolArr));
+
 		// init ohlc store with symbols
 		orderbook.updateOrderbookSymbols(symbolArr);
-		dispatch(setInitSymbols(symbolArr));
+
+		//	defer to end
+		setTimeout(() => dispatch(setSymbolData(data)), 0);
 	}, [data, dispatch]);
 
 	React.useEffect(() => {

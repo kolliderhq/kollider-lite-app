@@ -41,6 +41,7 @@ export const tradingSlice = createSlice({
 			state.positions[action.payload].quantity = '0';
 		},
 		setBalances: (state, action: PayloadAction<Balances>) => {
+			console.log('setbalances', action.payload);
 			state.balances = { ...action.payload };
 		},
 		setInstantOrder: (state, action: PayloadAction<{ order: OrderTemplate; extOrderId: string }>) => {

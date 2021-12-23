@@ -16,7 +16,7 @@ import { setIndexes } from 'contexts/modules/prices';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import useIsWindowVisible from 'hooks/useIsWindowVisible';
 
-const WATCH_TYPES = [CHANNELS.POSITION_STATES, CHANNELS.INDEX_VALUES, CHANNELS.MARK_PRICE];
+const WATCH_TYPES = [CHANNELS.POSITION_STATES, CHANNELS.INDEX_VALUES, CHANNELS.MARK_PRICE, CHANNELS.BALANCES];
 export function useSocketData() {
 	const [wsConnected, wsAuthenticated, apiKey] = useAppSelector(state => [
 		state.connection.isWsConnected,

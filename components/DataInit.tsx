@@ -11,6 +11,7 @@ import { useGetOrderbookData } from 'hooks/init/useGetOrderbookData';
 import { useInitialize } from 'hooks/init/useInitialize';
 import useQuerySideEffects from 'hooks/init/useQuerySideEffects';
 import { useSocketData } from 'hooks/init/useSocketData';
+import { useTradingListener } from 'hooks/init/useTradingListener';
 import { useWebln } from 'hooks/init/useWebln';
 import { useAppSelector } from 'hooks/redux';
 import { useStatusChecker } from 'hooks/useStatusChecker';
@@ -64,8 +65,7 @@ const RunOnHistoryLoad = () => {
 };
 
 const RunOnSymbolLoad = () => {
-	//	trading listener
-
+	useTradingListener();
 	useAutoLogout();
 	useGetOrderbookData(); //	init socket data
 	useWebln();

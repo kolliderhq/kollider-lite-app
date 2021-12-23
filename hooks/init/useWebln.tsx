@@ -27,15 +27,16 @@ export const useWebln = () => {
 				.enable()
 				.then(() => {
 					console.log('webln enabled');
+					dispatch(setWeblnConnected(true));
 				})
 				.catch(() => {
+					dispatch(setWeblnConnected(false));
 					console.log('webln disabled');
 				});
 
 			res.getInfo().then(info => {
 				if (info?.node?.alias) {
 					console.log('webln connected', info.node.alias);
-					dispatch(setWeblnConnected(true));
 					// displayToast(
 					// 	<p className="text-sm">
 					// 		Wallet [<span className="font-bold">{info.node.alias}</span>]
@@ -48,7 +49,6 @@ export const useWebln = () => {
 					// 	true
 					// );
 				} else {
-					dispatch(setWeblnConnected(false));
 					// displayToast(
 					// 	<p className="text-sm">
 					// 		Please unlock your wallet
@@ -76,9 +76,9 @@ export const useWebln = () => {
 	]);
 	const viewing = invoiceStore.viewing;
 	const invoice = invoiceStore.invoices[invoiceStore.symbol]?.invoice;
-
 	//	deposit / instant order invoice
 	React.useEffect(() => {
+		console.log('invoice', viewing, invoice, isWeblnConnected);
 		if (!viewing || !isWeblnConnected || !invoice) return;
 		weblnSendPayment(invoice as string, () => {
 			if (onlyWeblnIfEnabled) dispatch(setViewing(false));

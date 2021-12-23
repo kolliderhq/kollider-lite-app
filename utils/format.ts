@@ -86,6 +86,10 @@ export const formatNumber = (v: TBigInput = 0, size: number = 3): string => {
 	return formatNum(str);
 };
 
+export const formatUSD = (v: string): string => {
+	return `$${formatNumber(v)}`;
+};
+
 const formatNum = (str: string): string => {
 	const n = str,
 		p = n.indexOf('.');

@@ -1,9 +1,12 @@
 import React, { FormEvent } from 'react';
 
 import { Slider } from 'components/Slider';
+import { TABS } from 'consts';
 import { SLIDER } from 'consts/misc/slider';
 import { setOrderLeverage } from 'contexts';
+import { setTab } from 'contexts/modules/layout';
 import { useAppDispatch, useSymbols } from 'hooks';
+import { fixed } from 'utils/Big';
 import { getClosestInOrderedArray, getLeverageFromSliderValue } from 'utils/slider';
 
 export const LeverageArea = () => {
@@ -22,7 +25,7 @@ export const LeverageArea = () => {
 				return;
 			}
 			setSliderValue(getClosestInOrderedArray(newValue, SLIDER.PRESETS[maxLeverage]));
-			dispatch(setOrderLeverage(newValue));
+			dispatch(setOrderLeverage(Number(fixed(newValue, 1))));
 			setValue(newValue);
 		},
 		[maxLeverage]
@@ -33,7 +36,7 @@ export const LeverageArea = () => {
 			setSliderValue(newValue.x);
 			const leverage = getLeverageFromSliderValue(newValue.x, maxLeverage);
 			setValue(leverage);
-			dispatch(setOrderLeverage(leverage));
+			dispatch(setOrderLeverage(Number(fixed(leverage, 1))));
 		},
 		[maxLeverage]
 	);
@@ -45,6 +48,7 @@ export const LeverageArea = () => {
 					<label className="text-xs text-gray-300 tracking-wider">Leverage</label>
 					<div className="h-10 xs:h-9 bg-gray-700 border-transparent border-2 rounded-md w-full relative">
 						<input
+							onFocus={() => dispatch(setTab(TABS.ORDER_INFO))}
 							min={1}
 							max={maxLeverage}
 							className="input-default inline-block w-full rounded-md border border-transparent focus:border-gray-300 hover:border-gray-300"

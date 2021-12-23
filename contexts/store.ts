@@ -17,6 +17,7 @@ if (process.env.NODE_ENV !== 'production') {
 					[
 						'api/isOnline',
 						'trading/updateLastGraphData',
+						'trading/setPositionsData',
 						'orderbook/processOrder',
 						'prices/setIndexes',
 						'prices/setMarkPrices',

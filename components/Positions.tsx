@@ -4,6 +4,8 @@ import cn from 'clsx';
 import Img from 'next/image';
 
 import { useAppSelector, useSymbols } from 'hooks';
+import { fixed } from 'utils/Big';
+import { formatNumber, formatUSD } from 'utils/format';
 import { isNumber } from 'utils/scripts';
 
 export const PositionTable = () => {
@@ -13,25 +15,21 @@ export const PositionTable = () => {
 
 	const positionMargin = React.useMemo(() => {
 		if (!isNumber(balances?.isolatedMargin?.[symbol])) return '0';
-		return balances?.isolatedMargin?.[symbol];
+		return formatNumber(fixed(balances?.isolatedMargin?.[symbol], 0));
 	}, [balances?.isolatedMargin, symbol]);
-
-	const orderMargin = React.useMemo(() => {
-		if (!isNumber(balances?.orderMargin?.[symbol])) return '0';
-		return balances?.orderMargin?.[symbol];
-	}, [balances?.orderMargin, symbol]);
 
 	const hasPosition = position?.quantity ? position.quantity !== '0' : false;
 	return (
-		<section className="flex justify-center items-center w-full xs:px-2 py-2 xs:py-5">
+		<section className="flex justify-center items-center w-full xs:px-2 xs:pt-2">
 			<PositionData />
 			<div className="grid grid-cols-2 xs:grid-cols-3 grid-rows-2 gap-x-2 gap-y-3 w-full">
-				<LabelledValue label="PNL" value={hasPosition ? position?.upnl : '-'} />
-				<LabelledValue label="Amount" value={position?.quantity} />
-				<LabelledValue label="Entry Price" value={hasPosition ? position?.entryPrice : '-'} />
-				<LabelledValue label="Liq. Price" value={hasPosition ? position?.liqPrice : '-'} />
+				<LabelledValue className="col-span-2 xs:col-span-1" label="PNL" value={hasPosition ? position?.upnl : '-'} />
 				<LabelledValue label="Position Margin" value={hasPosition ? positionMargin : '-'} />
-				<LabelledValue label="Order Margin" value={hasPosition ? orderMargin : '-'} />
+				<LabelledValue label="Amount" value={position?.quantity} />
+				<div className="col-span-2 grid grid-cols-2 xs:col-span-3 w-full">
+					<LabelledValue label="Entry Price" value={hasPosition ? formatUSD(position?.entryPrice) : '-'} />
+					<LabelledValue label="Liq. Price" value={hasPosition ? formatUSD(position?.liqPrice) : '-'} />
+				</div>
 			</div>
 		</section>
 	);
@@ -41,7 +39,7 @@ const LabelledValue = ({ label, value, className }: { label: string; value: stri
 	return (
 		<div className={cn('flex flex-col items-center gap-1', className)}>
 			<p className="leading-none tracking-tight text-[10px] xs:text-xs text-gray-400 mb-0.5 text-center">{label}</p>
-			<p className="leading-none text-base text-right">{value}</p>
+			<p className="leading-none tracking-tighter xxs:tracking-normal text-sm xxs:text-base text-right">{value}</p>
 		</div>
 	);
 };
@@ -65,15 +63,15 @@ const PositionData = () => {
 			className={cn(
 				'bg-gray-700 rounded-lg flex flex-col items-center justify-center px-2 py-3 min-w-[60px] xxs:min-w-[80px]'
 			)}>
-			<div className="flex items-center">
-				<Img width={24} height={24} className="rounded-full mt-1 mr-1" src={largeAsset} />
+			<div className="flex flex-col items-center gap-0.5">
+				<Img width={20} height={20} className="rounded-full" src={largeAsset} />
 				<p
 					data-cy="overview-side"
 					className={cn(
 						'text-xs xs:text-base',
 						hasPosition ? (position.side === 'Bid' ? 'text-green-400' : 'text-red-400') : 'text-gray-100'
 					)}>
-					{hasPosition ? (position.side === 'Bid' ? 'Long' : 'Short') : '  '}
+					{hasPosition ? (position.side === 'Bid' ? ' Long' : ' Short') : '  '}
 				</p>
 			</div>
 			<p className="text-sm xs:text-base">{hasPosition ? `${position.leverage}x` : '-'}</p>

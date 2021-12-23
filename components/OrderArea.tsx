@@ -1,13 +1,15 @@
 import React, { FormEvent } from 'react';
 
 import cn from 'clsx';
+import toNumber from 'lodash-es/toNumber';
 
 import { baseSocketClient } from 'classes/SocketClient';
 import { LeverageArea } from 'components/LeverageArea';
-import { SETTINGS } from 'consts';
-import { Order, Side, askBidSelector, setOrderQuantity, useOrderbookSelector } from 'contexts';
+import { SETTINGS, TABS } from 'consts';
+import { Order, Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
+import { setTab } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolPriceDp, useSymbols } from 'hooks';
-import { applyDp, formatNumber } from 'utils/format';
+import { applyDp, formatNumber, optionalDecimal } from 'utils/format';
 import { isPositiveInteger } from 'utils/scripts';
 
 const buttonClass =
@@ -28,14 +30,24 @@ export const OrderArea = () => {
 };
 
 const OrderInput = () => {
-	const quantity = useAppSelector(state => Number(state.orders.order.quantity));
+	const { symbol } = useSymbols();
+	const [quantity, positions] = useAppSelector(state => [Number(state.orders.order.quantity), state.trading.positions]);
+	const position = positions[symbol];
 	const dispatch = useAppDispatch();
+
+	const hasPositionLeverage = position?.leverage && position?.quantity !== '0';
+	React.useEffect(() => {
+		if (!hasPositionLeverage) return;
+		dispatch(setOrderLeverage(toNumber(position.leverage)));
+	}, [hasPositionLeverage, position?.leverage]);
+
 	return (
 		<div className="h-full w-full">
 			<div className="w-full">
 				<label className="text-xs text-gray-300 tracking-wider">Quantity</label>
 				<div className="bg-gray-700 border-transparent rounded-md w-full">
 					<input
+						onFocus={() => dispatch(setTab(TABS.ORDER_INFO))}
 						min={1}
 						max={SETTINGS.LIMITS.NUMBER}
 						step={1}
@@ -52,15 +64,30 @@ const OrderInput = () => {
 				</div>
 			</div>
 			<div className="w-full mt-1">
-				<LeverageArea />
+				{!hasPositionLeverage ? <LeverageArea /> : <DisplayLeverage leverage={position.leverage} />}
 			</div>
 		</div>
 	);
 };
 
-const SellButton = ({ bestBid, priceDp }: { bestBid: string; priceDp: number }) => {
+const DisplayLeverage = ({ leverage }: { leverage: string }) => {
 	return (
-		<button onClick={() => {}} className={cn(buttonClass, 'bg-red-500', { 'opacity-50': !bestBid })}>
+		<div className="mt-2 h-10 xs:h-9 bg-gray-900 border-transparent border-2 rounded-md w-full relative flex items-center">
+			<p className="text-right w-full pr-5">{optionalDecimal(leverage)}</p>
+			<p className="text-base text-gray-400 pt-[2px] w-[2%] absolute right-[12px] bottom-[6px] xs:bottom-[4px]">x</p>
+		</div>
+	);
+};
+
+const SellButton = ({ bestBid, priceDp }: { bestBid: string; priceDp: number }) => {
+	const { symbol } = useSymbols();
+	const order = useAppSelector(state => state.orders.order);
+	return (
+		<button
+			onClick={() => {
+				processOrder(order, Side.ASK, priceDp, symbol);
+			}}
+			className={cn(buttonClass, 'bg-red-500', { 'opacity-50': !bestBid })}>
 			<p className="text-sm xs:text-base">
 				Sell
 				<span className="pr-1" />/<span className="pr-1" />
@@ -72,9 +99,13 @@ const SellButton = ({ bestBid, priceDp }: { bestBid: string; priceDp: number }) 
 };
 
 const BuyButton = ({ bestAsk, priceDp, className }: { bestAsk: string; priceDp: number; className?: string }) => {
+	const { symbol } = useSymbols();
+	const order = useAppSelector(state => state.orders.order);
 	return (
 		<button
-			onClick={() => {}}
+			onClick={() => {
+				processOrder(order, Side.BID, priceDp, symbol);
+			}}
 			className={cn(buttonClass, className, 'bg-green-600', {
 				'opacity-50': !bestAsk,
 			})}>

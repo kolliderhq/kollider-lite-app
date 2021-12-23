@@ -3,18 +3,41 @@ import React from 'react';
 import includes from 'lodash-es/includes';
 
 import { baseSocketClient } from 'classes/SocketClient';
-import { DIALOGS, MESSAGE_TYPES, TRADING_TYPES } from 'consts';
+import { CHANNELS, DIALOGS, MESSAGE_TYPES, TABS, TRADING_TYPES } from 'consts';
 import { reduxStore, setNewInvoice, setUserWithdrawlLimits, storeDispatch } from 'contexts';
-import { setDialog } from 'contexts/modules/layout';
+import { setDialog, setTab } from 'contexts/modules/layout';
 import { useAppSelector } from 'hooks/redux';
 import { LOG5 } from 'utils/debug';
 import { formatNumber } from 'utils/format';
 import { OrderInvoice } from 'utils/refiners/sockets';
-import { mapKeyValues } from 'utils/scripts';
 
 export const useTradingListener = () => {
 	const wsReady = useAppSelector(state => state.connection.isWsConnected);
+
+	React.useEffect(() => {
+		if (!wsReady) return;
+		baseSocketClient.addEventListener(tradingListener);
+		return () => {
+			baseSocketClient.removeEventListener(tradingListener);
+		};
+	}, [wsReady, tradingListener]);
+
+	// useSymbolListener();
 };
+
+// const useSymbolListener = () => {
+// 	const wsReady = useAppSelector(state => state.api.isWsConnected && state.api.isWsAuthenticated);
+// 	const { symbol } = useSymbols();
+//
+// React.useEffect(() => {
+// 	if (!wsReady) return;
+// 	let currentSymbol = symbol;
+// 	baseSocketClient.requestSymbolSubscribe(CHANNELS.MATCHES, [currentSymbol]);
+// 	return () => {
+// 		baseSocketClient.requestSymbolUnsubscribe(CHANNELS.MATCHES, [currentSymbol]);
+// 	};
+// }, [wsReady, symbol]);
+// };
 
 const tradingListener = (msg: any) => {
 	if (!includes(TRADING_TYPES, msg?.type)) return;
@@ -22,6 +45,7 @@ const tradingListener = (msg: any) => {
 		const data = msg.data;
 		const orderId = data.orderId;
 		console.log('fill', msg.data);
+		storeDispatch(setTab(TABS.POSITIONS));
 
 		// TODO : update logic for fill
 		//  update already kept orders and increase the amount of contracts that were filled for them

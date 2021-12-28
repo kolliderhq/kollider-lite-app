@@ -24,7 +24,7 @@ export const UI = deepFreeze({
 });
 
 export enum TABS {
-	ORDER_INFO,
+	ORDER,
 	POSITIONS,
 }
 

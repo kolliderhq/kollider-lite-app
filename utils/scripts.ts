@@ -75,3 +75,13 @@ export const getIsDocumentHidden = (): boolean => {
 	let [hidden] = getHiddenVisChange();
 	return document[hidden];
 };
+
+export const applyOptionalParams = (obj: Record<any, any>, onlyParams: boolean = true) => {
+	let ret = onlyParams ? '' : '&';
+	mapKeyValues(obj, (key, value) => {
+		if (value) {
+			ret = `${ret}${key}=${value}&`;
+		}
+	});
+	return ret.slice(0, -1);
+};

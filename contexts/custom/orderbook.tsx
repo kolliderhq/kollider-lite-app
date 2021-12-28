@@ -37,7 +37,7 @@ export const useSelectedOrderbookData = select => {
 
 export function useOrderbookSelector<T>(selector: (data: TOrderbook) => T) {
 	const data = useOrderbookData();
-	// console.log(data);
+	console.log('orderbook', data);
 	const selectedData = selector(data);
 	return React.useMemo(() => selectedData, [selectedData]) as T;
 }

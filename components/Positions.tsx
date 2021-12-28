@@ -20,26 +20,36 @@ export const PositionTable = () => {
 
 	const hasPosition = position?.quantity ? position.quantity !== '0' : false;
 	return (
-		<section className="flex justify-center items-center w-full xs:px-2 xs:pt-2">
-			<PositionData />
-			<div className="grid grid-cols-2 xs:grid-cols-3 grid-rows-2 gap-x-2 gap-y-3 w-full">
-				<LabelledValue className="col-span-2 xs:col-span-1" label="PNL" value={hasPosition ? position?.upnl : '-'} />
+		<section className="grid grid-rows-[fit-content(100%),1fr] xxs:grid-rows-1 grid-cols-1 xxs:grid-cols-3 gap-1">
+			<div className="py-2 xxs:py-0 xxs:col-span-1 w-full h-full">
+				<div className="grid grid-cols-2 xxs:flex flex-col items-center justify-center h-full gap-y-2 gap-x-3">
+					<PositionData />
+					<ClosePosition />
+				</div>
+			</div>
+			<div className="col-span-2 grid grid-cols-2 xs:grid-cols-2 grid-rows-2 gap-x-1 xxs:gap-x-2 gap-y-2 w-full xs:px-5 sm:px-0">
 				<LabelledValue label="Position Margin" value={hasPosition ? positionMargin : '-'} />
 				<LabelledValue label="Amount" value={position?.quantity} />
-				<div className="col-span-2 grid grid-cols-2 xs:col-span-3 w-full">
-					<LabelledValue label="Entry Price" value={hasPosition ? formatUSD(position?.entryPrice) : '-'} />
-					<LabelledValue label="Liq. Price" value={hasPosition ? formatUSD(position?.liqPrice) : '-'} />
-				</div>
+				<LabelledValue label="Entry Price" value={hasPosition ? formatUSD(position?.entryPrice) : '-'} />
+				<LabelledValue label="Liq. Price" value={hasPosition ? formatUSD(position?.liqPrice) : '-'} />
 			</div>
 		</section>
 	);
 };
 
+const ClosePosition = () => {
+	return (
+		<button className="flex items-center justify-center border border-theme-main rounded-md py-1 px-1.5">
+			<p className="text-[10px]">Close Position</p>
+		</button>
+	);
+};
+
 const LabelledValue = ({ label, value, className }: { label: string; value: string; className?: string }) => {
 	return (
-		<div className={cn('flex flex-col items-center gap-1', className)}>
-			<p className="leading-none tracking-tight text-[10px] xs:text-xs text-gray-400 mb-0.5 text-center">{label}</p>
-			<p className="leading-none tracking-tighter xxs:tracking-normal text-sm xxs:text-base text-right">{value}</p>
+		<div className={cn('flex flex-col items-center justify-center gap-2 sm:gap-0.5 h-10 xxs:h-14', className)}>
+			<p className="leading-none tracking-tight text-xs sm:text-sm text-gray-400 text-center">{label}</p>
+			<p className="leading-none tracking-normal text-base sm:text-lg text-right">{value}</p>
 		</div>
 	);
 };
@@ -61,20 +71,22 @@ const PositionData = () => {
 				} 0%,  rgba(38,41,50,1) 100%)`,
 			}}
 			className={cn(
-				'bg-gray-700 rounded-lg flex flex-col items-center justify-center px-2 py-3 min-w-[60px] xxs:min-w-[80px]'
+				'bg-gray-700 rounded-lg flex flex-col items-center justify-center px-2 py-2 xxs:py-3 min-w-[100px] xs:h-20'
 			)}>
 			<div className="flex flex-col items-center gap-0.5">
-				<Img width={20} height={20} className="rounded-full" src={largeAsset} />
-				<p
-					data-cy="overview-side"
-					className={cn(
-						'text-xs xs:text-base',
-						hasPosition ? (position.side === 'Bid' ? 'text-green-400' : 'text-red-400') : 'text-gray-100'
-					)}>
-					{hasPosition ? (position.side === 'Bid' ? ' Long' : ' Short') : '  '}
-				</p>
+				<div className="flex items-center gap-1 mb-0.5">
+					<Img width={18} height={18} className="rounded-full" src={largeAsset} />
+					<p
+						data-cy="overview-side"
+						className={cn(
+							'text-base',
+							hasPosition ? (position.side === 'Bid' ? 'text-green-400' : 'text-red-400') : 'text-gray-100'
+						)}>
+						{hasPosition ? (position.side === 'Bid' ? ' Long' : ' Short') : '  '}
+					</p>
+				</div>
 			</div>
-			<p className="text-sm xs:text-base">{hasPosition ? `${position.leverage}x` : '-'}</p>
+			<p className="text-base">{hasPosition ? `${position.leverage}x` : '-'}</p>
 		</div>
 	);
 };

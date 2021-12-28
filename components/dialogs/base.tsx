@@ -35,7 +35,7 @@ export const BasePopup: FunctionComponent<BaseDialogProps> = ({
 						<ModalAutoSizer>
 							<div
 								style={dialogStyle}
-								className="relative z-100 max-w-sm min-w-xxxs px-4 py-5 md:p-8 bg-gray-950 shadow-elevation-24dp rounded-lg z-10">
+								className="relative z-100 max-w-sm min-w-xxxs sm:my-5 px-4 py-5 sm:py-10 md:p-8 bg-gray-950 shadow-elevation-24dp rounded-lg z-10">
 								{children}
 								{!isHideCloseButton && (
 									<img
@@ -75,7 +75,7 @@ export const BaseDialog: FunctionComponent<BaseDialogProps> = ({
 						<ModalAutoSizer>
 							<div
 								style={dialogStyle}
-								className="max-w-sm min-w-xxxs px-4 py-5 md:p-8 bg-gray-950 shadow-elevation-24dp rounded-lg z-10">
+								className="max-w-sm min-w-xxxs px-4 py-5 sm:py-10 md:p-8 bg-gray-950 shadow-elevation-24dp rounded-lg z-10">
 								{children}
 								{!isHideCloseButton && (
 									<img

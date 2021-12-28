@@ -8,7 +8,7 @@ import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
 import { SETTINGS, TABS } from 'consts';
 import { Order, Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
 import { setTab } from 'contexts/modules/layout';
-import { useAppDispatch, useAppSelector, useSymbolPriceDp, useSymbols } from 'hooks';
+import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { applyDp, formatNumber, optionalDecimal } from 'utils/format';
 import { isPositiveInteger } from 'utils/scripts';
 
@@ -16,7 +16,7 @@ const buttonClass =
 	'h-14 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp flex flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
 export const OrderArea = () => {
 	const { bestAsk, bestBid } = useOrderbookSelector(askBidSelector);
-	const priceDp = useSymbolPriceDp();
+	const { priceDp } = useSymbolData();
 	return (
 		<section className="w-full flex flex-col items-center xs:grid xs:grid-rows-1 xs:grid-cols-7 h-full xs:h-[160px] w-full gap-4 xs:gap-4">
 			<BuyButton className="hidden xs:flex" bestAsk={bestAsk} priceDp={priceDp} />
@@ -52,7 +52,7 @@ const OrderInput = () => {
 				<label className="text-xs text-gray-300 tracking-wider">Quantity</label>
 				<div className="bg-gray-700 border-transparent rounded-md w-full">
 					<input
-						onFocus={() => dispatch(setTab(TABS.ORDER_INFO))}
+						onFocus={() => dispatch(setTab(TABS.ORDER))}
 						min={1}
 						max={SETTINGS.LIMITS.NUMBER}
 						step={1}
@@ -74,7 +74,7 @@ const OrderInput = () => {
 				) : (
 					<DisplayLeverage leverage={hasPositionLeverage ? position.leverage : leverage} />
 				)}
-				{!editingLeverage && <ChangeLeverageButton />}
+				{!editingLeverage && !hasPositionLeverage ? <ChangeLeverageButton /> : <div className="h-[42px]" />}
 			</div>
 		</div>
 	);

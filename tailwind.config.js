@@ -1,6 +1,6 @@
 const widths = {
 	xxxs: '320px',
-	xxs: '360px',
+	xxs: '380px',
 	xs: '480px',
 	sm: '600px',
 };

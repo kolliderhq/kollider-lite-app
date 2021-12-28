@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { AccountInfo } from 'components/AccountInfo';
 import { BalanceInfo } from 'components/BalanceInfo';
 import { Dialogs } from 'components/dialogs/DIalogs';
 import { Popups } from 'components/dialogs/Popups';
@@ -13,8 +14,9 @@ import { TABS } from 'consts';
 import { useAppSelector } from 'hooks';
 
 export default function Home() {
+	const selectedTab = useAppSelector(state => state.layout.selectedTab);
 	return (
-		<div className="w-full px-2 sm:px-4 pt-4 relative pb-20 min-h-screen">
+		<div className="w-full px-2 sm:px-4 pt-4 relative pb-10 min-h-screen">
 			<Dialogs />
 			<Popups />
 			<Header />
@@ -23,32 +25,21 @@ export default function Home() {
 					<SymbolSelectDropdown />
 				</div>
 			</div>
-			<OrderWrapper>
-				<OrderArea />
-				<TabArea />
-			</OrderWrapper>
+			<section className="w-full py-3 px-2 xs:py-4 rounded-md border border-gray-600 bg-gray-800 relative z-0">
+				{selectedTab === TABS.POSITIONS && (
+					<>
+						<PositionTable />
+						<AccountInfo />
+					</>
+				)}
+				{selectedTab === TABS.ORDER && (
+					<>
+						<OrderArea />
+						<OrderInfo />
+					</>
+				)}
+			</section>
+			<BalanceInfo />
 		</div>
 	);
 }
-
-const TabArea = () => {
-	const selectedTab = useAppSelector(state => state.layout.selectedTab);
-	return (
-		<section className="relative mt-2">
-			{selectedTab === TABS.ORDER_INFO && <OrderInfo />}
-			{selectedTab === TABS.POSITIONS && <PositionTable />}
-			<BalanceInfo />
-		</section>
-	);
-};
-
-const OrderWrapper = ({ children }) => {
-	return (
-		<section className="z-0 w-full pt-5 pb-5 px-3 xs:pt-6 xs:pb-6 rounded-md border border-gray-600 bg-gray-800 relative z-0 flex flex-col items-center">
-			{/*<div className="absolute left-[10px] top-[6px]">*/}
-			{/*	<p className="text-gray-200 text-base tracking-widest">Order</p>*/}
-			{/*</div>*/}
-			<div className="flex flex-col gap-2 w-full">{children}</div>
-		</section>
-	);
-};

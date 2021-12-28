@@ -13,7 +13,7 @@ interface InitLayout {
 const initialState: InitLayout = {
 	dialog: DIALOGS.NONE,
 	popup: POPUPS.NONE,
-	selectedTab: TABS.ORDER_INFO,
+	selectedTab: TABS.ORDER,
 
 	editingLeverage: false,
 };

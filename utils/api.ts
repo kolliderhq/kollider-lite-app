@@ -9,7 +9,6 @@ import { apiRefiner } from 'utils/refiners/api';
 
 import { API } from '../consts/api';
 import { CustomError } from './error';
-import { mapKeyValues } from './scripts';
 
 export const postRequest = (...args) => {
 	const [apiName, params, bodyParams] = args;
@@ -44,14 +43,4 @@ export const bodyParamsValidation = (apiName: string, params: any, target: any) 
 		});
 	}
 	return target[apiName].createBody(params) as Record<string, string>;
-};
-
-export const applyOptionalParams = (obj: Record<any, any>, onlyParams: boolean = true) => {
-	let ret = onlyParams ? '' : '&';
-	mapKeyValues(obj, (key, value) => {
-		if (value) {
-			ret = `${ret}${key}=${value}&`;
-		}
-	});
-	return ret.slice(0, -1);
 };

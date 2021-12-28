@@ -10,7 +10,7 @@ export const TabSelect = () => {
 	return (
 		<div className="w-full">
 			<div className="w-full grid grid-cols-2">
-				<TabButton tab={TABS.ORDER_INFO} label={'Order Info'} />
+				<TabButton tab={TABS.ORDER} label={'Order'} />
 				<TabButton tab={TABS.POSITIONS} label={'Positions'} />
 			</div>
 		</div>

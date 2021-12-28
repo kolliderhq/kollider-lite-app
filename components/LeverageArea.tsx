@@ -48,7 +48,7 @@ export const LeverageArea = () => {
 					<label className="text-xs text-gray-300 tracking-wider">Leverage</label>
 					<div className="h-10 xs:h-9 bg-gray-700 border-transparent border-2 rounded-md w-full relative">
 						<input
-							onFocus={() => dispatch(setTab(TABS.ORDER_INFO))}
+							onFocus={() => dispatch(setTab(TABS.ORDER))}
 							min={1}
 							max={maxLeverage}
 							className="input-default inline-block w-full rounded-md border border-transparent focus:border-gray-300 hover:border-gray-300"

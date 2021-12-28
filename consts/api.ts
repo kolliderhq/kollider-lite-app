@@ -1,7 +1,7 @@
 import { DeepReadonly } from 'ts-essentials';
 
 import { TIME } from 'consts/time';
-import { applyOptionalParams } from 'utils/api';
+import { applyOptionalParams } from 'utils/scripts';
 import { deepFreeze } from 'utils/scripts';
 
 import { API_ROLE, I_API } from './types/api';
@@ -175,6 +175,14 @@ const API: I_API = {
 			customOptions: {
 				...postOptions,
 			},
+		},
+		HISTORIC_ASSET_VALUES: {
+			route: (start, end, granularity, symbol) =>
+				`/user/historic_asset_values?${applyOptionalParams({ start, end, symbol, interval_size: granularity }, true)}`,
+			method: 'get',
+			base: END_POINTS.BACK,
+			stale: API_TIME.ONE_TIME,
+			allowNull: true,
 		},
 		TRADE_SUMMARY: {
 			route: () => `/user/trade_summary`,

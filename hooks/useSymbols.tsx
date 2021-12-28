@@ -2,6 +2,7 @@ import React from 'react';
 
 import map from 'lodash-es/map';
 
+import { GENERAL } from 'consts';
 import { UI } from 'consts/misc/UI';
 import { TSymbolData } from 'contexts';
 import { useAppSelector } from 'hooks/redux';
@@ -18,6 +19,7 @@ export function useSymbols() {
 		() => ({ symbols, symbolData, symbol: symbols[symbolIndex], symbolsDisplay, symbolsAssets, symbolIndex }),
 		[symbols, symbolData, symbolsDisplay, symbolsAssets, symbolIndex]
 	) as {
+		ㅂ;
 		symbols: string[];
 		symbolData: TSymbolData;
 		symbol: string;
@@ -27,8 +29,8 @@ export function useSymbols() {
 	};
 }
 
-export function useSymbolPriceDp() {
+export function useSymbolData() {
 	const { symbols, symbolData, symbolIndex } = useAppSelector(state => state.symbols);
 	const symbol = symbols[symbolIndex];
-	return symbolData[symbol]?.priceDp;
+	return symbolData[symbol] ? symbolData[symbol] : GENERAL.DEFAULT.OBJ;
 }

@@ -4,6 +4,7 @@ import isArray from 'lodash-es/isArray';
 import isFunction from 'lodash-es/isFunction';
 import isNil from 'lodash-es/isNil';
 import isObject from 'lodash-es/isObject';
+import map from 'lodash-es/map';
 
 import { API, API_NAMES } from 'consts/api';
 import { LOG, LOG2, LOG4 } from 'utils/debug';
@@ -105,6 +106,21 @@ refiner.set(API_NAMES.REFRESH_JWT, data => {
 		token: data?.token,
 	};
 });
+
+// interface IHistoricAssetValue {
+// 	mean_maket_value: number;
+// 	mean_notional_value: number;
+// 	time: number;
+// }
+// interface IHistoricAssetValues {
+// 	data: IHistoricAssetValue[];
+// 	symbol: string;
+// }
+// refiner.set(API_NAMES.HISTORIC_ASSET_VALUES, (data: IHistoricAssetValues) => {
+// 	LOG(data, 'HISTORIC_ASSET_VALUES');
+// 	const symbol = data?.symbol.includes('.') ? data.symbol : `${data?.symbol}.PERP`;
+// 	return { data: map(data.data, v => camelCaseAllKeys(v)), symbol: symbol };
+// });
 
 interface ITradeSummary {
 	mean_leverage: number;

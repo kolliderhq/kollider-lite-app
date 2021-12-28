@@ -26,9 +26,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 					onErrorRetry: defaultOnErrorRetry,
 				}}>
 				<DefaultSeo
-					title="Kollider Pro Exchange"
+					title="Kollider Light"
 					description="Instant Derivative Trading. Access any asset with Bitcoin simply and fast."
-					canonical={'pro.kollider.xyz'}
+					canonical={'trade.kollider.xyz'}
 					twitter={{
 						handle: '@kollider_trade',
 						// site: '@site',

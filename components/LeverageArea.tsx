@@ -4,7 +4,7 @@ import { Slider } from 'components/Slider';
 import { TABS } from 'consts';
 import { SLIDER } from 'consts/misc/slider';
 import { setOrderLeverage } from 'contexts';
-import { setTab } from 'contexts/modules/layout';
+import { setEditLeverage, setTab } from 'contexts/modules/layout';
 import { useAppDispatch, useSymbols } from 'hooks';
 import { fixed } from 'utils/Big';
 import { getClosestInOrderedArray, getLeverageFromSliderValue } from 'utils/slider';
@@ -76,6 +76,19 @@ export const LeverageArea = () => {
 			</section>
 		),
 		[value, setValue, sliderValue, maxLeverage, updateValue]
+	);
+};
+
+export const ChangeLeverageButton = () => {
+	const dispatch = useAppDispatch();
+	return (
+		<div className="w-full flex items-center justify-end">
+			<button
+				onClick={() => dispatch(setEditLeverage(true))}
+				className="hover:opacity-80 mt-2 px-4 py-2 border-theme-main border rounded-lg flex items-center justify-center w-fit">
+				<p className="text-xs">Change Leverage</p>
+			</button>
+		</div>
 	);
 };
 

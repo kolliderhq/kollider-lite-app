@@ -106,3 +106,9 @@
     box-shadow: 0 0 6px 3px rgba(76, 82, 100, 0.7);
   }
 }
+
+//  for toggle
+input:checked ~ .dot {
+  transform: translateX(100%);
+  background-color: #48bb78;
+}

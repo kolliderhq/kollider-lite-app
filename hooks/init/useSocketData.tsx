@@ -30,6 +30,7 @@ export function useSocketData() {
 		if (!wsAuthenticated && apiKey !== '') {
 			baseSocketClient.authorizeClient(apiKey, () => {
 				dispatch(setIsWsAuthenticated(true));
+				baseSocketClient.socketSend(MESSAGE_TYPES.BALANCES, {}, null, null);
 				baseSocketClient.socketSend(MESSAGE_TYPES.WITHDRAWAL_LIMIT_INFO, {}, null, null);
 				baseSocketClient.socketSend(MESSAGE_TYPES.POSITIONS, {}, null, null);
 

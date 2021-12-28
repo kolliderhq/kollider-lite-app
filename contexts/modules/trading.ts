@@ -1,13 +1,14 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import each from 'lodash-es/each';
 
-import { Balances, PositionState } from 'utils/refiners/sockets';
+import { Balances, PositionState, ReceivedOrder } from 'utils/refiners/sockets';
 import { OrderTemplate } from 'utils/trading';
 
 interface InitState {
 	positions: Record<string, Partial<PositionState> & { quantity: string }>;
 	balances: Balances;
-	instantOrders: Record<string, Partial<OrderTemplate>>;
+	instantOrders: Record<string, Record<string, Partial<OrderTemplate | ReceivedOrder>>>;
+	orderIds: Record<string, Record<string, Partial<ReceivedOrder>>>;
 }
 
 const initialState: InitState = {
@@ -23,6 +24,7 @@ const initialState: InitState = {
 		orderMargin: {},
 	},
 	instantOrders: {},
+	orderIds: {},
 };
 
 export const tradingSlice = createSlice({
@@ -41,8 +43,17 @@ export const tradingSlice = createSlice({
 			state.positions[action.payload].quantity = '0';
 		},
 		setBalances: (state, action: PayloadAction<Balances>) => {
-			console.log('setbalances', action.payload);
 			state.balances = { ...action.payload };
+		},
+		setOrderId: (state, action: PayloadAction<ReceivedOrder>) => {
+			const { symbol, orderId } = action.payload;
+			if (state.orderIds[symbol] === undefined) {
+				state.orderIds[symbol] = {
+					[orderId]: action.payload,
+				};
+			} else {
+				state.orderIds[symbol][orderId] = action.payload;
+			}
 		},
 		setInstantOrder: (state, action: PayloadAction<{ order: OrderTemplate; extOrderId: string }>) => {
 			const { order, extOrderId } = action.payload;
@@ -52,9 +63,31 @@ export const tradingSlice = createSlice({
 				};
 			}
 		},
+		mergeInstantOrder: (state, action: PayloadAction<ReceivedOrder>) => {
+			const order = action.payload;
+			if (!state.instantOrders[order.symbol]) {
+				state.instantOrders[order.symbol] = {
+					[order.extOrderId]: order,
+				};
+			} else if (state.instantOrders[order.symbol][order.extOrderId]) {
+				state.instantOrders[order.symbol][order.extOrderId] = {
+					...state.instantOrders[order.symbol][order.extOrderId],
+					...order,
+				};
+			} else {
+				state.instantOrders[order.symbol][order.extOrderId] = order;
+			}
+		},
 	},
 });
 
-export const { setInitTrading, setPositionClosed, setPositionsData, setBalances, setInstantOrder } =
-	tradingSlice.actions;
+export const {
+	setInitTrading,
+	setOrderId,
+	setPositionClosed,
+	setPositionsData,
+	setBalances,
+	setInstantOrder,
+	mergeInstantOrder,
+} = tradingSlice.actions;
 export default tradingSlice.reducer;

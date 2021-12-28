@@ -125,9 +125,20 @@ refiner.set(TRADING_TYPES.DONE, v => {
 	return v;
 });
 
+export interface ReceivedOrder {
+	extOrderId: string;
+	leverage: number;
+	orderId: number;
+	orderType: string;
+	price: number;
+	quantity: number;
+	symbol: string;
+	timestamp: number;
+	uid: number;
+}
 refiner.set(TRADING_TYPES.RECEIVED, v => {
 	if (!v.data) return v;
-	LOG3(v, 'Received order');
+	LOG3(v, 'RECEIVED');
 	const obj = v.data;
 	return {
 		...v,
@@ -140,7 +151,7 @@ refiner.set(TRADING_TYPES.RECEIVED, v => {
 			symbol: obj?.symbol,
 			timestamp: parseTime(obj?.timestamp),
 			uid: obj?.uid,
-		},
+		} as ReceivedOrder,
 		type: TRADING_TYPES.RECEIVED,
 	};
 });
@@ -389,12 +400,12 @@ refiner.set(CHANNEL_OPTIONS.ORDERBOOK_LEVEL2.customType, (res: Level2State) => {
 });
 
 refiner.set(TRADING_TYPES.DEPOSIT_SUCCESS, v => {
-	LOG3(v, 'deposit');
+	LOG3(v, 'DEPOSIT_SUCCESS');
 	return v;
 });
 
 refiner.set(TRADING_TYPES.RAW_DEPOSIT, v => {
-	LOG3(v, 'raw deposit');
+	LOG3(v, 'RAW_DEPOSIT');
 	return v;
 });
 

@@ -4,7 +4,7 @@ import cn from 'clsx';
 import toNumber from 'lodash-es/toNumber';
 
 import { baseSocketClient } from 'classes/SocketClient';
-import { LeverageArea } from 'components/LeverageArea';
+import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
 import { SETTINGS, TABS } from 'consts';
 import { Order, Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
 import { setTab } from 'contexts/modules/layout';
@@ -31,9 +31,14 @@ export const OrderArea = () => {
 
 const OrderInput = () => {
 	const { symbol } = useSymbols();
-	const [quantity, positions] = useAppSelector(state => [Number(state.orders.order.quantity), state.trading.positions]);
+	const [quantity, leverage, positions] = useAppSelector(state => [
+		Number(state.orders.order.quantity),
+		String(state.orders.order.leverage),
+		state.trading.positions,
+	]);
 	const position = positions[symbol];
 	const dispatch = useAppDispatch();
+	const editingLeverage = useAppSelector(state => state.layout.editingLeverage);
 
 	const hasPositionLeverage = position?.leverage && position?.quantity !== '0';
 	React.useEffect(() => {
@@ -64,7 +69,12 @@ const OrderInput = () => {
 				</div>
 			</div>
 			<div className="w-full mt-1">
-				{!hasPositionLeverage ? <LeverageArea /> : <DisplayLeverage leverage={position.leverage} />}
+				{!hasPositionLeverage && editingLeverage ? (
+					<LeverageArea />
+				) : (
+					<DisplayLeverage leverage={hasPositionLeverage ? position.leverage : leverage} />
+				)}
+				{!editingLeverage && <ChangeLeverageButton />}
 			</div>
 		</div>
 	);
@@ -121,6 +131,7 @@ const BuyButton = ({ bestAsk, priceDp, className }: { bestAsk: string; priceDp: 
 };
 
 export const processOrder = (order: Order, side: Side, priceDp: number, symbol: string, localSave?: string) => {
+	if (order.quantity === 0 || !order.quantity) return;
 	const obj = {
 		leverage: Number(order.leverage),
 		quantity: order.quantity,

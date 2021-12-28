@@ -6,12 +6,16 @@ interface InitLayout {
 	dialog: DIALOGS;
 	popup: POPUPS;
 	selectedTab: TABS;
+
+	editingLeverage: boolean;
 }
 
 const initialState: InitLayout = {
 	dialog: DIALOGS.NONE,
 	popup: POPUPS.NONE,
 	selectedTab: TABS.ORDER_INFO,
+
+	editingLeverage: false,
 };
 
 export const layoutSlice = createSlice({
@@ -35,9 +39,13 @@ export const layoutSlice = createSlice({
 		setTab: (state, action: PayloadAction<TABS>) => {
 			state.selectedTab = action.payload;
 		},
+
+		setEditLeverage: (state, action: PayloadAction<boolean>) => {
+			state.editingLeverage = action.payload;
+		},
 	},
 });
 
-export const { setDialog, setDialogClose, setPopup, setTab, setPopupClose } = layoutSlice.actions;
+export const { setDialog, setDialogClose, setPopup, setTab, setPopupClose, setEditLeverage } = layoutSlice.actions;
 
 export default layoutSlice.reducer;

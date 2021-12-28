@@ -2,6 +2,7 @@ import React from 'react';
 
 import { LoginDialog } from 'components/dialogs/Login';
 import { SettingsDialog } from 'components/dialogs/Settings';
+import { WithdrawAvailableDialog } from 'components/dialogs/WithdrawAvailable';
 import { DIALOGS } from 'consts';
 import { setDialogClose } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
@@ -14,6 +15,7 @@ export const Dialogs = () => {
 		<>
 			<LoginDialog isOpen={currentDialog === DIALOGS.LOGIN} close={close} />
 			<SettingsDialog isOpen={currentDialog === DIALOGS.SETTINGS} close={close} />
+			<WithdrawAvailableDialog isOpen={currentDialog === DIALOGS.SETTLE_INVOICE} close={close} />
 		</>
 	);
 };

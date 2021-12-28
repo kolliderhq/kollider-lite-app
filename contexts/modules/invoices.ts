@@ -37,11 +37,10 @@ export const invoicesSlice = createSlice({
 			state.settlement = action.payload;
 		},
 		setInvoiceSettled: (state, action: PayloadAction<string>) => {
-			state.invoices = {};
-			state.invoices[action.payload] = null;
+			state.invoices[action.payload] = {};
 			state.viewing = false;
 		},
-		setNewInvoice: (state, action: PayloadAction<OrderInvoice>) => {
+		setNewInvoice: (state, action: PayloadAction<OrderInvoice & { extOrderId: string }>) => {
 			state.invoices[action.payload.symbol] = action.payload;
 			state.invoices = { ...toPlainObject(state.invoices), [action.payload.symbol]: action.payload };
 			state.symbol = action.payload.symbol;

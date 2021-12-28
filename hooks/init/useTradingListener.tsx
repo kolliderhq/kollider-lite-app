@@ -4,12 +4,20 @@ import includes from 'lodash-es/includes';
 
 import { baseSocketClient } from 'classes/SocketClient';
 import { CHANNELS, DIALOGS, MESSAGE_TYPES, TABS, TRADING_TYPES } from 'consts';
-import { reduxStore, setNewInvoice, setUserWithdrawlLimits, storeDispatch } from 'contexts';
+import {
+	mergeInstantOrder,
+	reduxStore,
+	setInvoiceSettled,
+	setNewInvoice,
+	setOrderId,
+	setUserWithdrawlLimits,
+	storeDispatch,
+} from 'contexts';
 import { setDialog, setTab } from 'contexts/modules/layout';
 import { useAppSelector } from 'hooks/redux';
 import { LOG5 } from 'utils/debug';
 import { formatNumber } from 'utils/format';
-import { OrderInvoice } from 'utils/refiners/sockets';
+import { OrderInvoice, ReceivedOrder } from 'utils/refiners/sockets';
 
 export const useTradingListener = () => {
 	const wsReady = useAppSelector(state => state.connection.isWsConnected);
@@ -21,23 +29,7 @@ export const useTradingListener = () => {
 			baseSocketClient.removeEventListener(tradingListener);
 		};
 	}, [wsReady, tradingListener]);
-
-	// useSymbolListener();
 };
-
-// const useSymbolListener = () => {
-// 	const wsReady = useAppSelector(state => state.api.isWsConnected && state.api.isWsAuthenticated);
-// 	const { symbol } = useSymbols();
-//
-// React.useEffect(() => {
-// 	if (!wsReady) return;
-// 	let currentSymbol = symbol;
-// 	baseSocketClient.requestSymbolSubscribe(CHANNELS.MATCHES, [currentSymbol]);
-// 	return () => {
-// 		baseSocketClient.requestSymbolUnsubscribe(CHANNELS.MATCHES, [currentSymbol]);
-// 	};
-// }, [wsReady, symbol]);
-// };
 
 const tradingListener = (msg: any) => {
 	if (!includes(TRADING_TYPES, msg?.type)) return;
@@ -89,24 +81,34 @@ const tradingListener = (msg: any) => {
 		} else if (msg.data?.reason === 'Fill') {
 			const orderId = msg.data?.order_id;
 			if (!orderId) return;
-
+			console.log('FILL', msg.data);
 			// TODO : delete orders kept in redux
 		} else {
 			LOG5(`undefined reason - ${msg.data?.reason}`, 'done');
 		}
 	} else if (msg.type === TRADING_TYPES.RECEIVED) {
 		if (!msg.data) return;
-		const data = msg.data;
+		const data = msg.data as ReceivedOrder;
+		storeDispatch(mergeInstantOrder(data));
+		storeDispatch(setOrderId(data));
 		// TODO : update order id store
-		//  get invoice and display it to user
+
+		const currentInvoice = reduxStore.getState().invoices.invoices[data.symbol];
+		console.log(data, currentInvoice);
+		if (currentInvoice?.extOrderId === data.extOrderId) {
+			storeDispatch(setInvoiceSettled(data.symbol));
+		}
 	} else if (msg.type === TRADING_TYPES.TRADE) {
 		const data = msg.data;
 		// TODO : update matches store with new trade
 	} else if (msg.type === TRADING_TYPES.ORDER_INVOICE) {
-		const data = msg.data as OrderInvoice;
-
-		// TODO : update order ids
-		//	and display invoice to user
+		const data = msg.data; // as OrderInvoice;
+		const orderId = data.orderId;
+		const symbol = data.symbol;
+		const orderIds = reduxStore.getState().trading.orderIds;
+		if (orderIds?.[symbol]?.[orderId]) {
+			data.extOrderId = orderIds[symbol][orderId]?.extOrderId;
+		}
 		storeDispatch(setNewInvoice(data));
 	} else if (msg.type === TRADING_TYPES.WITHDRAWAL_LIMIT_INFO) {
 		storeDispatch(setUserWithdrawlLimits(msg.data));

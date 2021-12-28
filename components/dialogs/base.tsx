@@ -2,6 +2,9 @@ import React, { FunctionComponent } from 'react';
 
 import { Dialog } from '@headlessui/react';
 
+import useElementDimensions from 'hooks/useElementDimentions';
+import useWindowSize from 'hooks/useWindowSize';
+
 export interface BaseDialogProps {
 	dialogStyle?: Record<string, string>;
 	isOpen: boolean;
@@ -28,18 +31,21 @@ export const BasePopup: FunctionComponent<BaseDialogProps> = ({
 					onClose={close}
 					initialFocus={initialFocus}>
 					<div className="p-5 flex items-center justify-center min-h-screen">
-						<div
-							style={dialogStyle}
-							className="relative z-100 w-4/5 max-w-sm min-w-xxxs px-4 py-5 md:p-8 bg-gray-950 shadow-elevation-24dp rounded-lg z-10">
-							{children}
-							{!isHideCloseButton && (
-								<img
-									onClick={() => close()}
-									className="absolute cursor-pointer top-3 sm:top-5 right-3 sm:right-5 w-8 sm:w-10"
-									src="/assets/common/close.svg"
-								/>
-							)}
-						</div>
+						<Dialog.Overlay className="fixed inset-0 w-full h-full" />
+						<ModalAutoSizer>
+							<div
+								style={dialogStyle}
+								className="relative z-100 max-w-sm min-w-xxxs px-4 py-5 md:p-8 bg-gray-950 shadow-elevation-24dp rounded-lg z-10">
+								{children}
+								{!isHideCloseButton && (
+									<img
+										onClick={() => close()}
+										className="absolute cursor-pointer top-3 sm:top-5 right-3 sm:right-5 w-8 sm:w-10"
+										src="/assets/common/close.svg"
+									/>
+								)}
+							</div>
+						</ModalAutoSizer>
 					</div>
 				</Dialog>
 			) : null}
@@ -66,18 +72,20 @@ export const BaseDialog: FunctionComponent<BaseDialogProps> = ({
 					initialFocus={initialFocus}>
 					<div className="p-5 flex items-center justify-center min-h-screen">
 						<Dialog.Overlay className="fixed inset-0 bg-black opacity-50 z-90" />
-						<div
-							style={dialogStyle}
-							className="relative z-100 w-4/5 max-w-sm min-w-xxxs px-4 py-5 md:p-8 bg-gray-950 shadow-elevation-24dp rounded-lg z-10">
-							{children}
-							{!isHideCloseButton && (
-								<img
-									onClick={() => close()}
-									className="absolute cursor-pointer top-3 sm:top-5 right-3 sm:right-5 w-8 sm:w-10"
-									src="/assets/common/close.svg"
-								/>
-							)}
-						</div>
+						<ModalAutoSizer>
+							<div
+								style={dialogStyle}
+								className="max-w-sm min-w-xxxs px-4 py-5 md:p-8 bg-gray-950 shadow-elevation-24dp rounded-lg z-10">
+								{children}
+								{!isHideCloseButton && (
+									<img
+										onClick={() => close()}
+										className="absolute cursor-pointer top-3 sm:top-5 right-3 sm:right-5 w-8 sm:w-10"
+										src="/assets/common/close.svg"
+									/>
+								)}
+							</div>
+						</ModalAutoSizer>
 					</div>
 				</Dialog>
 			) : null}
@@ -120,3 +128,38 @@ export function wrapBaseDialog<C extends React.ElementType>(
 		);
 	};
 }
+
+export const ModalAutoSizer = ({ children }) => {
+	const ref = React.useRef();
+	const { width, height } = useElementDimensions(ref);
+	const { width: windowWidth, height: windowHeight } = useWindowSize();
+
+	const [widthMult, setWidthMult] = React.useState(1);
+	const [margin, setMargin] = React.useState(null);
+
+	React.useEffect(() => {
+		if (!width || !windowWidth) return;
+		if (width > windowWidth) {
+			setWidthMult((windowWidth / width) * 0.96);
+		}
+	}, [width, windowWidth]);
+
+	React.useEffect(() => {
+		if (!height || !windowHeight) return;
+		if (height > windowHeight) {
+			setMargin(height - windowHeight + 10);
+		}
+	}, [height, windowHeight]);
+	return (
+		<section
+			role="presentation"
+			className="h-full relative z-100"
+			style={{
+				transform: `scale(${widthMult}, ${widthMult})`,
+				marginTop: margin ? `${margin}px` : '',
+			}}
+			ref={ref}>
+			{children}
+		</section>
+	);
+};

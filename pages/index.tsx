@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { BalanceInfo } from 'components/BalanceInfo';
 import { Dialogs } from 'components/dialogs/DIalogs';
 import { Popups } from 'components/dialogs/Popups';
 import { SymbolSelectDropdown } from 'components/Dropdown';
@@ -33,9 +34,10 @@ export default function Home() {
 const TabArea = () => {
 	const selectedTab = useAppSelector(state => state.layout.selectedTab);
 	return (
-		<section className="relative pt-2">
+		<section className="relative mt-2">
 			{selectedTab === TABS.ORDER_INFO && <OrderInfo />}
 			{selectedTab === TABS.POSITIONS && <PositionTable />}
+			<BalanceInfo />
 		</section>
 	);
 };
@@ -46,7 +48,7 @@ const OrderWrapper = ({ children }) => {
 			{/*<div className="absolute left-[10px] top-[6px]">*/}
 			{/*	<p className="text-gray-200 text-base tracking-widest">Order</p>*/}
 			{/*</div>*/}
-			<div className="flex flex-col gap-4 w-full">{children}</div>
+			<div className="flex flex-col gap-2 w-full">{children}</div>
 		</section>
 	);
 };

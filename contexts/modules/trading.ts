@@ -7,7 +7,7 @@ import { OrderTemplate } from 'utils/trading';
 interface InitState {
 	positions: Record<string, Partial<PositionState> & { quantity: string }>;
 	balances: Balances;
-	instantOrders: Record<string, Record<string, Partial<OrderTemplate | ReceivedOrder>>>;
+	instantOrders: Record<string, Record<string, Partial<OrderTemplate & { extOrderId: string }>>>;
 	orderIds: Record<string, Record<string, Partial<ReceivedOrder>>>;
 }
 
@@ -47,35 +47,36 @@ export const tradingSlice = createSlice({
 		},
 		setOrderId: (state, action: PayloadAction<ReceivedOrder>) => {
 			const { symbol, orderId } = action.payload;
-			if (state.orderIds[symbol] === undefined) {
-				state.orderIds[symbol] = {
-					[orderId]: action.payload,
-				};
-			} else {
-				state.orderIds[symbol][orderId] = action.payload;
-			}
+			if (state.orderIds[symbol] === undefined) state.orderIds[symbol] = {};
+			state.orderIds[symbol][orderId] = action.payload;
 		},
 		setInstantOrder: (state, action: PayloadAction<{ order: OrderTemplate; extOrderId: string }>) => {
 			const { order, extOrderId } = action.payload;
-			if (!state.instantOrders[order.symbol]) {
-				state.instantOrders[order.symbol] = {
-					[extOrderId]: order,
-				};
-			}
+			console.log('setInstantOrder', order, extOrderId);
+			if (!state.instantOrders[order.symbol]) state.instantOrders[order.symbol] = {};
+			state.instantOrders[order.symbol][extOrderId] = order;
 		},
 		mergeInstantOrder: (state, action: PayloadAction<ReceivedOrder>) => {
 			const order = action.payload;
+			const newOrder = {
+				leverage: order.leverage,
+				quantity: String(order.quantity),
+				price: String(order.price),
+				symbol: order.symbol,
+				orderType: order.orderType,
+				extOrderId: order.extOrderId,
+			} as Partial<OrderTemplate & { extOrderId: string }>;
 			if (!state.instantOrders[order.symbol]) {
 				state.instantOrders[order.symbol] = {
-					[order.extOrderId]: order,
+					[order.extOrderId]: newOrder,
 				};
 			} else if (state.instantOrders[order.symbol][order.extOrderId]) {
 				state.instantOrders[order.symbol][order.extOrderId] = {
 					...state.instantOrders[order.symbol][order.extOrderId],
-					...order,
+					...newOrder,
 				};
 			} else {
-				state.instantOrders[order.symbol][order.extOrderId] = order;
+				state.instantOrders[order.symbol][order.extOrderId] = newOrder;
 			}
 		},
 	},

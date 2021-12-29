@@ -29,15 +29,13 @@ export function OrderInfo() {
 		isInaccurate: bestBidAmount < quantity,
 	};
 	return (
-		<section className="mt-5 flex flex-col items-center">
-			<div className="flex flex-col gap-2 w-full">
-				<div className="grid grid-cols-2 gap-2 xs:gap-5 w-full h-full">
-					<div className="border border-green-600 border-opacity-75 bg-gray-950 p-4">
-						<DisplayOrderData data={askData} />
-					</div>
-					<div className="border border-red-600 border-opacity-75 bg-gray-950 p-4">
-						<DisplayOrderData data={bidData} className="text-right" />
-					</div>
+		<section className="mt-5 w-full">
+			<div className="grid grid-cols-2 gap-2 xs:gap-5 w-full">
+				<div className="border border-green-600 border-opacity-75 bg-gray-950 p-4">
+					<DisplayOrderData data={askData} />
+				</div>
+				<div className="border border-red-600 border-opacity-75 bg-gray-950 p-4">
+					<DisplayOrderData data={bidData} className="text-right" />
 				</div>
 			</div>
 		</section>

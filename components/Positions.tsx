@@ -3,7 +3,9 @@ import React from 'react';
 import cn from 'clsx';
 import Img from 'next/image';
 
-import { useAppSelector, useSymbols } from 'hooks';
+import { processOrder } from 'components/OrderArea';
+import { Order, Side } from 'contexts';
+import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { fixed } from 'utils/Big';
 import { formatNumber, formatUSD } from 'utils/format';
 import { isNumber } from 'utils/scripts';
@@ -29,7 +31,7 @@ export const PositionTable = () => {
 			</div>
 			<div className="col-span-2 grid grid-cols-2 xs:grid-cols-2 grid-rows-2 gap-x-1 xxs:gap-x-2 gap-y-2 w-full xs:px-5 sm:px-0">
 				<LabelledValue label="Position Margin" value={hasPosition ? positionMargin : '-'} />
-				<LabelledValue label="Amount" value={position?.quantity} />
+				<LabelledValue label="Amount" value={hasPosition ? position?.quantity : '-'} />
 				<LabelledValue label="Entry Price" value={hasPosition ? formatUSD(position?.entryPrice) : '-'} />
 				<LabelledValue label="Liq. Price" value={hasPosition ? formatUSD(position?.liqPrice) : '-'} />
 			</div>
@@ -38,14 +40,33 @@ export const PositionTable = () => {
 };
 
 const ClosePosition = () => {
+	const { symbol } = useSymbols();
+	const { priceDp } = useSymbolData();
+	const positions = useAppSelector(state => state.trading.positions);
+	const position = positions[symbol];
+	const hasPosition = position?.quantity ? position.quantity !== '0' : false;
+	const onClosePosition = React.useCallback(() => {
+		if (!hasPosition) return;
+		const order = {
+			quantity: Number(position.quantity),
+			leverage: Number(position.leverage),
+			isInstant: true,
+		} as Order;
+		processOrder(order, position.side === 'Ask' ? Side.BID : Side.ASK, priceDp, symbol);
+	}, [hasPosition, position, priceDp, symbol]);
 	return (
-		<button className="flex items-center justify-center border border-theme-main rounded-md py-1 px-1.5">
+		<button
+			onClick={onClosePosition}
+			className={cn(
+				hasPosition ? 'hover:opacity-80 cursor-pointer' : 'opacity-50 cursor-not-allowed',
+				'flex items-center justify-center border border-theme-main rounded-md py-1 px-1.5'
+			)}>
 			<p className="text-[10px]">Close Position</p>
 		</button>
 	);
 };
 
-const LabelledValue = ({ label, value, className }: { label: string; value: string; className?: string }) => {
+export const LabelledValue = ({ label, value, className }: { label: string; value: string; className?: string }) => {
 	return (
 		<div className={cn('flex flex-col items-center justify-center gap-2 sm:gap-0.5 h-10 xxs:h-14', className)}>
 			<p className="leading-none tracking-tight text-xs sm:text-sm text-gray-400 text-center">{label}</p>

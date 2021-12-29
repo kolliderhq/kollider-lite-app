@@ -2,6 +2,7 @@ import React from 'react';
 
 import { InvoicePopup } from 'components/dialogs/Invoice';
 import { DIALOGS, POPUPS } from 'consts';
+import { setInvoiceSettled, setViewing } from 'contexts';
 import { setDialog, setPopup, setPopupClose } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
 
@@ -13,7 +14,12 @@ export const Popups = () => {
 		state.invoices.viewing,
 		state.connection.isWeblnConnected,
 	]);
-	const close = React.useCallback(() => dispatch(setPopupClose()), []);
+	const close = React.useCallback(() => {
+		dispatch(setPopupClose());
+		if (currentPopup === POPUPS.INVOICE) {
+			dispatch(setViewing(false));
+		}
+	}, [currentPopup]);
 
 	//	open invoice popup
 	React.useEffect(() => {

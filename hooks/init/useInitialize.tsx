@@ -16,7 +16,6 @@ export function useInitialize() {
 
 const persistSettings = () => {
 	const settings = defaultLocalStore.get('settings');
-	console.log('settings', settings);
 	if (empty(settings)) {
 		storeDispatch(setFirstLoad());
 	} else {

@@ -4,7 +4,7 @@ import map from 'lodash-es/map';
 
 import { GENERAL } from 'consts';
 import { UI } from 'consts/misc/UI';
-import { TSymbolData } from 'contexts';
+import { ISymbolData, TSymbolData } from 'contexts';
 import { useAppSelector } from 'hooks/redux';
 
 export function useSymbols() {
@@ -32,5 +32,5 @@ export function useSymbols() {
 export function useSymbolData() {
 	const { symbols, symbolData, symbolIndex } = useAppSelector(state => state.symbols);
 	const symbol = symbols[symbolIndex];
-	return symbolData[symbol] ? symbolData[symbol] : GENERAL.DEFAULT.OBJ;
+	return (symbolData[symbol] ? symbolData[symbol] : GENERAL.DEFAULT.OBJ) as ISymbolData;
 }

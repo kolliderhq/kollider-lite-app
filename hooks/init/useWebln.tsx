@@ -78,7 +78,7 @@ export const useWebln = () => {
 	const invoice = invoiceStore.invoices[invoiceStore.symbol]?.invoice;
 	//	deposit / instant order invoice
 	React.useEffect(() => {
-		console.log('invoice', viewing, invoice, isWeblnConnected);
+		// console.log('invoice', viewing, invoice, isWeblnConnected);
 		if (!viewing || !isWeblnConnected || !invoice) return;
 		weblnSendPayment(invoice as string, () => {
 			if (onlyWeblnIfEnabled) dispatch(setViewing(false));

@@ -60,6 +60,11 @@ export const InvoicePopup = wrapBasePopup(() => {
 						</div>
 					</LabelValue>
 					<LabelValue label={'Amount'}>{instantOrder?.quantity}</LabelValue>
+					<LabelValue label={'Side'}>
+						<span className={cn(instantOrder?.side === 'Bid' ? 'text-green-400' : 'text-red-400')}>
+							{instantOrder?.side}
+						</span>
+					</LabelValue>
 					<LabelValue label={'Leverage'}>{instantOrder?.leverage / 100}x</LabelValue>
 				</div>
 			</section>

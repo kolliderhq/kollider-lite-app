@@ -1,3 +1,5 @@
+import cn from 'clsx';
+
 import { DIALOGS } from 'consts';
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
@@ -22,7 +24,10 @@ export const BalanceInfo = () => {
 					onClick={() => {
 						if (Number(cash) > 0) dispatch(setDialog(DIALOGS.SETTLE_INVOICE));
 					}}
-					className="py-2 px-4 border border-theme-main rounded-lg hover:opacity-80">
+					className={cn(
+						Number(cash) > 0 ? 'hover:opacity-80 cursor-pointer' : 'opacity-50 cursor-not-allowed',
+						'py-2 px-4 border border-theme-main rounded-lg hover:opacity-80'
+					)}>
 					<p className="text-xs">Withdraw</p>
 				</button>
 			</div>

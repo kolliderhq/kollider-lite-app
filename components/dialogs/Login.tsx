@@ -12,6 +12,8 @@ import { defaultLocalStore, setApiKey, setUserData } from 'contexts';
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { getSWROptions } from 'utils/fetchers';
+import { formatNumber } from 'utils/format';
+import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
 export const Login = () => {
 	const [open, setOpen] = React.useState(true);
@@ -41,7 +43,7 @@ const LoginContents = () => {
 		state.connection.apiKey,
 		state.connection.isWeblnConnected,
 	]);
-	const { data } = useSWR([API_NAMES.AUTH_LNURL, hasToken], getSWROptions(API_NAMES.AUTH_LNURL));
+	const { data, mutate } = useSWR([API_NAMES.AUTH_LNURL, hasToken], getSWROptions(API_NAMES.AUTH_LNURL));
 
 	React.useEffect(() => {
 		const cleanup = baseSocketClient.listenOnce(WS_CUSTOM_TYPES.LNURL_AUTH_CREDENTIALS, data => {
@@ -52,18 +54,20 @@ const LoginContents = () => {
 				email: '',
 				type: USER_TYPE.PRO,
 			};
-			// displayToast(<p className="text-sm">Successfully logged in</p>, 'info', {
-			// 	autoClose: 1500,
-			// 	position: 'top-center',
-			// });
+
+			displayToast(<p>Login Success</p>, {
+				type: 'success',
+				level: TOAST_LEVEL.CRITICAL,
+			});
 			dispatch(setUserData(userData));
 			defaultLocalStore.cookieSet(CONTEXTS.LOCAL_STORAGE.FULL_USER, { ...userData });
 			if (data?.refreshToken) defaultLocalStore.cookieSet(CONTEXTS.LOCAL_STORAGE.FULL_USER_REFRESH, data.refreshToken);
 		});
 		return () => {
+			mutate();
 			cleanup();
 		};
-	}, [dispatch]);
+	}, [dispatch, mutate]);
 
 	return (
 		<div className="w-full h-full my-auto">

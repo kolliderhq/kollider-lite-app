@@ -1,5 +1,6 @@
 import cn from 'clsx';
 
+import { WithdrawLimitLine } from 'components/WithdrawLimit';
 import { DIALOGS } from 'consts';
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
@@ -11,7 +12,7 @@ export const BalanceInfo = () => {
 	const balances = useAppSelector(state => state.trading.balances);
 	const cash = fixed(balances.cash, 0);
 	return (
-		<div className="mt-4">
+		<div className="mt-4 pb-10 gap-x-5 flex flex-wrap xs:flex-nowrap items-center justify-between">
 			<div className="flex items-center justify-start gap-6">
 				<div>
 					<p className="text-xs tracking-tightest leading-none text-gray-400">Available</p>
@@ -31,6 +32,7 @@ export const BalanceInfo = () => {
 					<p className="text-xs">Withdraw</p>
 				</button>
 			</div>
+			<WithdrawLimitLine />
 		</div>
 	);
 };

@@ -30,11 +30,6 @@ export const useOrderbookData = () => {
 	}, [shouldUpdate, symbol]);
 };
 
-export const useSelectedOrderbookData = select => {
-	const data = useOrderbookData();
-	return React.useMemo(() => data[select], [data, select]);
-};
-
 export function useOrderbookSelector<T>(selector: (data: TOrderbook) => T) {
 	const data = useOrderbookData();
 	const selectedData = selector(data);
@@ -43,7 +38,7 @@ export function useOrderbookSelector<T>(selector: (data: TOrderbook) => T) {
 
 export const setOrderbook = data => {
 	const symbol = data.symbol;
-	// console.log('setOrderbook', data);
+	console.log('orderbook snapshot', data, symbol);
 	Orderbook.instance.setOrderbookSnapshot(
 		{
 			asks: data.asks,
@@ -67,7 +62,6 @@ export const batchProcessOrder = async (updateData, symbol) => {
 
 	if (empty(updateDataArr)) return;
 	calcAccum(newData);
-
 	Orderbook.instance.setOrderbookSnapshot(newData, symbol);
 };
 

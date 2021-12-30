@@ -21,7 +21,7 @@ export const InvoicePopup = wrapBasePopup(() => {
 	const instantOrder = find(
 		map(instantOrders[symbol], order => order),
 		// @ts-ignore value is mostly defined
-		order => order?.orderId === invoice.orderId
+		order => order?.extOrderId === invoice.extOrderId
 	);
 
 	React.useEffect(() => {

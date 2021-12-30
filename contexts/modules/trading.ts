@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import cloneDeep from 'lodash-es/cloneDeep';
 import each from 'lodash-es/each';
 
 import { Balances, PositionState, ReceivedOrder } from 'utils/refiners/sockets';
@@ -35,6 +36,7 @@ export const tradingSlice = createSlice({
 			each(action.payload, symbol => {
 				state.positions[symbol] = { quantity: '0' };
 			});
+			state.balances = cloneDeep(initialState.balances);
 		},
 		setPositionsData: (state, action: PayloadAction<{ symbol: string; data: PositionState }>) => {
 			state.positions[action.payload.symbol] = action.payload.data;
@@ -52,7 +54,6 @@ export const tradingSlice = createSlice({
 		},
 		setInstantOrder: (state, action: PayloadAction<{ order: OrderTemplate; extOrderId: string }>) => {
 			const { order, extOrderId } = action.payload;
-			console.log('setInstantOrder', order, extOrderId);
 			if (!state.instantOrders[order.symbol]) state.instantOrders[order.symbol] = {};
 			state.instantOrders[order.symbol][extOrderId] = order;
 		},
@@ -63,7 +64,6 @@ export const tradingSlice = createSlice({
 				quantity: String(order.quantity),
 				price: String(order.price),
 				symbol: order.symbol,
-				orderType: order.orderType,
 				extOrderId: order.extOrderId,
 			} as Partial<OrderTemplate & { extOrderId: string }>;
 			if (!state.instantOrders[order.symbol]) {

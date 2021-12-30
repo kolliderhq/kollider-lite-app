@@ -3,7 +3,7 @@ import React from 'react';
 import includes from 'lodash-es/includes';
 
 import { baseSocketClient } from 'classes/SocketClient';
-import { CHANNELS, DIALOGS, MESSAGE_TYPES, TABS, TRADING_TYPES } from 'consts';
+import { DIALOGS, MESSAGE_TYPES, TABS, TRADING_TYPES } from 'consts';
 import {
 	mergeInstantOrder,
 	reduxStore,
@@ -16,8 +16,9 @@ import {
 import { setDialog, setTab } from 'contexts/modules/layout';
 import { useAppSelector } from 'hooks/redux';
 import { LOG5 } from 'utils/debug';
-import { formatNumber } from 'utils/format';
-import { OrderInvoice, ReceivedOrder } from 'utils/refiners/sockets';
+import { applyDp, formatNumber } from 'utils/format';
+import { ReceivedOrder } from 'utils/refiners/sockets';
+import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
 export const useTradingListener = () => {
 	const wsReady = useAppSelector(state => state.connection.isWsConnected);
@@ -36,8 +37,25 @@ const tradingListener = (msg: any) => {
 	if (msg.type === TRADING_TYPES.FILL) {
 		const data = msg.data;
 		const orderId = data.orderId;
-		console.log('fill', msg.data);
+		console.log('fill', data);
+		const priceDp = reduxStore.getState().symbols.symbolData[data.symbol]?.priceDp;
+		if (!data || !priceDp) return;
 		storeDispatch(setTab(TABS.POSITIONS));
+		displayToast(
+			<p>
+				Order Filled - ${formatNumber(applyDp(data.price, priceDp))}
+				<br />
+				{data.side === 'Bid' ? <span className="text-green-400">Buy</span> : <span className="text-red-400">Sell</span>}
+				{' ' + formatNumber(msg.data.quantity)} {data.symbol.split('.')[0]}
+			</p>,
+			{
+				type: 'dark',
+				level: TOAST_LEVEL.INFO,
+				toastOptions: {
+					position: 'bottom-right',
+				},
+			}
+		);
 
 		// TODO : update logic for fill
 		//  update already kept orders and increase the amount of contracts that were filled for them
@@ -65,7 +83,6 @@ const tradingListener = (msg: any) => {
 			// 	LOG5(`cancel order but id not found - ${id}`, 'Cancel Donez');
 			// 	return;
 			// }
-			// TODO : delete orders kept in redux
 			// console.log('CANCEL ORDER', order);
 			// hide Liquidation orders due to spam
 			// if (order.orderType === 'LIQ') return;
@@ -91,7 +108,6 @@ const tradingListener = (msg: any) => {
 		const data = msg.data as ReceivedOrder;
 		storeDispatch(mergeInstantOrder(data));
 		storeDispatch(setOrderId(data));
-		// TODO : update order id store
 
 		const currentInvoice = reduxStore.getState().invoices.invoices[data.symbol];
 		console.log(data, currentInvoice);
@@ -100,7 +116,7 @@ const tradingListener = (msg: any) => {
 		}
 	} else if (msg.type === TRADING_TYPES.TRADE) {
 		const data = msg.data;
-		// TODO : update matches store with new trade
+		// update matches store with new trade -> not in Light client
 	} else if (msg.type === TRADING_TYPES.ORDER_INVOICE) {
 		const data = msg.data; // as OrderInvoice;
 		const orderId = data.orderId;
@@ -113,17 +129,17 @@ const tradingListener = (msg: any) => {
 	} else if (msg.type === TRADING_TYPES.WITHDRAWAL_LIMIT_INFO) {
 		storeDispatch(setUserWithdrawlLimits(msg.data));
 	} else if (msg.type === TRADING_TYPES.DEPOSIT_REJECTION) {
-		// displayToast(
-		// 	<>
-		// 		Deposit was rejected
-		// 		<br />
-		// 		{msg.data.reason}
-		// 	</>,
-		// 	'error',
-		// 	null,
-		// 	'Trade fail',
-		// 	true
-		// );
+		displayToast(
+			<p>
+				Deposit was rejected
+				<br />
+				{msg.data.reason}
+			</p>,
+			{
+				type: 'error',
+				level: TOAST_LEVEL.CRITICAL,
+			}
+		);
 	} else if (msg.type === TRADING_TYPES.SETTLEMENT_REQUEST) {
 		// settling happens by withdrawals only
 		// console.log('settlementRequest >>>>>>', msg.data);
@@ -135,17 +151,21 @@ const tradingListener = (msg: any) => {
 		if (store.layout.dialog === DIALOGS.SETTLE_INVOICE) {
 			storeDispatch(setDialog(DIALOGS.NONE));
 		}
-		// displayToast(
-		// 	<>
-		// 		{'Close Position / Withdraw'}
-		// 		<br />
-		// 		<DisplayAmount decimals={0} denom={'SATS'} amount={msg.data.amount} sizeInt={14} sizeDenom={12} />
-		// 	</>,
-		// 	'dark',
-		// 	null,
-		// 	'Withdraw success',
-		// 	true
-		// );
+		displayToast(
+			<p>
+				Withdraw Success
+				<br />
+				{formatNumber(msg.data.amount)}
+				<span className="pl-1 text-xs">SATS</span>
+			</p>,
+			{
+				type: 'dark',
+				level: TOAST_LEVEL.CRITICAL,
+				toastOptions: {
+					position: 'bottom-right',
+				},
+			}
+		);
 		baseSocketClient.socketSend(MESSAGE_TYPES.WITHDRAWAL_LIMIT_INFO, {}, null, null);
 	} else if (msg.type === TRADING_TYPES.LIQUIDATIONS) {
 		const store = reduxStore.getState();
@@ -163,16 +183,23 @@ const tradingListener = (msg: any) => {
 		// 	true
 		// );
 	} else if (msg.type === TRADING_TYPES.DEPOSIT_SUCCESS) {
-		let message = <></>;
 		if (msg?.data?.deposit?.amount) {
-			message = (
-				<>
+			displayToast(
+				<p>
+					Deposit Success
 					<br />
-					<span className="font-bold">{formatNumber(msg?.data?.deposit?.amount)} SATS</span>
-				</>
+					<span className="font-bold">{formatNumber(msg?.data?.deposit?.amount)}</span>
+					<span className="pl-1 text-xs">SATS</span>
+				</p>,
+				{
+					type: 'dark',
+					level: TOAST_LEVEL.CRITICAL,
+					toastOptions: {
+						position: 'bottom-right',
+					},
+				}
 			);
 		}
-		// displayToast(<p>Deposit Success{message}</p>, 'dark', { autoClose: 7000 }, 'Deposit', true);
 		baseSocketClient.socketSend(MESSAGE_TYPES.WITHDRAWAL_LIMIT_INFO, {}, null, null);
 	} else if (msg.type === TRADING_TYPES.RAW_DEPOSIT) {
 		const paymentRequest = msg?.data?.payment_request;
@@ -184,23 +211,6 @@ const tradingListener = (msg: any) => {
 	} else if (msg.type === TRADING_TYPES.RAW_WITHDRAWAL) {
 		const paymentRequest = msg?.data?.paymentRequest;
 		if (!paymentRequest) return;
-		// TODO : process payment request to display qr code
-		// updateInvoiceStore({ withdrawSettled: paymentRequest });
-		// not used atm.
-		// updateInvoiceStore({ withdrawSettled: msg.data.paymentRequest });
-		// displayToast(
-		// 	<p className="text-sm">
-		// 		Successfully Withdrew
-		// 		<br />
-		// 		<span className="font-bold">
-		// 			{formatNumber(msg.data.amount)}
-		// 			<span className="text-xs">SATS</span>
-		// 		</span>
-		// 	</p>,
-		// 	'dark',
-		// 	{ autoClose: 6000 },
-		// 	'Withdraw'
-		// );
 	} else if (msg.type === TRADING_TYPES.ADL_NOTICE) {
 		// displayToast(<ADLToast data={msg.data} />, 'error', { position: 'top-right' }, 'Auto Deleverage Notice', true);
 	} else {

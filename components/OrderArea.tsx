@@ -74,7 +74,8 @@ const OrderInput = () => {
 				) : (
 					<DisplayLeverage leverage={hasPositionLeverage ? position.leverage : leverage} />
 				)}
-				{!editingLeverage && !hasPositionLeverage ? <ChangeLeverageButton /> : <div className="h-[42px]" />}
+				{!editingLeverage && !hasPositionLeverage && <ChangeLeverageButton />}
+				{!editingLeverage && hasPositionLeverage && <div className="h-0 xs:h-[42px]" />}
 			</div>
 		</div>
 	);

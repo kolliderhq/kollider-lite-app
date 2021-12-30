@@ -1,18 +1,16 @@
 import React from 'react';
 
 // eslint-disable-next-line prettier/prettier
-import { RequestInvoiceResponse, WebLNProvider } from 'webln';
+import { RequestInvoiceResponse } from 'webln';
 
 import { baseSocketClient } from 'classes/SocketClient';
-import { MESSAGE_TYPES } from 'consts';
-import { DIALOGS } from 'consts';
-import { SETTINGS } from 'consts';
-import { setViewing, setWeblnConnected } from 'contexts';
-import { reduxStore } from 'contexts';
+import { DIALOGS, MESSAGE_TYPES, SETTINGS } from 'consts';
+import { reduxStore, setViewing, setWeblnConnected } from 'contexts';
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { TBigInput } from 'utils/Big';
-import { Balances, OrderInvoice } from 'utils/refiners/sockets';
+import { Balances } from 'utils/refiners/sockets';
+import { TOAST_LEVEL, displayToast } from 'utils/toast';
 import { FixedLengthArray } from 'utils/types/utils';
 // import { displayToast } from 'utils/toast';
 import { weblnInit, weblnSendPayment, weblnWithdraw } from 'utils/webln';
@@ -22,44 +20,52 @@ export const useWebln = () => {
 	//	initialize webln - runs on startup
 	React.useEffect(() => {
 		weblnInit().then(res => {
-			if (!res) return;
+			if (!res) {
+				console.log('webln init failed');
+				displayToast(<p className="text-sm">Webln not found</p>, {
+					type: 'info',
+					level: TOAST_LEVEL.INFO,
+				});
+				return;
+			}
+
 			res
 				.enable()
 				.then(() => {
-					console.log('webln enabled');
 					dispatch(setWeblnConnected(true));
 				})
 				.catch(() => {
 					dispatch(setWeblnConnected(false));
 					console.log('webln disabled');
+					displayToast(
+						<p className="text-sm">
+							Please unlock your wallet
+							<br />
+							and refresh the page
+						</p>,
+						{
+							type: 'warning',
+							level: TOAST_LEVEL.CRITICAL,
+						}
+					);
 				});
 
 			res.getInfo().then(info => {
 				if (info?.node?.alias) {
 					console.log('webln connected', info.node.alias);
-					// displayToast(
-					// 	<p className="text-sm">
-					// 		Wallet [<span className="font-bold">{info.node.alias}</span>]
-					// 		<br />
-					// 		was successfully loaded
-					// 	</p>,
-					// 	'dark',
-					// 	null,
-					// 	'WebLn Found',
-					// 	true
-					// );
+					displayToast(
+						<p className="text-sm">
+							Wallet [<span className="font-bold">{info.node.alias}</span>]
+							<br />
+							was successfully loaded
+						</p>,
+						{
+							type: 'dark',
+							title: 'Webln Connected',
+							level: TOAST_LEVEL.IMPORTANT,
+						}
+					);
 				} else {
-					// displayToast(
-					// 	<p className="text-sm">
-					// 		Please unlock your wallet
-					// 		<br />
-					// 		and refresh the page
-					// 	</p>,
-					// 	'error',
-					// 	null,
-					// 	'WebLn Wallet inaccessible',
-					// 	true
-					// );
 				}
 			});
 		});

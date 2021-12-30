@@ -30,9 +30,9 @@ export const PositionTable = () => {
 				</div>
 			</div>
 			<div className="col-span-2 grid grid-cols-2 xs:grid-cols-2 grid-rows-2 gap-x-1 xxs:gap-x-2 gap-y-2 w-full xs:px-5 sm:px-0">
-				<LabelledValue label="Position Margin" value={hasPosition ? positionMargin : '-'} />
+				<LabelledValue label="invested SATS" value={hasPosition ? positionMargin : '-'} />
 				<LabelledValue label="Amount" value={hasPosition ? position?.quantity : '-'} />
-				<LabelledValue label="Entry Price" value={hasPosition ? formatUSD(position?.entryPrice) : '-'} />
+				<LabelledValue label="Purchase Price" value={hasPosition ? formatUSD(position?.entryPrice) : '-'} />
 				<LabelledValue label="Liq. Price" value={hasPosition ? formatUSD(position?.liqPrice) : '-'} />
 			</div>
 		</section>

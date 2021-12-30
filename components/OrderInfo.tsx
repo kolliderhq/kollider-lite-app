@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 
 import cn from 'clsx';
 
+import Loader from 'components/Loader';
 import { CURRENCY } from 'consts/misc/currency';
 import { askBidSelector, useOrderbookSelector } from 'contexts';
 import { useAppSelector, useSymbolData, useSymbols } from 'hooks';
@@ -13,15 +14,15 @@ export function OrderInfo() {
 	const { bestAsk, bestBid, bestAskAmount, bestBidAmount } = useOrderbookSelector(askBidSelector);
 	const { priceDp, contractSize } = useSymbolData();
 	const { symbol } = useSymbols();
-	console.log(bestAsk, bestBid, priceDp);
-	const askOrderValue = getOrderValue(bestAsk, priceDp, quantity, symbol);
+	const askOrderValue = getOrderValue(bestAsk, priceDp, quantity, symbol, contractSize);
 	const askData: SideBuyData = {
 		margin: divide(askOrderValue, leverage, 0),
 		orderValue: fixed(askOrderValue, 0),
 		fees: multiply(CURRENCY.TAKER_FEES, askOrderValue, 0),
 		isInaccurate: bestAskAmount < quantity,
 	};
-	const bidOrderValue = getOrderValue(bestBid, priceDp, quantity, symbol);
+	const bidOrderValue = getOrderValue(bestBid, priceDp, quantity, symbol, contractSize);
+
 	const bidData: SideBuyData = {
 		margin: divide(bidOrderValue, leverage, 0),
 		orderValue: fixed(bidOrderValue, 0),
@@ -32,10 +33,10 @@ export function OrderInfo() {
 		<section className="mt-5 w-full">
 			<div className="grid grid-cols-2 gap-2 xs:gap-5 w-full">
 				<div className="border border-green-600 border-opacity-75 bg-gray-950 p-4">
-					<DisplayOrderData data={askData} />
+					<DisplayOrderData loaded={!!bestAsk} data={askData} />
 				</div>
 				<div className="border border-red-600 border-opacity-75 bg-gray-950 p-4">
-					<DisplayOrderData data={bidData} className="text-right" />
+					<DisplayOrderData loaded={!!bestBid} data={bidData} className="text-right" />
 				</div>
 			</div>
 		</section>
@@ -49,36 +50,52 @@ interface SideBuyData {
 	isInaccurate: boolean;
 }
 
-const getOrderValue = (price, priceDp, quantity, symbol) => {
+const getOrderValue = (price, priceDp, quantity, symbol, contractSize) => {
 	if (symbol === 'BTCUSD.PERP') {
 		const div = divide(CURRENCY.SATS_PER_BTC, applyDp(price ? price : 1, priceDp), 10);
 		return multiply(!isNaN(Number(div)) ? div : 0, quantity ? quantity : 0, 10);
 	}
-	const div = applyDp(price ? price : 1, priceDp);
+	const div = multiply(applyDp(price ? price : 1, priceDp), contractSize);
 	return multiply(!isNaN(Number(div)) ? div : 0, quantity ? quantity : 0, 10);
 };
 
-const DisplayOrderData = ({ data, className = '' }: { data: SideBuyData; className?: string }) => {
+const DisplayOrderData = ({
+	loaded,
+	data,
+	className = '',
+}: {
+	loaded: boolean;
+	data: SideBuyData;
+	className?: string;
+}) => {
 	return (
 		<ul className={cn('grid grid-rows-auto gap-3', className)}>
-			<li>
-				<LabelledValue label={'Margin'} innacurate={data.isInaccurate}>
-					{formatNumber(data.margin)}
-					<span className="pl-1 text-xs xxs:text-sm xs:text-base break-normal">SATS</span>
-				</LabelledValue>
-			</li>
-			<li>
-				<LabelledValue label={'Order Value'} innacurate={data.isInaccurate}>
-					{formatNumber(data.orderValue)}
-					<span className="pl-1 text-xs xxs:text-sm xs:text-base break-normal">SATS</span>
-				</LabelledValue>
-			</li>
-			<li>
-				<LabelledValue label={'Fees'} innacurate={data.isInaccurate}>
-					{formatNumber(data.fees)}
-					<span className="pl-1 text-xs xxs:text-sm xs:text-base break-normal">SATS</span>
-				</LabelledValue>
-			</li>
+			{loaded ? (
+				<>
+					<li>
+						<LabelledValue label={'Margin'} innacurate={data.isInaccurate}>
+							{formatNumber(data.margin)}
+							<span className="pl-1 text-xs xxs:text-sm xs:text-base break-normal">SATS</span>
+						</LabelledValue>
+					</li>
+					<li>
+						<LabelledValue label={'Order Value'} innacurate={data.isInaccurate}>
+							{formatNumber(data.orderValue)}
+							<span className="pl-1 text-xs xxs:text-sm xs:text-base break-normal">SATS</span>
+						</LabelledValue>
+					</li>
+					<li>
+						<LabelledValue label={'Fees'} innacurate={data.isInaccurate}>
+							{formatNumber(data.fees)}
+							<span className="pl-1 text-xs xxs:text-sm xs:text-base break-normal">SATS</span>
+						</LabelledValue>
+					</li>
+				</>
+			) : (
+				<div className="h-[140px]">
+					<Loader />
+				</div>
+			)}
 		</ul>
 	);
 };

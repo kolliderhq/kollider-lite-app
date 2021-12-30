@@ -1,0 +1,39 @@
+:root {
+  --toastify-color-info: #3498db;
+  --toastify-color-light: #3498db !important;
+  --toastify-text-color-light: #fff !important;
+}
+
+.Toastify__toast-container {
+  &.Toastify__toast-container--top-center {
+    width: fit-content;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &.Toastify__toast-container--bottom-right {
+    bottom: 2em;
+    width: fit-content;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  > .Toastify__toast {
+    @apply w-screen xxs:w-[380px] shadow-elevation-24dp
+  }
+  .Toastify__toast-icon {
+    @apply w-8
+  }
+  .Toastify__close-button--light {
+    color: #fff !important;
+    opacity: 0.5;
+  }
+}
+
+.kollider__animate {
+  animation-fill-mode: both;
+  animation-duration: 0.5s;
+}
+
+.kollider__animate-fast {
+  animation-fill-mode: both;
+  animation-duration: 0.3s;
+}

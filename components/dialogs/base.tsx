@@ -80,7 +80,7 @@ export const BaseDialog: FunctionComponent<BaseDialogProps> = ({
 								{!isHideCloseButton && (
 									<img
 										onClick={() => close()}
-										className="absolute cursor-pointer top-3 sm:top-5 right-3 sm:right-5 w-8 sm:w-10"
+										className="absolute cursor-pointer hover:opacity-80 top-3 sm:top-5 right-3 sm:right-5 w-8 sm:w-10"
 										src="/assets/common/close.svg"
 									/>
 								)}

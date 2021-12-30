@@ -129,7 +129,6 @@ export interface ReceivedOrder {
 	extOrderId: string;
 	leverage: number;
 	orderId: number;
-	orderType: string;
 	price: number;
 	quantity: number;
 	symbol: string;

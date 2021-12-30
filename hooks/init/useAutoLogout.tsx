@@ -10,8 +10,7 @@ import {
 	storeDispatch,
 } from 'contexts';
 import { useAppDispatch, useAppSelector } from 'hooks';
-
-// import { displayToast } from 'utils/toast';
+import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
 let logoutTimeout;
 export default function useAutoLogout() {
@@ -49,4 +48,9 @@ export const logOutFunc = () => {
 	storeDispatch(setUserLogout());
 	storeDispatch(setApiKey(''));
 	storeDispatch(setInitTrading());
+
+	displayToast(<p>Successfully Logged Out</p>, {
+		type: 'success',
+		level: TOAST_LEVEL.IMPORTANT,
+	});
 };

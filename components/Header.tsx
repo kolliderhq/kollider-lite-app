@@ -70,7 +70,7 @@ export const Header = () => {
 						// 	null
 						// );
 					}}
-					className="opacity-75 hover:opacity-100 cursor-pointer px-2">
+					className="s-filter-theme-main-hover cursor-pointer px-2">
 					<img className="h-5 w-5 min-w-[20px]" src={'/assets/common/logout.svg'} alt="logout" />
 				</button>
 			)}

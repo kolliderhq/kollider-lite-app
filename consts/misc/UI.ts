@@ -21,11 +21,28 @@ export const UI = deepFreeze({
 			LONGEST: 10000,
 		},
 	},
+	DENOM: {
+		SATS: {
+			VALUE: 'SATS',
+			MULT: 1,
+		},
+		BTC: {
+			VALUE: 'BTC',
+			MULT: Math.pow(10, -8),
+			DECIMALS: 7,
+		},
+		USD: {
+			VALUE: 'USD',
+			MULT: null, //  need realtime data for this
+			DECIMALS: 3,
+		},
+	},
 });
 
 export enum TABS {
 	ORDER,
 	POSITIONS,
+	__LENGTH,
 }
 
 // dependant on UI actions

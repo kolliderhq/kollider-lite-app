@@ -2,10 +2,12 @@ import React from 'react';
 
 import { baseSocketClient } from 'classes/SocketClient';
 import { wrapBaseDialog, wrapBasePopup } from 'components/dialogs/base';
+import { LabelValue } from 'components/dialogs/Invoice';
 import Loader from 'components/Loader';
 import { QrCode } from 'components/QrCode';
 import { MESSAGE_TYPES, TRADING_TYPES } from 'consts';
 import { useAppSelector } from 'hooks';
+import { formatNumber } from 'utils/format';
 
 export const WithdrawAvailableDialog = wrapBaseDialog(() => {
 	const balances = useAppSelector(state => state.trading.balances);
@@ -33,8 +35,16 @@ export const WithdrawAvailableDialog = wrapBaseDialog(() => {
 	}, [amount]);
 	return (
 		<div className="w-full h-full mt-10">
-			<h4 className="tracking-wider mb-3 text-center">Withdraw Available Margin</h4>
+			<h4 className="tracking-wider mb-3 text-center">Withdraw Margin</h4>
 			<section className="w-full py-3 px-3 xs:py-6 xs:px-6 flex flex-col items-center mt-5">
+				<div className="container-spacious mb-3">
+					<LabelValue label={'Margin'}>
+						<p>
+							{formatNumber(amount)}
+							<span className="pl-1 text-xs">SATS</span>
+						</p>
+					</LabelValue>
+				</div>
 				{invoice ? (
 					<div className="border-white border-8 mt-2 rounded-lg">
 						<div className="border-black border-4 s-qrWrapper">

@@ -15,9 +15,9 @@ export const SettingsDialog = wrapBaseDialog(() => {
 			<h2 className="text-center text-2xl xs:text-3xl">Settings</h2>
 			<section className="container-spacious container-children-bottom-border mt-5">
 				<SettingsSwitch
-					label="Auto withdraw all balance with Webln"
+					label="Auto withdraw 100+ SATS with Webln"
 					value={!!weblnAutoWithdraw}
-					onClick={() => dispatch(setWeblnAutoWithdraw(weblnAutoWithdraw === 0 ? 1 : 0))}
+					onClick={() => dispatch(setWeblnAutoWithdraw(weblnAutoWithdraw === 0 ? 100 : 0))}
 				/>
 				<SettingsSwitch
 					label="Hide invoice if Webln is enabled"

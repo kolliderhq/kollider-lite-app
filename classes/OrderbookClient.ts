@@ -168,6 +168,10 @@ export class OrderbookClient {
 		}
 	}
 
+	get currentSymbol(): string {
+		return this._currentSymbol;
+	}
+
 	public setIsReady(isReady: boolean): void {
 		this._clientState.isReady = isReady;
 		this.subUnsubChannels(this._clientState.isReady);

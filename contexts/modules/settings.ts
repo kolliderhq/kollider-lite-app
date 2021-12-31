@@ -17,7 +17,7 @@ const initialState: Settings = {
 	denom: 'SATS',
 
 	onlyWeblnIfEnabled: true, //	hides invoices if enabled
-	weblnAutoWithdraw: 1, //	auto withdrawal does not happen if enabled
+	weblnAutoWithdraw: 100, //	auto withdrawal does not happen if enabled
 	isToastsShown: true, //	not sure whether market makers will be here but ok
 	persisted: false,
 };
@@ -27,6 +27,9 @@ export const settingsSlice = createSlice({
 	initialState,
 	reducers: {
 		setPersistSettings: (state, action: PayloadAction<Settings>) => {
+			// TODO : remove this after a few weeks(21/12/31)
+			if (action.payload.weblnAutoWithdraw === 1) action.payload.weblnAutoWithdraw = 100;
+
 			Object.keys(action.payload).forEach(key => {
 				state[key] = action.payload[key];
 			});

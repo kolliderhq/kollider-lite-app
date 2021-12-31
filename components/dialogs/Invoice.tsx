@@ -72,9 +72,9 @@ export const InvoicePopup = wrapBasePopup(() => {
 	);
 });
 
-const LabelValue = ({ label, children }: { label: string; children: ReactNode }) => {
+export const LabelValue = ({ label, children }: { label: string; children: ReactNode }) => {
 	return (
-		<div className="flex justify-between items-center mb-0.5 last:mb-0">
+		<div className="w-full flex justify-between items-center mb-0.5 last:mb-0">
 			<div className="text-sm">{label}</div>
 			<div className="text-sm">{children}</div>
 		</div>

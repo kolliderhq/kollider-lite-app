@@ -52,6 +52,17 @@ export const tradingSlice = createSlice({
 			if (state.orderIds[symbol] === undefined) state.orderIds[symbol] = {};
 			state.orderIds[symbol][orderId] = action.payload;
 		},
+		removeOrderId: (state, action: PayloadAction<string>) => {
+			const orderId = action.payload;
+			let found = false;
+			each(Object.keys(state.orderIds), symbol => {
+				if (found) return;
+				if (state.orderIds[symbol][orderId]) {
+					delete state.orderIds[symbol][orderId];
+					found = true;
+				}
+			});
+		},
 		setInstantOrder: (state, action: PayloadAction<{ order: OrderTemplate; extOrderId: string }>) => {
 			const { order, extOrderId } = action.payload;
 			if (!state.instantOrders[order.symbol]) state.instantOrders[order.symbol] = {};
@@ -86,6 +97,7 @@ export const {
 	setInitTrading,
 	setOrderId,
 	setPositionClosed,
+	removeOrderId,
 	setPositionsData,
 	setBalances,
 	setInstantOrder,

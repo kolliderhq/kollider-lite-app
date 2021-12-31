@@ -7,6 +7,7 @@ import { DIALOGS, MESSAGE_TYPES, TABS, TRADING_TYPES } from 'consts';
 import {
 	mergeInstantOrder,
 	reduxStore,
+	removeOrderId,
 	setInvoiceSettled,
 	setNewInvoice,
 	setOrderId,
@@ -40,7 +41,8 @@ const tradingListener = (msg: any) => {
 		console.log('fill', data);
 		const priceDp = reduxStore.getState().symbols.symbolData[data.symbol]?.priceDp;
 		if (!data || !priceDp) return;
-		storeDispatch(setTab(TABS.POSITIONS));
+
+		//	Self fill will never happen since limit orders are not alloweed
 		displayToast(
 			<p>
 				Order Filled - ${formatNumber(applyDp(data.price, priceDp))}
@@ -80,7 +82,7 @@ const tradingListener = (msg: any) => {
 			const id = msg.data?.order_id;
 			// const order = findOrderInfo(id);
 			// if (!order) {
-			// 	LOG5(`cancel order but id not found - ${id}`, 'Cancel Donez');
+			// 	LOG5(`cancel order but id not found - ${id}`, 'Cancel Done');
 			// 	return;
 			// }
 			// console.log('CANCEL ORDER', order);
@@ -99,7 +101,7 @@ const tradingListener = (msg: any) => {
 			const orderId = msg.data?.order_id;
 			if (!orderId) return;
 			console.log('FILL', msg.data);
-			// TODO : delete orders kept in redux
+			storeDispatch(removeOrderId(orderId));
 		} else {
 			LOG5(`undefined reason - ${msg.data?.reason}`, 'done');
 		}

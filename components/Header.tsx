@@ -6,13 +6,14 @@ import Img from 'next/image';
 import { DIALOGS, USER_TYPE } from 'consts';
 import { setDialog } from 'contexts/modules/layout';
 import { logOutFunc, useAppDispatch, useAppSelector } from 'hooks';
+import { weblnConnectAttempt } from 'hooks/init/useWebln';
+import { weblnInit } from 'utils/webln';
 
 export const Header = () => {
 	const dispatch = useAppDispatch();
-	const [currentDialog, loggedIn, isWeblnConnected] = useAppSelector(state => [
+	const [currentDialog, loggedIn] = useAppSelector(state => [
 		state.layout.dialog,
 		state.user.data.token !== '' && state.user.data.type === USER_TYPE.PRO,
-		state.connection.isWeblnConnected,
 	]);
 	return (
 		<div className="flex items-center justify-between w-full h-16 pb-4 mb-2">
@@ -30,14 +31,7 @@ export const Header = () => {
 						</p>
 					</button>
 				)}
-				{!isWeblnConnected && (
-					<button className="py-1 px-2 border border-gray-100 shadow-elevation-24dp hover:border-theme-main rounded-md group hover:opacity-80">
-						<p className="text-xs xxs:text-sm flex flex-col items-center xs:block">
-							<img className="xs:inline mr-1" width={16} height={16} src="/assets/common/socket.svg" />
-							Webln
-						</p>
-					</button>
-				)}
+				<WeblnButton />
 				<button
 					onClick={() => dispatch(setDialog(DIALOGS.SETTINGS))}
 					className={cn('min-w-[28px] pr-2 py-2 flex items-center justify-center group hover:opacity-80')}>
@@ -76,4 +70,19 @@ export const Header = () => {
 			)}
 		</div>
 	);
+};
+
+const WeblnButton = () => {
+	const isWeblnConnected = useAppSelector(state => state.connection.isWeblnConnected);
+
+	return !isWeblnConnected ? (
+		<button
+			onClick={() => weblnConnectAttempt()}
+			className="py-1 px-2 border border-gray-100 shadow-elevation-24dp hover:border-theme-main rounded-md group hover:opacity-80">
+			<p className="text-xs xxs:text-sm flex flex-col items-center xs:block">
+				<img className="xs:inline mr-1" width={16} height={16} src="/assets/common/socket.svg" />
+				Webln
+			</p>
+		</button>
+	) : null;
 };

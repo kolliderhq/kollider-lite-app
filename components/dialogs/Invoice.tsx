@@ -9,11 +9,15 @@ import Img from 'next/image';
 import { wrapBasePopup } from 'components/dialogs/base';
 import Loader from 'components/Loader';
 import { QrCode } from 'components/QrCode';
+import { POPUPS, SETTINGS } from 'consts';
+import { setPopup } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbols } from 'hooks';
+import useTimer from 'hooks/useTimer';
 import { formatNumber } from 'utils/format';
 
 export const InvoicePopup = wrapBasePopup(() => {
 	const dispatch = useAppDispatch();
+	const [time] = useTimer(SETTINGS.LIMITS.INVOICE, () => dispatch(setPopup(POPUPS.NONE)));
 	const { symbolsAssets, symbols } = useSymbols();
 	const [{ invoices, symbol }, instantOrders] = useAppSelector(state => [state.invoices, state.trading.instantOrders]);
 	const localIndex = findIndex(symbols, v => v === symbol);
@@ -24,17 +28,18 @@ export const InvoicePopup = wrapBasePopup(() => {
 		order => order?.extOrderId === invoice.extOrderId
 	);
 
-	React.useEffect(() => {
-		console.log('instantOrder', instantOrders, instantOrder, invoice);
-	}, [instantOrder]);
-
 	return (
 		<div className="w-full h-full mt-5">
 			<h2 className="tracking-wider mb-3 text-center">
 				<img className="inline mr-2 pb-1" width={28} height={28} src="/assets/common/lightning.svg" />
 				Invoice
 			</h2>
-			<section className="w-full py-3 px-3 xs:py-6 xs:px-6 flex flex-col items-center mt-5">
+			<div className="mt-1.5">
+				<p className="text-center">
+					Expires in: <span className="font-mono text-red-600">{time / 1000}</span>s
+				</p>
+			</div>
+			<section className="w-full py-3 px-3 xs:py-6 xs:px-6 flex flex-col items-center">
 				{invoice.invoice ? (
 					<div className="border-white border-8 mt-2 rounded-lg">
 						<div className="border-black border-4 s-qrWrapper">

@@ -47,7 +47,7 @@ export function useSocketData() {
 		baseSocketClient.connect('', data => {
 			storeDispatch(setIsWsConnected(true));
 			baseSocketClient.addEventListener(channelListener);
-			baseSocketClient.requestChannelSubscribe(CHANNELS.POSITION_STATES, []);
+			// baseSocketClient.requestChannelSubscribe(CHANNELS.POSITION_STATES, []);
 		});
 	}, []);
 

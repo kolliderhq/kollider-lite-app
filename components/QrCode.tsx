@@ -3,8 +3,6 @@ import React from 'react';
 import cn from 'clsx';
 import QrDisplay from 'qrcode.react';
 
-import { weblnSendPayment } from 'utils/webln';
-
 export function QrCode({
 	autoClick = false,
 	wrapperClass,
@@ -23,7 +21,6 @@ export function QrCode({
 		if (!value || !ref.current) return;
 		//	clicks qr code if doesn't have webln and is mobile. For wallets like bluewallet
 		if (!autoClick) return;
-		weblnSendPayment(value);
 		// ref.current.dispatchEvent(new MouseEvent(`click`, { bubbles: true, cancelable: true, view: window }));
 	}, [value, autoClick]);
 	return (

@@ -7,10 +7,11 @@ import { wrapBaseDialog } from 'components/dialogs/base';
 import Loader from 'components/Loader';
 import { QrCode } from 'components/QrCode';
 import { wrapHasLightClient } from 'components/wrappers/LightClientWrapper';
-import { API_NAMES, CONTEXTS, DIALOGS, USER_TYPE, WS_CUSTOM_TYPES } from 'consts';
+import { API_NAMES, CONTEXTS, DIALOGS, SETTINGS, USER_TYPE, WS_CUSTOM_TYPES } from 'consts';
 import { defaultLocalStore, setApiKey, setUserData } from 'contexts';
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
+import useTimer from 'hooks/useTimer';
 import { getSWROptions } from 'utils/fetchers';
 import { formatNumber } from 'utils/format';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
@@ -39,6 +40,7 @@ export const LoginDialog = wrapBaseDialog(
 
 const LoginContents = () => {
 	const dispatch = useAppDispatch();
+	const [time] = useTimer(SETTINGS.LIMITS.INVOICE, () => dispatch(setDialog(DIALOGS.NONE)));
 	const [hasToken, isWeblnConnected] = useAppSelector(state => [
 		state.connection.apiKey,
 		state.connection.isWeblnConnected,
@@ -81,6 +83,11 @@ const LoginContents = () => {
 						<img className="inline mr-2 pb-1" width={28} height={28} src="/assets/common/lightning.svg" />
 						Login
 					</h2>
+					<div className="my-1.5 w-full">
+						<p className="text-center">
+							Expires in: <span className="font-mono text-red-600">{time / 1000}</span>s
+						</p>
+					</div>
 					<p className="my-2 text-gray-300 text-sm mx-auto w-fit px-5 py-2 bg-gray-700 rounded-lg border border-gray-400">
 						Scan with your wallet to log in
 					</p>

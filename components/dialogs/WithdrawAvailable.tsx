@@ -5,12 +5,16 @@ import { wrapBaseDialog, wrapBasePopup } from 'components/dialogs/base';
 import { LabelValue } from 'components/dialogs/Invoice';
 import Loader from 'components/Loader';
 import { QrCode } from 'components/QrCode';
-import { MESSAGE_TYPES, TRADING_TYPES } from 'consts';
-import { useAppSelector } from 'hooks';
+import { DIALOGS, MESSAGE_TYPES, SETTINGS, TRADING_TYPES } from 'consts';
+import { setDialog } from 'contexts/modules/layout';
+import { useAppDispatch, useAppSelector } from 'hooks';
+import useTimer from 'hooks/useTimer';
 import { formatNumber } from 'utils/format';
 
 export const WithdrawAvailableDialog = wrapBaseDialog(() => {
 	const balances = useAppSelector(state => state.trading.balances);
+	const dispatch = useAppDispatch();
+	const [time] = useTimer(SETTINGS.LIMITS.INVOICE, () => dispatch(setDialog(DIALOGS.NONE)));
 	const [amount, setAmount] = React.useState(null);
 	const [invoice, setInvoice] = React.useState(null);
 	const [invoiceAmount, setInvoiceAmount] = React.useState(null);
@@ -37,6 +41,11 @@ export const WithdrawAvailableDialog = wrapBaseDialog(() => {
 		<div className="w-full h-full mt-10">
 			<h4 className="tracking-wider mb-3 text-center">Withdraw Margin</h4>
 			<section className="w-full py-3 px-3 xs:py-6 xs:px-6 flex flex-col items-center mt-5">
+				<div className="my-1.5 w-full">
+					<p className="text-center">
+						Expires in: <span className="font-mono text-red-600">{time / 1000}</span>s
+					</p>
+				</div>
 				<div className="container-spacious mb-3">
 					<LabelValue label={'Margin'}>
 						<p>
@@ -45,6 +54,7 @@ export const WithdrawAvailableDialog = wrapBaseDialog(() => {
 						</p>
 					</LabelValue>
 				</div>
+
 				{invoice ? (
 					<div className="border-white border-8 mt-2 rounded-lg">
 						<div className="border-black border-4 s-qrWrapper">

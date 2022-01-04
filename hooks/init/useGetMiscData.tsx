@@ -7,12 +7,11 @@ import useSWR from 'swr';
 
 import { orderbook } from 'classes/Orderbook';
 import { API_NAMES } from 'consts/api';
+import { setInitSymbols } from 'contexts/modules/invoices';
+import { setSymbolLoad } from 'contexts/modules/misc';
 import { addSymbols, setSymbolData, setSymbolIndex } from 'contexts/modules/symbols';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { getSWROptions } from 'utils/fetchers';
-
-import { setInitSymbols } from '../../contexts/modules/invoices';
-import { setSymbolLoad } from '../../contexts/modules/misc';
 
 // import { displayToast } from 'utils/toast';
 

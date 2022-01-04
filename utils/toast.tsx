@@ -33,6 +33,7 @@ export type ToastOptions = {
 	type: TypeOptions | Theme;
 	level: TOAST_LEVEL;
 	shouldSave?: boolean;
+	toastId?: string;
 	toastOptions?: Partial<ToastifyOptions>;
 };
 
@@ -52,14 +53,15 @@ export const displayToast = (value: ReactNode, options: ToastOptions) => {
 		...defaultOptions,
 		autoClose: getAutoClose(options.level),
 		...options.toastOptions,
+		toastId: options?.toastId,
+		// autoClose: false,
 	};
 	if (inputOptions?.onClick) {
 		if (!inputOptions.hideProgressBar) inputOptions.hideProgressBar = false;
 	}
 
 	// TODO : Add and push to notifications
-	inputOptions.icon = ({ type }) => <StatusIcon type={type} isLink={!!inputOptions.onClick} />;
-	console.log(value, inputOptions, options);
+	inputOptions.icon = () => <StatusIcon type={options.type} isLink={!!inputOptions.onClick} />;
 	return toast[options.type](
 		<ToastContent content={value} type={options.type} isLink={!!inputOptions?.onClick} />,
 		inputOptions
@@ -139,7 +141,7 @@ const ErrorSvg = ({ className }) => {
 function StatusIcon({ type, isLink }) {
 	const className = cn('s-filter-white w-8 h-8', { underline: isLink });
 	if (type === 'info' || type === 'dark') return <InfoSvg className={className} />;
-	else if (type === 'warn') return <WarnSvg className={className} />;
+	else if (type === 'warning') return <WarnSvg className={className} />;
 	else if (type === 'success') return <SuccessSvg className={className} />;
 	else return <ErrorSvg className={className} />;
 }

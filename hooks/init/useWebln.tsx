@@ -22,6 +22,7 @@ export const weblnConnectAttempt = () => {
 			displayToast(<p className="text-sm">Webln not found in browser</p>, {
 				type: 'info',
 				level: TOAST_LEVEL.INFO,
+				toastId: 'webln-not-found',
 			});
 			return;
 		}
@@ -52,9 +53,10 @@ export const weblnConnectAttempt = () => {
 					{
 						type: 'warning',
 						level: TOAST_LEVEL.CRITICAL,
-						toastOptions: {
-							autoClose: 1000,
-						},
+						toastId: 'webln-disabled',
+						// toastOptions: {
+						// 	autoClose: 2000,
+						// },
 					}
 				);
 			}

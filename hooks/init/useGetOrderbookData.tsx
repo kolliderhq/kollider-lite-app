@@ -10,10 +10,7 @@ import { useSymbols } from 'hooks/useSymbols';
 export const useGetOrderbookData = () => {
 	const ref = React.useRef<InstanceType<typeof OrderbookClient>>();
 	const visible = useIsWindowVisible();
-	const [wsReady, wsAuthenticated] = useAppSelector(state => [
-		state.connection.isWsConnected,
-		state.connection.isWsAuthenticated,
-	]);
+	const wsReady = useAppSelector(state => state.connection.isWsConnected);
 	const { symbol } = useSymbols();
 
 	React.useLayoutEffect(() => {
@@ -36,10 +33,8 @@ export const useGetOrderbookData = () => {
 	React.useEffect(() => {
 		if (!wsReady) return;
 		if (!visible) return;
-		if (wsAuthenticated) {
-			baseSocketClient.requestChannelSubscribe(CHANNELS.ORDERBOOK_LEVEL2, [ref.current.currentSymbol]);
-		}
-	}, [wsReady, visible, wsAuthenticated]);
+		baseSocketClient.requestChannelSubscribe(CHANNELS.ORDERBOOK_LEVEL2, [ref.current.currentSymbol]);
+	}, [wsReady, visible]);
 
 	React.useEffect(() => {
 		if (!ref.current) return;

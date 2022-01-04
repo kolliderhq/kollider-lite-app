@@ -6,6 +6,49 @@ import { divide, multiply } from 'utils/Big';
 
 import { FixedLengthArray } from './types/utils';
 
+export function categorizeBySymbol<T>(
+	root: Record<string, T> | T[],
+	symbolGetter: (element: T) => string,
+	options?: {
+		idGetter?: (element: T) => string | number; // necessary when root is object
+	}
+) {
+	const ret = {};
+	if (isArray(root)) {
+		if (!options?.idGetter) throw new Error('categorizeBySymbol needs idGetter option to process arrays');
+
+		const target = root as T[];
+		each(target, element => {
+			try {
+				const symbol = symbolGetter(element);
+				const id = options?.idGetter(element);
+				if (!ret[symbol]) ret[symbol] = {};
+				ret[symbol][id] = element;
+			} catch (ex) {
+				console.log('[categorizeBySymbol] error while getting symbol or id');
+				console.error(ex);
+			}
+		});
+	} else {
+		const target = root as Record<string, T>;
+		each(target, (element, key) => {
+			try {
+				const symbol = symbolGetter(element);
+				let id = key;
+				if (options?.idGetter) {
+					id = `${options.idGetter(element)}`;
+				}
+				if (!ret[symbol]) ret[symbol] = {};
+				ret[symbol][id] = element;
+			} catch (ex) {
+				console.log('[categorizeBySymbol] error while getting symbol or id');
+				console.error(ex);
+			}
+		});
+	}
+	return ret as Record<string, Record<string, T>>;
+}
+
 export const dispSymbol = (txt: string): string => {
 	return `${txt.substr(0, txt.length - 3)}•${txt.substr(txt.length - 3)}`;
 };

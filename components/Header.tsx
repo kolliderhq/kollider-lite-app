@@ -3,9 +3,10 @@ import React from 'react';
 import cn from 'clsx';
 import Img from 'next/image';
 
+import { auth } from 'classes/Auth';
 import { DIALOGS, USER_TYPE } from 'consts';
 import { setDialog } from 'contexts/modules/layout';
-import { logOutFunc, useAppDispatch, useAppSelector } from 'hooks';
+import { useAppDispatch, useAppSelector } from 'hooks';
 import { weblnConnectAttempt } from 'hooks/init/useWebln';
 import { weblnInit } from 'utils/webln';
 
@@ -52,17 +53,7 @@ export const Header = () => {
 					data-tip
 					data-for="logout"
 					onClick={() => {
-						logOutFunc();
-						// displayToast(
-						// 	<p className="text-sm">Successfully logged out</p>,
-						// 	'info',
-						// 	{
-						// 		autoClose: 1500,
-						// 		position: 'top-center',
-						// 	},
-						// 	null,
-						// 	null
-						// );
+						auth.logoutUser();
 					}}
 					className="s-filter-theme-main-hover cursor-pointer px-2">
 					<img className="h-5 w-5 min-w-[20px]" src={'/assets/common/logout.svg'} alt="logout" />

@@ -30,7 +30,7 @@ export const useTradingListener = () => {
 		return () => {
 			baseSocketClient.removeEventListener(tradingListener);
 		};
-	}, [wsReady, tradingListener]);
+	}, [wsReady]);
 };
 
 const tradingListener = (msg: any) => {

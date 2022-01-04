@@ -3,7 +3,7 @@ import React from 'react';
 import includes from 'lodash-es/includes';
 
 import { baseSocketClient } from 'classes/SocketClient';
-import { CHANNELS, MESSAGE_TYPES } from 'consts';
+import { CHANNELS, MESSAGE_TYPES, USER_TYPE } from 'consts';
 import {
 	setBalances,
 	setIsWsAuthenticated,
@@ -18,26 +18,26 @@ import useIsWindowVisible from 'hooks/useIsWindowVisible';
 
 const WATCH_TYPES = [CHANNELS.POSITION_STATES, CHANNELS.INDEX_VALUES, CHANNELS.MARK_PRICE, CHANNELS.BALANCES];
 export function useSocketData() {
-	const [wsConnected, wsAuthenticated, apiKey] = useAppSelector(state => [
+	const [wsConnected, wsAuthenticated, apiKey, userType] = useAppSelector(state => [
 		state.connection.isWsConnected,
 		state.connection.isWsAuthenticated,
 		state.connection.apiKey,
+		state.user.data.type,
 	]);
 	const visible = useIsWindowVisible();
 
-	const dispatch = useAppDispatch();
 	React.useEffect(() => {
 		if (!wsAuthenticated && apiKey !== '') {
-			baseSocketClient.authorizeClient(apiKey, () => {
-				dispatch(setIsWsAuthenticated(true));
-				baseSocketClient.socketSend(MESSAGE_TYPES.BALANCES, {}, null, null);
-				baseSocketClient.socketSend(MESSAGE_TYPES.WITHDRAWAL_LIMIT_INFO, {}, null, null);
-				baseSocketClient.socketSend(MESSAGE_TYPES.POSITIONS, {}, null, null);
-
-				baseSocketClient.requestChannelSubscribe(CHANNELS.POSITION_STATES, []);
-			});
+			authorizeClientAndSubscribe(apiKey);
 		}
 	}, [wsAuthenticated, apiKey]);
+
+	React.useEffect(() => {
+		if (userType !== USER_TYPE.PRO) return;
+		authorizeClientAndSubscribe(apiKey);
+	}, [userType]);
+
+	React.useEffect(() => {}, []);
 
 	React.useEffect(() => {
 		const channelListener = msg => {
@@ -60,6 +60,7 @@ export function useSocketData() {
 
 				baseSocketClient.requestChannelSubscribe(CHANNELS.POSITION_STATES, []);
 			}
+			baseSocketClient.socketSend(MESSAGE_TYPES.BALANCES, {}, null, null);
 			baseSocketClient.requestChannelSubscribe(CHANNELS.MARK_PRICE, []);
 			baseSocketClient.requestChannelSubscribe(CHANNELS.INDEX_VALUES, []);
 		} else {
@@ -71,6 +72,21 @@ export function useSocketData() {
 		}
 	}, [visible, wsConnected]);
 }
+
+const authorizeClientAndSubscribe = (apiKey: string) => {
+	baseSocketClient.authorizeClient(apiKey, () => {
+		storeDispatch(setIsWsAuthenticated(true));
+		baseSocketClient.socketSend(MESSAGE_TYPES.BALANCES, {}, null, null);
+		baseSocketClient.socketSend(MESSAGE_TYPES.WITHDRAWAL_LIMIT_INFO, {}, null, null);
+		baseSocketClient.socketSend(MESSAGE_TYPES.POSITIONS, {}, null, null);
+		baseSocketClient.socketSend(MESSAGE_TYPES.OPEN_ORDERS, {}, null, null);
+		baseSocketClient.socketSend(MESSAGE_TYPES.ADVANCED_ORDERS, {}, null, null);
+
+		baseSocketClient.requestChannelSubscribe(CHANNELS.POSITION_STATES, []);
+		baseSocketClient.requestChannelSubscribe(CHANNELS.MARK_PRICE, []);
+		baseSocketClient.requestChannelSubscribe(CHANNELS.INDEX_VALUES, []);
+	});
+};
 
 const updateChannelData = (msg: any) => {
 	// console.log('updateChannelData', msg.type, msg.data);

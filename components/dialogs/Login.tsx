@@ -2,6 +2,7 @@ import React from 'react';
 
 import useSWR from 'swr';
 
+import { auth } from 'classes/Auth';
 import { baseSocketClient } from 'classes/SocketClient';
 import { wrapBaseDialog } from 'components/dialogs/base';
 import Loader from 'components/Loader';
@@ -49,21 +50,7 @@ const LoginContents = () => {
 
 	React.useEffect(() => {
 		const cleanup = baseSocketClient.listenOnce(WS_CUSTOM_TYPES.LNURL_AUTH_CREDENTIALS, data => {
-			dispatch(setDialog(DIALOGS.NONE));
-			dispatch(setApiKey(data.accessToken));
-			const userData = {
-				token: data?.accessToken,
-				email: '',
-				type: USER_TYPE.PRO,
-			};
-
-			displayToast(<p>Login Success</p>, {
-				type: 'success',
-				level: TOAST_LEVEL.CRITICAL,
-			});
-			dispatch(setUserData(userData));
-			defaultLocalStore.cookieSet(CONTEXTS.LOCAL_STORAGE.FULL_USER, { ...userData });
-			if (data?.refreshToken) defaultLocalStore.cookieSet(CONTEXTS.LOCAL_STORAGE.FULL_USER_REFRESH, data.refreshToken);
+			auth.proUserLogin(data);
 		});
 		return () => {
 			mutate();

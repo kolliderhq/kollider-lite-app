@@ -6,8 +6,17 @@ import keys from 'lodash-es/keys';
 import lowerCase from 'lodash-es/lowerCase';
 import map from 'lodash-es/map';
 
-import { CHANNELS, CHANNEL_OPTIONS, MESSAGE_TYPES, TRADING_TYPES, WS, WS_CUSTOM_TYPES } from 'consts/websocket';
+import {
+	CHANNELS,
+	CHANNEL_OPTIONS,
+	MESSAGE_TYPES,
+	TRADING_TYPES,
+	UNUSED_TRADING_TYPES,
+	WS,
+	WS_CUSTOM_TYPES,
+} from 'consts/websocket';
 import { LOG3, LOG5 } from 'utils/debug';
+import { mapKeyValues } from 'utils/scripts';
 
 import { add, divide } from '../Big';
 import { createAccumulatedArray, sortObjByKeys } from '../complexSort';
@@ -452,6 +461,86 @@ refiner.set('error', v => {
 		// TODO :	do something to the UI
 	}
 	return v;
+});
+
+// unused
+const refineOrder = obj => ({
+	extOrderId: obj?.ext_order_id,
+	filled: obj?.filled,
+	leverage: obj?.leverage,
+	marginType: obj?.margin_type,
+	orderId: obj?.order_id,
+	orderType: obj?.order_type,
+	price: obj?.price,
+	quantity: obj?.quantity,
+	settlementType: obj?.settlement_type,
+	side: obj?.side,
+	symbol: obj?.symbol,
+	timestamp: parseTime(obj?.timestamp),
+});
+
+interface IOpenOrder {
+	ext_order_id: string;
+	filled: number;
+	leverage: number;
+	margin_type: string;
+	order_id: number;
+	order_type: string;
+	price: number;
+	quantity: number;
+	settlement_type: string;
+	side: string;
+	symbol: string;
+	timestamp: number;
+}
+
+export interface OpenOrders {
+	[symbol: string]: OpenOrder[];
+}
+export type OpenOrder = ReturnType<typeof refineOrder>;
+refiner.set(
+	UNUSED_TRADING_TYPES.OPEN_ORDERS,
+	(data: { data: { open_orders: { [symbol: string]: IOpenOrder[] } }; seq: number; type: string }) => {
+		LOG3(data, 'OPEN_ORDERS');
+		const retObj = {};
+		const pickedData = data.data?.open_orders;
+		mapKeyValues(pickedData, (symbol, orderArr) => {
+			const obj = {};
+			each(orderArr, order => {
+				obj[order.order_id] = refineOrder(order);
+			});
+			retObj[symbol] = obj;
+		});
+		return {
+			type: data?.type,
+			data: retObj,
+		};
+	}
+);
+
+export interface RawAdvancedOrders {
+	advanced_order_type: string;
+	ext_order_id: string;
+	filled: number;
+	leverage: number;
+	margin_type: string;
+	order_id: number;
+	order_type: string;
+	price: number;
+	quantity: number;
+	settlement_type: string;
+	side: string;
+	symbol: string;
+	timestamp: number;
+	trigger_price_type: string;
+	uid: number;
+}
+export type AdvancedOrder = KeysToCamelCase<RawAdvancedOrders>;
+// or TRADING_TYPES.USER_ADVANCED_ORDERS
+refiner.set(WS.MESSAGES.ADVANCED_ORDERS.refineType, v => {
+	LOG3(v, 'ADVANCED_ORDERS');
+	const data = camelCaseAllKeys(v.data);
+	return { ...v, data: data };
 });
 
 //  messages

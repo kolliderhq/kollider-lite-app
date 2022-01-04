@@ -42,13 +42,13 @@ class SocketClient extends EventEmitter {
 	private _localEmitter = new EventEmitter();
 	private _socket: WebSocket | undefined;
 
-	private _socketConnected = false;
 	private _socketAuthenticated = false;
 
 	private _channelMap = new Map(); //  keeps track of which channels are sub to which symbol
 	private _clientOptions: typeof BASE_WS_CLIENT;
 	private _apiKey = '';
 	private _connectionOptions: WebSocketOptions;
+
 	constructor(clientOptions = BASE_WS_CLIENT) {
 		super();
 		this.setMaxListeners(Infinity);
@@ -58,6 +58,7 @@ class SocketClient extends EventEmitter {
 
 		this.connect = this.connect.bind(this);
 	}
+
 	public async connect(apiKey = '', openCallback = noop) {
 		const nav = navigator as any;
 		const isBrave = (nav?.brave && (await nav?.brave?.isBrave())) || false;
@@ -92,9 +93,10 @@ class SocketClient extends EventEmitter {
 			this.processMsg(msg);
 		});
 	}
-	private reset() {
-		this.closeSocket(1000, 'new api key');
+	public reset() {
 		this._apiKey = '';
+		this.reconnectSocket(1000, 'new api key');
+		this._channelMap.clear();
 	}
 	get isReady() {
 		if (this._socket && this._socket?.readyState === 1) return true;
@@ -171,6 +173,7 @@ class SocketClient extends EventEmitter {
 
 	public closeSocket(code: number, reason: string) {
 		this.socketSend(MESSAGE_TYPES.LOGOUT, {}, null);
+		storeDispatch(setIsWsAuthenticated(false));
 		(this.socket as WebSocket).close(code, reason);
 		each(this._localEmitter.eventNames(), evName => this._localEmitter.removeAllListeners(evName));
 	}

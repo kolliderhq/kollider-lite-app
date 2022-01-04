@@ -1,8 +1,7 @@
 import each from 'lodash-es/each';
 import keys from 'lodash-es/keys';
-import { v4 as uuidv4 } from 'uuid';
 
-import { OrderTemplate, makeOrder } from '../utils/trading';
+import { OrderTemplate, makeOrder } from 'utils/trading';
 
 let back: string;
 if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
@@ -79,6 +78,11 @@ interface IWS {
 	CHANNELS: typeof CHANNELS;
 }
 
+export enum UNUSED_TRADING_TYPES {
+	OPEN_ORDERS = 'open_orders',
+	USER_ADVANCED_ORDERS = 'user_advanced_orders', //	 also in advanced orders
+}
+
 export const WS: IWS = Object.freeze({
 	END_POINTS: SOCKET_END_POINTS,
 	MESSAGES: {
@@ -146,6 +150,15 @@ export const WS: IWS = Object.freeze({
 		WITHDRAWAL_LIMIT_INFO: {
 			type: 'fetch_withdrawal_limit_info',
 			createBody: () => ({}),
+		},
+		OPEN_ORDERS: {
+			type: 'fetch_open_orders',
+			createBody: params => ({ ...params }),
+		},
+		ADVANCED_ORDERS: {
+			type: 'fetch_user_advanced_orders',
+			createBody: () => ({}),
+			refineType: 'user_advanced_orders',
 		},
 	},
 	CHANNELS,

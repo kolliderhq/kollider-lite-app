@@ -5,12 +5,13 @@ import toNumber from 'lodash-es/toNumber';
 
 import { baseSocketClient } from 'classes/SocketClient';
 import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
-import { SETTINGS, TABS } from 'consts';
+import { SETTINGS, TABS, USER_TYPE } from 'consts';
 import { Order, Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
 import { setTab } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { applyDp, formatNumber, optionalDecimal } from 'utils/format';
 import { isPositiveInteger } from 'utils/scripts';
+import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
 const buttonClass =
 	'h-14 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp flex flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
@@ -19,12 +20,13 @@ export const OrderArea = () => {
 	const { priceDp } = useSymbolData();
 	return (
 		<section className="w-full flex flex-col items-center xs:grid xs:grid-rows-1 xs:grid-cols-7 h-full xs:h-[160px] w-full gap-4 xs:gap-4">
-			<BuyButton className="hidden xs:flex" bestAsk={bestAsk} priceDp={priceDp} />
+			<SellButton className="hidden xs:flex" bestBid={bestBid} priceDp={priceDp} />
 			<div className="xs:col-span-3 xs:row-span-1 w-full">
 				<OrderInput />
 			</div>
-			<BuyButton className="flex xs:hidden" bestAsk={bestAsk} priceDp={priceDp} />
-			<SellButton bestBid={bestBid} priceDp={priceDp} />
+			<SellButton className="flex xs:hidden" bestBid={bestBid} priceDp={priceDp} />
+
+			<BuyButton bestAsk={bestAsk} priceDp={priceDp} />
 		</section>
 	);
 };
@@ -90,7 +92,7 @@ const DisplayLeverage = ({ leverage }: { leverage: string }) => {
 	);
 };
 
-const SellButton = ({ bestBid, priceDp }: { bestBid: string; priceDp: number }) => {
+const SellButton = ({ bestBid, priceDp, className }: { bestBid: string; priceDp: number; className?: string }) => {
 	const { symbol } = useSymbols();
 	const order = useAppSelector(state => state.orders.order);
 	return (
@@ -98,7 +100,7 @@ const SellButton = ({ bestBid, priceDp }: { bestBid: string; priceDp: number }) 
 			onClick={() => {
 				processOrder(order, Side.ASK, priceDp, symbol);
 			}}
-			className={cn(buttonClass, 'bg-red-500', { 'opacity-50': !bestBid })}>
+			className={cn(buttonClass, className, 'bg-red-500', { 'opacity-50': !bestBid })}>
 			<p className="text-sm xs:text-base">
 				Sell
 				<span className="pr-1" />/<span className="pr-1" />
@@ -112,9 +114,18 @@ const SellButton = ({ bestBid, priceDp }: { bestBid: string; priceDp: number }) 
 const BuyButton = ({ bestAsk, priceDp, className }: { bestAsk: string; priceDp: number; className?: string }) => {
 	const { symbol } = useSymbols();
 	const order = useAppSelector(state => state.orders.order);
+	const loggedIn = useAppSelector(state => state.user.data.type === USER_TYPE.PRO);
 	return (
 		<button
 			onClick={() => {
+				if (!loggedIn) {
+					displayToast(<p className="text-sm">You must be logged in to place orders</p>, {
+						type: 'warning',
+						level: TOAST_LEVEL.CRITICAL,
+						toastId: 'req-login-place-order',
+					});
+					return;
+				}
 				processOrder(order, Side.BID, priceDp, symbol);
 			}}
 			className={cn(buttonClass, className, 'bg-green-600', {

@@ -3,25 +3,32 @@
  * all processes related to authentication will be in this class
  */
 
+import React from 'react';
+
 import each from 'lodash-es/each';
 import { v4 as uuidv4, v4 } from 'uuid';
 
 import { Processor } from 'classes/Processor';
-import { API_NAMES, CONTEXTS, SETTINGS, USER_TYPE } from 'consts';
+import { baseSocketClient } from 'classes/SocketClient';
+import { API_NAMES, CONTEXTS, DIALOGS, SETTINGS, USER_TYPE } from 'consts';
 import {
 	defaultLocalStore,
 	reduxStore,
 	reinitOrder,
 	setApiKey,
+	setInitNotifications,
 	setInitTrading,
 	setUserData,
+	setUserLogout,
 	setUserType,
 	storeDispatch,
 } from 'contexts';
+import { setDialog } from 'contexts/modules/layout';
 import { postRequest } from 'utils/api';
 import { LOG, LOG3, LOG5 } from 'utils/debug';
 import { jwtGetExp } from 'utils/jwt';
 import { getMsFromNow } from 'utils/time';
+import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
 class Auth {
 	public static instance = this;
@@ -52,13 +59,60 @@ class Auth {
 		});
 	}
 
+	public proUserLogin(data: any) {
+		this._processor.requestProcess({
+			processFunc: () => proUserLoginProcessFunc(data),
+		});
+	}
+
 	public lightClientLogin() {
 		if (this._userType !== USER_TYPE.NULL) return false;
 		this._processor.requestProcess({
-			processFunc: lightClientLoginProcessFunc,
+			processFunc: () => lightClientLoginProcessFunc(),
+		});
+	}
+
+	public logoutUser() {
+		if (this._userType === USER_TYPE.NULL) return false;
+		this._processor.requestProcess({
+			processFunc: logOutFunc,
 		});
 	}
 }
+
+const proUserLoginProcessFunc = data => {
+	storeDispatch(setDialog(DIALOGS.NONE));
+	storeDispatch(setApiKey(data.accessToken));
+	const userData = {
+		token: data?.accessToken,
+		email: '',
+		type: USER_TYPE.PRO,
+	};
+
+	displayToast(<p>Login Success</p>, {
+		type: 'success',
+		level: TOAST_LEVEL.CRITICAL,
+	});
+	storeDispatch(setUserData(userData));
+	defaultLocalStore.cookieSet(CONTEXTS.LOCAL_STORAGE.FULL_USER, { ...userData });
+	if (data?.refreshToken) defaultLocalStore.cookieSet(CONTEXTS.LOCAL_STORAGE.FULL_USER_REFRESH, data.refreshToken);
+};
+
+const logOutFunc = () => {
+	storeDispatch(setInitNotifications());
+	defaultLocalStore.cookieUnset(CONTEXTS.LOCAL_STORAGE.FULL_USER);
+	defaultLocalStore.cookieUnset(CONTEXTS.LOCAL_STORAGE.FULL_USER_REFRESH);
+	storeDispatch(setUserLogout());
+	storeDispatch(setApiKey(''));
+	storeDispatch(setInitTrading());
+	// baseSocketClient.closeSocket(1000, 'logout');
+	baseSocketClient.reset();
+	// storeDispatch(setIsWsAuthenticated(false));
+	displayToast(<p>Successfully Logged Out</p>, {
+		type: 'success',
+		level: TOAST_LEVEL.IMPORTANT,
+	});
+};
 
 const loadLocalDataProcessFunc = () => {
 	if (defaultLocalStore.has(CONTEXTS.LOCAL_STORAGE.FULL_USER)) {

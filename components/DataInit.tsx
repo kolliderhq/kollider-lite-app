@@ -9,6 +9,7 @@ import { useCheckIpLocation } from 'hooks/init/useCheckIpLocation';
 import useGetMiscData from 'hooks/init/useGetMiscData';
 import { useGetOrderbookData } from 'hooks/init/useGetOrderbookData';
 import { useInitialize } from 'hooks/init/useInitialize';
+import { useProFixes } from 'hooks/init/useProFixes';
 import useQuerySideEffects from 'hooks/init/useQuerySideEffects';
 import { useSocketData } from 'hooks/init/useSocketData';
 import { useTradingListener } from 'hooks/init/useTradingListener';
@@ -54,6 +55,7 @@ export const DataInit = () => {
 const RunOnHydration = () => {
 	useQuerySideEffects(); //  parse url queries
 	useSocketData();
+	useProFixes();
 	useCheckIpLocation();
 	return <></>;
 };

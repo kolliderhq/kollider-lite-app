@@ -7,5 +7,5 @@ const transition = cssTransition({
 });
 
 export const ToastContainer = () => {
-	return <ToastifyContainer transition={transition} />;
+	return <ToastifyContainer theme={'colored'} transition={transition} />;
 };

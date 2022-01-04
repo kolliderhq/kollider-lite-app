@@ -1,11 +1,14 @@
 import React from 'react';
 
+import { auth } from 'classes/Auth';
+import { baseSocketClient } from 'classes/SocketClient';
 import { CONTEXTS, SETTINGS, USER_TYPE } from 'consts';
 import {
 	defaultLocalStore,
 	setApiKey,
 	setInitNotifications,
 	setInitTrading,
+	setIsWsAuthenticated,
 	setUserLogout,
 	storeDispatch,
 } from 'contexts';
@@ -35,22 +38,8 @@ export default function useAutoLogout() {
 			clearTimeout(logoutTimeout);
 		} else {
 			logoutTimeout = setTimeout(() => {
-				logOutFunc();
+				auth.logoutUser();
 			}, SETTINGS.LIMITS.TOKEN_PERSIST);
 		}
 	}, [focus, userData, dispatch]);
 }
-
-export const logOutFunc = () => {
-	storeDispatch(setInitNotifications());
-	defaultLocalStore.cookieUnset(CONTEXTS.LOCAL_STORAGE.FULL_USER);
-	defaultLocalStore.cookieUnset(CONTEXTS.LOCAL_STORAGE.FULL_USER_REFRESH);
-	storeDispatch(setUserLogout());
-	storeDispatch(setApiKey(''));
-	storeDispatch(setInitTrading());
-
-	displayToast(<p>Successfully Logged Out</p>, {
-		type: 'success',
-		level: TOAST_LEVEL.IMPORTANT,
-	});
-};

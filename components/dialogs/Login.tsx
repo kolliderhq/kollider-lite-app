@@ -4,40 +4,31 @@ import useSWR from 'swr';
 
 import { auth } from 'classes/Auth';
 import { baseSocketClient } from 'classes/SocketClient';
-import { wrapBaseDialog } from 'components/dialogs/base';
 import Loader from 'components/Loader';
 import { QrCode } from 'components/QrCode';
-import { wrapHasLightClient } from 'components/wrappers/LightClientWrapper';
-import { API_NAMES, CONTEXTS, DIALOGS, SETTINGS, USER_TYPE, WS_CUSTOM_TYPES } from 'consts';
-import { defaultLocalStore, setApiKey, setUserData } from 'contexts';
+import { WrapHasLightClient } from 'components/wrappers/LightClientWrapper';
+import { API_NAMES, DIALOGS, SETTINGS, WS_CUSTOM_TYPES } from 'consts';
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import useTimer from 'hooks/useTimer';
 import { getSWROptions } from 'utils/fetchers';
-import { formatNumber } from 'utils/format';
-import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
 export const Login = () => {
-	const [open, setOpen] = React.useState(true);
-	const [loggedIn, isWeblnConnected] = useAppSelector(state => [
-		state.user.data.token !== '',
-		state.connection.isWeblnConnected,
-	]);
-	return <LoginDialog isOpen={!loggedIn && open && !isWeblnConnected} close={() => setOpen(false)} />;
+	return <LoginDialog />;
 };
 
-export const LoginDialog = wrapBaseDialog(
-	wrapHasLightClient(
-		() => {
-			return <LoginContents />;
-		},
-		() => (
-			<div className="h-[364px]">
-				<Loader />
-			</div>
-		)
-	)
-);
+export const LoginDialog = () => {
+	return (
+		<WrapHasLightClient
+			loaderElement={
+				<div className="h-[364px]">
+					<Loader />
+				</div>
+			}>
+			<LoginContents />
+		</WrapHasLightClient>
+	);
+};
 
 const LoginContents = () => {
 	const dispatch = useAppDispatch();
@@ -46,7 +37,7 @@ const LoginContents = () => {
 		state.connection.apiKey,
 		state.connection.isWeblnConnected,
 	]);
-	const { data, mutate } = useSWR([API_NAMES.AUTH_LNURL, hasToken], getSWROptions(API_NAMES.AUTH_LNURL));
+	const { data, isValidating, mutate } = useSWR([API_NAMES.AUTH_LNURL, hasToken], getSWROptions(API_NAMES.AUTH_LNURL));
 
 	React.useEffect(() => {
 		const cleanup = baseSocketClient.listenOnce(WS_CUSTOM_TYPES.LNURL_AUTH_CREDENTIALS, data => {
@@ -60,8 +51,8 @@ const LoginContents = () => {
 
 	return (
 		<div className="w-full h-full my-auto">
-			{!data?.lnurlAuth ? (
-				<div className="h-[364px]">
+			{!data?.lnurlAuth || isValidating ? (
+				<div className="h-[467px] min-w-xxxs">
 					<Loader />
 				</div>
 			) : (

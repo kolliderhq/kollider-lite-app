@@ -2,11 +2,10 @@ import React from 'react';
 
 import cn from 'clsx';
 
-import { wrapBaseDialog } from 'components/dialogs/base';
 import { setOnlyWeblnIfEnabled, setWeblnAutoWithdraw } from 'contexts';
 import { useAppDispatch, useAppSelector } from 'hooks';
 
-export const SettingsDialog = wrapBaseDialog(() => {
+export const SettingsDialog = () => {
 	const dispatch = useAppDispatch();
 	const { weblnAutoWithdraw, onlyWeblnIfEnabled } = useAppSelector(state => state.settings);
 
@@ -27,7 +26,7 @@ export const SettingsDialog = wrapBaseDialog(() => {
 			</section>
 		</div>
 	);
-});
+};
 
 const SettingsSwitch = ({ label, value, onClick }: { label: string; value: boolean; onClick: () => void }) => {
 	return (

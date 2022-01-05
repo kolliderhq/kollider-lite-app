@@ -6,7 +6,7 @@ import findIndex from 'lodash-es/findIndex';
 import map from 'lodash-es/map';
 import Img from 'next/image';
 
-import { wrapBasePopup } from 'components/dialogs/base';
+import { WrapBasePopup, wrapBasePopup } from 'components/dialogs/base';
 import Loader from 'components/Loader';
 import { QrCode } from 'components/QrCode';
 import { POPUPS, SETTINGS } from 'consts';
@@ -15,7 +15,7 @@ import { useAppDispatch, useAppSelector, useSymbols } from 'hooks';
 import useTimer from 'hooks/useTimer';
 import { formatNumber } from 'utils/format';
 
-export const InvoicePopup = wrapBasePopup(() => {
+export const InvoicePopup = () => {
 	const dispatch = useAppDispatch();
 	const [time] = useTimer(SETTINGS.LIMITS.INVOICE, () => dispatch(setPopup(POPUPS.NONE)));
 	const { symbolsAssets, symbols } = useSymbols();
@@ -75,7 +75,7 @@ export const InvoicePopup = wrapBasePopup(() => {
 			</section>
 		</div>
 	);
-});
+};
 
 export const LabelValue = ({ label, children }: { label: string; children: ReactNode }) => {
 	return (

@@ -1,12 +1,17 @@
 import { sort } from 'fast-sort';
 import each from 'lodash-es/each';
+import identity from 'lodash-es/identity';
 import isArray from 'lodash-es/isArray';
 import isFunction from 'lodash-es/isFunction';
 import isNil from 'lodash-es/isNil';
 import isObject from 'lodash-es/isObject';
+import keys from 'lodash-es/keys';
 import map from 'lodash-es/map';
+import pickBy from 'lodash-es/pickBy';
 
 import { API, API_NAMES } from 'consts/api';
+import { reduxStore } from 'contexts';
+import { divide } from 'utils/Big';
 import { LOG, LOG2, LOG4 } from 'utils/debug';
 
 import { CustomError } from '../error';
@@ -106,6 +111,38 @@ refiner.set(API_NAMES.REFRESH_JWT, data => {
 		token: data?.token,
 	};
 });
+
+interface IHistoricalOhlc {
+	data: IOHLC[];
+	symbol: string;
+}
+refiner.set(API_NAMES.HISTORICAL_OHLC, (data: IHistoricalOhlc) => {
+	const store = reduxStore.getState();
+	const symbol = data?.symbol;
+	let priceDp = store.symbols.symbolData[symbol]?.priceDp;
+	if (!priceDp) priceDp = 1;
+
+	const ret = map(data.data, dataPoint => {
+		const value = pickBy(dataPoint, identity);
+		each(keys(value), key => {
+			if (key === 'time') {
+				value.time = parseTime(value.time) / 1000;
+			} else value[key] = value[key] ? Number(divide(value[key], Math.pow(10, 1), priceDp)) : null;
+			// TODO : tell Kons to fix the Api ^ - it should be returning natural numbers like the historical_ohlc_chart api
+		});
+		return value;
+	});
+	return { ...data, data: ret };
+});
+
+export interface IOHLC {
+	high: Nullable<number>;
+	close: Nullable<number>;
+	low: Nullable<number>;
+	open: Nullable<number>;
+	time: Nullable<number>;
+	volume: Nullable<number>;
+}
 
 // interface IHistoricAssetValue {
 // 	mean_maket_value: number;

@@ -16,12 +16,18 @@ export const Header = () => {
 		state.layout.dialog,
 		state.user.data.token !== '' && state.user.data.type === USER_TYPE.PRO,
 	]);
+
+	const onClickLogin = () => {
+		dispatch(setDialog(DIALOGS.LOGIN));
+	};
+
 	return (
 		<div className="flex items-center justify-between w-full h-16 pb-4 mb-2">
 			<figure className="w-full flex items-center justify-start">
 				<img className="w-30 h-[30px] xs:w-40 xs:h-10" src="/assets/logos/kollider_logo_white.png" />
 			</figure>
 			<div className="col-span-2 w-full flex items-center justify-end gap-3 xxs:gap-4">
+				<WeblnButton />
 				{!loggedIn && (
 					<button
 						onClick={() => dispatch(setDialog(DIALOGS.LOGIN))}
@@ -32,13 +38,12 @@ export const Header = () => {
 						</p>
 					</button>
 				)}
-				<WeblnButton />
 				<button
 					onClick={() => dispatch(setDialog(DIALOGS.SETTINGS))}
 					className={cn('min-w-[28px] pr-2 py-2 flex items-center justify-center group hover:opacity-80')}>
 					<Img
 						className={cn(
-							{ 'rotate-90 s-filter-theme-main': currentDialog },
+							{ 'rotate-90 s-filter-theme-main': currentDialog === DIALOGS.SETTINGS },
 							'group-hover:rotate-90 s-transition-rotate s-filter-theme-main-hover'
 						)}
 						width={20}

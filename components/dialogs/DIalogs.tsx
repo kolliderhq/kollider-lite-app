@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { WrapBaseDialog } from 'components/dialogs/base';
 import { LoginDialog } from 'components/dialogs/Login';
 import { SettingsDialog } from 'components/dialogs/Settings';
 import { WithdrawAvailableDialog } from 'components/dialogs/WithdrawAvailable';
@@ -13,9 +14,15 @@ export const Dialogs = () => {
 	const close = React.useCallback(() => dispatch(setDialogClose()), []);
 	return (
 		<>
-			<LoginDialog isOpen={currentDialog === DIALOGS.LOGIN} close={close} />
-			<SettingsDialog isOpen={currentDialog === DIALOGS.SETTINGS} close={close} />
-			<WithdrawAvailableDialog isOpen={currentDialog === DIALOGS.SETTLE_INVOICE} close={close} />
+			<WrapBaseDialog isOpen={currentDialog === DIALOGS.LOGIN} close={close}>
+				<LoginDialog />
+			</WrapBaseDialog>
+			<WrapBaseDialog isOpen={currentDialog === DIALOGS.SETTINGS} close={close}>
+				<SettingsDialog />
+			</WrapBaseDialog>
+			<WrapBaseDialog isOpen={currentDialog === DIALOGS.SETTLE_INVOICE} close={close}>
+				<WithdrawAvailableDialog />
+			</WrapBaseDialog>
 		</>
 	);
 };

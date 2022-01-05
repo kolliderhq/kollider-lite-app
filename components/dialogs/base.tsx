@@ -1,9 +1,12 @@
 import React, { FunctionComponent } from 'react';
 
 import { Dialog } from '@headlessui/react';
+import dynamic from 'next/dynamic';
 
 import useElementDimensions from 'hooks/useElementDimentions';
 import useWindowSize from 'hooks/useWindowSize';
+
+const Portal = dynamic(import('components/Portal'), { ssr: false });
 
 export interface BaseDialogProps {
 	dialogStyle?: Record<string, string>;
@@ -22,16 +25,11 @@ export const BasePopup: FunctionComponent<BaseDialogProps> = ({
 	initialFocus,
 }) => {
 	return (
-		<>
+		<Portal id={'popup'}>
 			{isOpen ? (
-				<Dialog
-					as="div"
-					className="fixed inset-0 z-100 overflow-y-auto"
-					open={isOpen}
-					onClose={close}
-					initialFocus={initialFocus}>
+				<div className="fixed inset-0 z-100 overflow-y-auto">
 					<div className="p-5 flex items-center justify-center min-h-screen">
-						<Dialog.Overlay className="fixed inset-0 w-full h-full" />
+						<div className="fixed inset-0 w-full h-full bg-black opacity-25" onClick={() => close()} />
 						<ModalAutoSizer>
 							<div
 								style={dialogStyle}
@@ -47,9 +45,9 @@ export const BasePopup: FunctionComponent<BaseDialogProps> = ({
 							</div>
 						</ModalAutoSizer>
 					</div>
-				</Dialog>
+				</div>
 			) : null}
-		</>
+		</Portal>
 	);
 };
 
@@ -62,16 +60,11 @@ export const BaseDialog: FunctionComponent<BaseDialogProps> = ({
 	initialFocus,
 }) => {
 	return (
-		<>
+		<Portal id="dialog">
 			{isOpen ? (
-				<Dialog
-					as="div"
-					className="fixed inset-0 z-100 overflow-y-auto"
-					open={isOpen}
-					onClose={close}
-					initialFocus={initialFocus}>
+				<div className="fixed inset-0 z-100 overflow-y-auto">
 					<div className="p-5 flex items-center justify-center min-h-screen">
-						<Dialog.Overlay className="fixed inset-0 bg-black opacity-50 z-90" />
+						<div className="fixed inset-0 w-full h-full" onClick={() => close()} />
 						<ModalAutoSizer>
 							<div
 								style={dialogStyle}
@@ -87,47 +80,37 @@ export const BaseDialog: FunctionComponent<BaseDialogProps> = ({
 							</div>
 						</ModalAutoSizer>
 					</div>
-				</Dialog>
+				</div>
 			) : null}
-		</>
+		</Portal>
 	);
 };
 
-export function wrapBasePopup<C extends React.ElementType>(
-	element: C
-): React.ElementType<BaseDialogProps & React.ComponentProps<C>> {
-	// eslint-disable-next-line react/display-name
-	return props => {
-		return (
-			<BasePopup
-				isOpen={props.isOpen}
-				dialogStyle={props.dialogStyle}
-				close={props.close}
-				isHideCloseButton={props.isHideCloseButton}
-				initialFocus={props.initialFocus}>
-				{props.isOpen ? React.createElement(element, props) : null}
-			</BasePopup>
-		);
-	};
-}
+export const WrapBasePopup: FunctionComponent<BaseDialogProps> = props => {
+	return (
+		<BasePopup
+			isOpen={props.isOpen}
+			dialogStyle={props.dialogStyle}
+			close={props.close}
+			isHideCloseButton={props.isHideCloseButton}
+			initialFocus={props.initialFocus}>
+			{props.isOpen ? props.children : null}
+		</BasePopup>
+	);
+};
 
-export function wrapBaseDialog<C extends React.ElementType>(
-	element: C
-): React.ElementType<BaseDialogProps & React.ComponentProps<C>> {
-	// eslint-disable-next-line react/display-name
-	return props => {
-		return (
-			<BaseDialog
-				isOpen={props.isOpen}
-				dialogStyle={props.dialogStyle}
-				close={props.close}
-				isHideCloseButton={props.isHideCloseButton}
-				initialFocus={props.initialFocus}>
-				{props.isOpen ? React.createElement(element, props) : null}
-			</BaseDialog>
-		);
-	};
-}
+export const WrapBaseDialog: FunctionComponent<BaseDialogProps> = props => {
+	return (
+		<BaseDialog
+			isOpen={props.isOpen}
+			dialogStyle={props.dialogStyle}
+			close={props.close}
+			isHideCloseButton={props.isHideCloseButton}
+			initialFocus={props.initialFocus}>
+			{props.isOpen ? props.children : null}
+		</BaseDialog>
+	);
+};
 
 export const ModalAutoSizer = ({ children }) => {
 	const ref = React.useRef();

@@ -166,6 +166,16 @@ const API: I_API = {
 				...postOptions,
 			},
 		},
+		HISTORICAL_OHLC: {
+			route: (symbol, intervalSize, start, end) =>
+				`/market/historical_ohlc?symbol=${symbol}&interval_size=${intervalSize}${applyOptionalParams(
+					{ start, end },
+					false
+				)}`,
+			method: 'get',
+			base: END_POINTS.BACK,
+			stale: API_TIME.HOUR,
+		},
 		REFRESH_JWT: {
 			route: () => `/auth/refresh_token`,
 			method: 'post',

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { baseSocketClient } from 'classes/SocketClient';
-import { wrapBaseDialog, wrapBasePopup } from 'components/dialogs/base';
 import { LabelValue } from 'components/dialogs/Invoice';
 import Loader from 'components/Loader';
 import { QrCode } from 'components/QrCode';
@@ -11,7 +10,7 @@ import { useAppDispatch, useAppSelector } from 'hooks';
 import useTimer from 'hooks/useTimer';
 import { formatNumber } from 'utils/format';
 
-export const WithdrawAvailableDialog = wrapBaseDialog(() => {
+export const WithdrawAvailableDialog = () => {
 	const balances = useAppSelector(state => state.trading.balances);
 	const dispatch = useAppDispatch();
 	const [time] = useTimer(SETTINGS.LIMITS.INVOICE, () => dispatch(setDialog(DIALOGS.NONE)));
@@ -69,4 +68,4 @@ export const WithdrawAvailableDialog = wrapBaseDialog(() => {
 			</section>
 		</div>
 	);
-});
+};

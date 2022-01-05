@@ -21,7 +21,7 @@ export function QrCode({
 		if (!value || !ref.current) return;
 		//	clicks qr code if doesn't have webln and is mobile. For wallets like bluewallet
 		if (!autoClick) return;
-		// ref.current.dispatchEvent(new MouseEvent(`click`, { bubbles: true, cancelable: true, view: window }));
+		ref.current.dispatchEvent(new MouseEvent(`click`, { bubbles: true, cancelable: true, view: window }));
 	}, [value, autoClick]);
 	return (
 		<div className={cn(wrapperClass)}>

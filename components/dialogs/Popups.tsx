@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { WrapBasePopup } from 'components/dialogs/base';
 import { InvoicePopup } from 'components/dialogs/Invoice';
 import { DIALOGS, POPUPS } from 'consts';
 import { setInvoiceSettled, setViewing } from 'contexts';
@@ -39,7 +40,9 @@ export const Popups = () => {
 
 	return (
 		<>
-			<InvoicePopup isOpen={currentPopup === POPUPS.INVOICE} close={close} />
+			<WrapBasePopup isOpen={currentPopup === POPUPS.INVOICE} close={close}>
+				<InvoicePopup />
+			</WrapBasePopup>
 		</>
 	);
 };

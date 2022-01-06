@@ -1,6 +1,5 @@
 import React from 'react';
 
-// eslint-disable-next-line prettier/prettier
 import { RequestInvoiceResponse } from 'webln';
 
 import { baseSocketClient } from 'classes/SocketClient';
@@ -12,7 +11,6 @@ import { TBigInput } from 'utils/Big';
 import { Balances } from 'utils/refiners/sockets';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 import { FixedLengthArray } from 'utils/types/utils';
-// import { displayToast } from 'utils/toast';
 import { weblnInit, weblnSendPayment, weblnWithdraw } from 'utils/webln';
 
 export const weblnConnectAttempt = () => {

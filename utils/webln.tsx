@@ -1,13 +1,23 @@
 import { RequestInvoiceResponse, WebLNProvider, requestProvider } from 'webln';
 
 import { TBigInput } from 'utils/Big';
-
-// import { displayToast } from 'utils/toast';
+import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
 export const weblnInit = async (): Promise<WebLNProvider | null> => {
 	try {
 		return await requestProvider();
 	} catch (err) {
+		displayToast(
+			<p>
+				There was an error initializing webln
+				<br />
+				{err.message()}
+			</p>,
+			{
+				type: 'error',
+				level: TOAST_LEVEL.IMPORTANT,
+			}
+		);
 		console.log('Webln request provider error', err.message);
 		return null;
 	}

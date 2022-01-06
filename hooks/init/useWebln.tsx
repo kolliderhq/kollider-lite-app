@@ -9,68 +9,78 @@ import { TBigInput } from 'utils/Big';
 import { Balances } from 'utils/refiners/sockets';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 import { FixedLengthArray } from 'utils/types/utils';
-import { RequestInvoiceResponse } from 'utils/vendor/webln';
+import { RequestInvoiceResponse, WebLNProvider } from 'utils/vendor/webln';
 import { weblnInit, weblnSendPayment, weblnWithdraw } from 'utils/webln';
 
 export const weblnConnectAttempt = () => {
 	weblnInit().then(res => {
 		if (!res) {
-			console.log('webln init failed');
-			displayToast(<p className="text-sm">Webln not found in browser</p>, {
-				type: 'info',
-				level: TOAST_LEVEL.INFO,
-				toastId: 'webln-not-found',
-			});
+			// error toast shown in weblninit
+			// displayToast(<p className="text-sm">Webln not found in browser</p>, {
+			// 	type: 'info',
+			// 	level: TOAST_LEVEL.INFO,
+			// 	toastId: 'webln-not-found',
+			// });
 			return;
 		}
-		try {
-			res.getInfo().then(info => {
-				if (info?.node?.alias) {
-					storeDispatch(setWeblnConnected(true));
-					console.log('webln connected', info.node.alias);
-					displayToast(
-						<p className="text-sm">
-							Webln Wallet [<span className="font-bold">{info.node.alias}</span>]
-							<br />
-							was successfully loaded
-						</p>,
-						{
-							type: 'dark',
-							level: TOAST_LEVEL.IMPORTANT,
-						}
-					);
-				} else {
-					storeDispatch(setWeblnConnected(false));
-					console.log('webln disabled');
-					displayToast(
-						<p className="text-sm">
-							Please unlock your Webln wallet
-							<br />
-							and try to connect again
-						</p>,
-						{
-							type: 'warning',
-							level: TOAST_LEVEL.CRITICAL,
-							toastId: 'webln-disabled',
-							// toastOptions: {
-							// 	autoClose: 2000,
-							// },
-						}
-					);
-				}
+		const result = res as WebLNProvider;
+		// getInfo exists - probably extension
+		if (result?.getInfo) {
+			try {
+				result.getInfo().then(info => {
+					if (info?.node?.alias) {
+						storeDispatch(setWeblnConnected(true));
+						console.log('webln connected', info.node.alias);
+						displayToast(
+							<p className="text-sm">
+								Webln Wallet [<span className="font-bold">{info.node.alias}</span>]
+								<br />
+								was successfully loaded
+							</p>,
+							{
+								type: 'dark',
+								level: TOAST_LEVEL.IMPORTANT,
+							}
+						);
+					} else {
+						storeDispatch(setWeblnConnected(false));
+						console.log('webln disabled');
+						displayToast(
+							<p className="text-sm">
+								Please unlock your Webln wallet
+								<br />
+								and try to connect again
+							</p>,
+							{
+								type: 'warning',
+								level: TOAST_LEVEL.CRITICAL,
+								toastId: 'webln-disabled',
+								// toastOptions: {
+								// 	autoClose: 2000,
+								// },
+							}
+						);
+					}
+				});
+			} catch (err) {
+				displayToast(
+					<p className="text-sm">
+						There was an error fetching webln info
+						<br />
+						<span className="text-xs">⚠️ {err.message}</span>
+					</p>,
+					{
+						type: 'error',
+						level: TOAST_LEVEL.IMPORTANT,
+					}
+				);
+			}
+		} else {
+			displayToast(<p className="text-sm">Webln detected</p>, {
+				type: 'info',
+				level: TOAST_LEVEL.INFO,
+				toastId: 'webln-found',
 			});
-		} catch (err) {
-			displayToast(
-				<p className="text-sm">
-					There was an error fetching webln info
-					<br />
-					<span className="text-xs">⚠️ {err.message}</span>
-				</p>,
-				{
-					type: 'error',
-					level: TOAST_LEVEL.IMPORTANT,
-				}
-			);
 		}
 	});
 };

@@ -1,3 +1,5 @@
+import { TOAST_LEVEL, displayToast } from 'utils/toast';
+
 import { MissingProviderError } from './errors';
 import { WebLNProvider } from './provider';
 
@@ -22,6 +24,21 @@ export function requestProvider(_: GetProviderParameters = {}): Promise<WebLNPro
 		if (!webln) {
 			return reject(new MissingProviderError('Your browser has no WebLN provider'));
 		}
+		const keys = Object.keys(webln);
+		displayToast(
+			<p className="text-xs">
+				Debugging Webln methods <br />
+				{keys.join(', ')}
+			</p>,
+			{
+				type: 'error',
+				level: TOAST_LEVEL.IMPORTANT,
+				toastOptions: {
+					autoClose: false,
+				},
+			}
+		);
+
 		if (webln?.enable) {
 			webln
 				.enable()

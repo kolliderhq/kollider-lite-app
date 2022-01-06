@@ -8,10 +8,10 @@ export const weblnInit = async (): Promise<WebLNProvider | null> => {
 		return await requestProvider();
 	} catch (err) {
 		displayToast(
-			<p>
+			<p className="text-sm">
 				There was an error initializing webln
 				<br />
-				{err.message()}
+				<span className="text-xs">⚠️ {err.message}</span>
 			</p>,
 			{
 				type: 'error',

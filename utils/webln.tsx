@@ -1,3 +1,4 @@
+import { setWeblnConnected, storeDispatch } from 'contexts';
 import { TBigInput } from 'utils/Big';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 import { RequestInvoiceResponse, WebLNProvider, requestProvider } from 'utils/vendor/webln';
@@ -27,19 +28,20 @@ export const weblnWithdraw = async (inputState: {
 }): Promise<RequestInvoiceResponse | { error: string; locked: boolean }> => {
 	const webln = await weblnInit();
 	if (webln) {
-		console.log('init webln', webln);
-		try {
-			const result = await webln.makeInvoice({
-				amount: inputState.amount,
-				defaultAmount: inputState.amount,
-				defaultMemo: `Kollider Withdrawal ${inputState.amount} SATS`,
-			});
-			if (result === undefined) {
-				return { error: 'Wallet is Locked. Unlock wallet and try again', locked: true };
+		if (Object.keys(webln).includes('makeInvoice')) {
+			try {
+				const result = await webln.makeInvoice({
+					amount: inputState.amount,
+					defaultAmount: inputState.amount,
+					defaultMemo: `Kollider Withdrawal ${inputState.amount} SATS`,
+				});
+				if (result === undefined) {
+					return { error: 'Wallet is Locked. Unlock wallet and try again', locked: true };
+				}
+				return result;
+			} catch (e) {
+				return { error: 'Invoice was rejected', locked: false };
 			}
-			return result;
-		} catch (e) {
-			return { error: 'Invoice was rejected', locked: false };
 		}
 	}
 	return { error: 'Webln not detected', locked: true };
@@ -47,17 +49,31 @@ export const weblnWithdraw = async (inputState: {
 
 export const weblnSendPayment = async (invoice: string, finallyCallback?: () => void) => {
 	const webln = await weblnInit();
-	console.log('webln', webln);
-	if (webln) {
-		webln
-			.sendPayment(invoice)
-			.then(res => {
-				console.log('payment callback >>>', res);
-			})
-			.catch(ex => {
-				console.error('payment exception >>>', ex);
-				// displayToast('Webln Wallet is Locked. Unlock wallet and try again', 'error', null, 'WebLn Error', true);
-			})
-			.finally(finallyCallback);
+	if (Object.keys(webln).includes('sendPayment')) {
+		if (webln) {
+			webln
+				.sendPayment(invoice)
+				.then(res => {
+					console.log('payment callback >>>', res);
+				})
+				.catch(ex => {
+					console.error('payment exception >>>', ex);
+					// displayToast('Webln Wallet is Locked. Unlock wallet and try again', 'error', null, 'WebLn Error', true);
+				})
+				.finally(finallyCallback);
+		}
+	} else {
+		displayToast(
+			<p className="text-sm">
+				Could not request payment
+				<br />
+				<span className="text-xs">⚠️ Wallet is locked</span>
+			</p>,
+			{
+				type: 'error',
+				level: TOAST_LEVEL.IMPORTANT,
+			}
+		);
+		storeDispatch(setWeblnConnected(false));
 	}
 };

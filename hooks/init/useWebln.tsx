@@ -15,67 +15,30 @@ import { weblnInit, weblnSendPayment, weblnWithdraw } from 'utils/webln';
 export const weblnConnectAttempt = () => {
 	weblnInit().then(res => {
 		if (!res) {
-			// error toast shown in weblninit
-			// displayToast(<p className="text-sm">Webln not found in browser</p>, {
-			// 	type: 'info',
-			// 	level: TOAST_LEVEL.INFO,
-			// 	toastId: 'webln-not-found',
-			// });
+			storeDispatch(setWeblnConnected(false));
 			return;
 		}
-		const result = res as WebLNProvider;
-		// getInfo exists - probably extension
-		if (result?.getInfo) {
-			try {
-				result.getInfo().then(info => {
-					if (info?.node?.alias) {
-						storeDispatch(setWeblnConnected(true));
-						console.log('webln connected', info.node.alias);
-						displayToast(
-							<p className="text-sm">
-								Webln Wallet [<span className="font-bold">{info.node.alias}</span>]
-								<br />
-								was successfully loaded
-							</p>,
-							{
-								type: 'dark',
-								level: TOAST_LEVEL.IMPORTANT,
-							}
-						);
-					} else {
-						storeDispatch(setWeblnConnected(false));
-						console.log('webln disabled');
-						displayToast(
-							<p className="text-sm">
-								Please unlock your Webln wallet
-								<br />
-								and try to connect again
-							</p>,
-							{
-								type: 'warning',
-								level: TOAST_LEVEL.CRITICAL,
-								toastId: 'webln-disabled',
-								// toastOptions: {
-								// 	autoClose: 2000,
-								// },
-							}
-						);
-					}
-				});
-			} catch (err) {
-				displayToast(
-					<p className="text-sm">
-						There was an error fetching webln info
-						<br />
-						<span className="text-xs">⚠️ {err.message}</span>
-					</p>,
-					{
-						type: 'error',
-						level: TOAST_LEVEL.IMPORTANT,
-					}
-				);
-			}
+		// sendPayment is not active - wallet is locked in extension
+		const keys = Object.keys(res);
+		console.log('res', keys);
+		if (!keys.includes('sendPayment')) {
+			storeDispatch(setWeblnConnected(false));
+			displayToast(
+				<p className="text-sm">
+					Please unlock your Webln wallet
+					<br />
+					and try to connect again
+				</p>,
+				{
+					type: 'warning',
+					level: TOAST_LEVEL.CRITICAL,
+					toastId: 'webln-disabled',
+				}
+			);
+			return;
 		} else {
+			//	sendPayment is active - webln on mobile or desktop extension
+			storeDispatch(setWeblnConnected(true));
 			displayToast(<p className="text-sm">Webln detected</p>, {
 				type: 'info',
 				level: TOAST_LEVEL.INFO,

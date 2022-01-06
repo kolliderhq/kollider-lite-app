@@ -41,8 +41,7 @@
     "store2": "^2.12.0",
     "swr": "^1.1.0",
     "tailwindcss": "^2.2.19",
-    "uuid": "^8.3.2",
-    "webln": "^0.2.2"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^12.0.7",

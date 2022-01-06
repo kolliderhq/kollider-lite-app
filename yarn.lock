@@ -574,25 +574,6 @@
   resolved "https://registry.yarnpkg.com/@types/big.js/-/big.js-6.1.2.tgz#68a952b629a6aaa2b5855a2f63363d1e77f6dd91"
   integrity sha512-h24JIZ52rvSvi2jkpYDk2yLH99VzZoCJiSfDWwjst7TwJVuXN61XVCUlPCzRl7mxKEMsGf8z42Q+J4TZwU3z2w==
 
-"@types/chrome@0.0.74":
-  version "0.0.74"
-  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.74.tgz#f69827c48fcf7fecc90c96089807661749a5a5e3"
-  integrity sha512-hzosS5CkQcIKCgxcsV2AzbJ36KNxG/Db2YEN/erEu7Boprg+KpMDLBQqKFmSo+JkQMGqRcicUyqCowJpuT+C6A==
-  dependencies:
-    "@types/filesystem" "*"
-
-"@types/filesystem@*":
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/@types/filesystem/-/filesystem-0.0.32.tgz#307df7cc084a2293c3c1a31151b178063e0a8edf"
-  integrity sha512-Yuf4jR5YYMR2DVgwuCiP11s0xuVRyPKmz8vo6HBY3CGdeMj8af93CFZX+T82+VD1+UqHOxTq31lO7MI7lepBtQ==
-  dependencies:
-    "@types/filewriter" "*"
-
-"@types/filewriter@*":
-  version "0.0.29"
-  resolved "https://registry.yarnpkg.com/@types/filewriter/-/filewriter-0.0.29.tgz#a48795ecadf957f6c0d10e0c34af86c098fa5bee"
-  integrity sha512-BsPXH/irW0ht0Ji6iw/jJaK8Lj3FJemon2gvEqHKpCdDCeemHa+rI3WBGq5z7cDMZgoLjY40oninGxqk+8NzNQ==
-
 "@types/hoist-non-react-statics@^3.3.0":
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
@@ -5065,13 +5046,6 @@ webidl-conversions@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-4.0.2.tgz#a855980b1f0b6b359ba1d5d9fb39ae941faa63ad"
   integrity sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==
-
-webln@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/webln/-/webln-0.2.2.tgz#f7db18548639c96dca04b0b3a2369f1b06cc123e"
-  integrity sha512-U/fKQNb0E/lld8U4QFAquH/qaBUpqsn64PoiwCcHbz9c8ENKzFk60XNOnlWtNuEqBX33BcP+03GI029FRDfGqA==
-  dependencies:
-    "@types/chrome" "0.0.74"
 
 webpack-bundle-analyzer@4.3.0:
   version "4.3.0"

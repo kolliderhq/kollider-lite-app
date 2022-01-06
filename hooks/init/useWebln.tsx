@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { RequestInvoiceResponse } from 'webln';
-
 import { baseSocketClient } from 'classes/SocketClient';
 import { DIALOGS, MESSAGE_TYPES, SETTINGS } from 'consts';
 import { reduxStore, setViewing, setWeblnConnected, storeDispatch } from 'contexts';
@@ -11,6 +9,7 @@ import { TBigInput } from 'utils/Big';
 import { Balances } from 'utils/refiners/sockets';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 import { FixedLengthArray } from 'utils/types/utils';
+import { RequestInvoiceResponse } from 'utils/vendor/webln';
 import { weblnInit, weblnSendPayment, weblnWithdraw } from 'utils/webln';
 
 export const weblnConnectAttempt = () => {

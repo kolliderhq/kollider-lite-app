@@ -1,7 +1,6 @@
-import { RequestInvoiceResponse, WebLNProvider, requestProvider } from 'webln';
-
 import { TBigInput } from 'utils/Big';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
+import { RequestInvoiceResponse, WebLNProvider, requestProvider } from 'utils/vendor/webln';
 
 export const weblnInit = async (): Promise<WebLNProvider | null> => {
 	try {

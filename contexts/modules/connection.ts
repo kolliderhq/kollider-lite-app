@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import type { WebLNProvider } from 'webln';
 
 import { Nullable } from 'utils/types/utils';
+import type { WebLNProvider } from 'utils/vendor/webln';
 
 interface ConnectionState {
 	apiKey: string;

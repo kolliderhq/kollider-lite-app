@@ -23,7 +23,12 @@ export function requestProvider(_: GetProviderParameters = {}): Promise<WebLNPro
 			return reject(new MissingProviderError('Your browser has no WebLN provider'));
 		}
 		if (webln?.enable) {
-			webln.enable().then(() => resolve(webln));
+			webln
+				.enable()
+				.then(() => resolve(webln))
+				.catch(ex => {
+					return reject(new MissingProviderError('Failed to enable webLN provider'));
+				});
 		} else {
 			return reject(new MissingProviderError('Your browser has no WebLN provider'));
 		}

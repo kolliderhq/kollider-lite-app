@@ -109,8 +109,8 @@ const useProcessAutoWithdrawWebln = () => {
 	const [isWeblnConnected, balances, weblnAutoWithdraw] = useAppSelector(state => [
 		state.connection.isWeblnConnected,
 		state.trading.balances,
-		!!state.settings.weblnAutoWithdraw,
-	]) as FixedLengthArray<[boolean, Balances, boolean]>;
+		state.settings.weblnAutoWithdraw,
+	]) as FixedLengthArray<[boolean, Balances, number]>;
 	const cash = balances?.cash;
 
 	// throttles withdrawals for WEBLN_WITHDRAW_TIMEOUT_MS and checks if there were new changes to cash.
@@ -120,7 +120,7 @@ const useProcessAutoWithdrawWebln = () => {
 		timeout: null,
 	});
 	React.useEffect(() => {
-		if (!isWeblnConnected || !weblnAutoWithdraw) return;
+		if (!isWeblnConnected || weblnAutoWithdraw === 0) return;
 		if (Number(cash) >= Number(weblnAutoWithdraw)) {
 			ref.current.timestamp = Date.now();
 			const current = ref.current.timestamp;

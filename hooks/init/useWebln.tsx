@@ -24,41 +24,55 @@ export const weblnConnectAttempt = () => {
 			});
 			return;
 		}
-		res.getInfo().then(info => {
-			if (info?.node?.alias) {
-				storeDispatch(setWeblnConnected(true));
-				console.log('webln connected', info.node.alias);
-				displayToast(
-					<p className="text-sm">
-						Webln Wallet [<span className="font-bold">{info.node.alias}</span>]
-						<br />
-						was successfully loaded
-					</p>,
-					{
-						type: 'dark',
-						level: TOAST_LEVEL.IMPORTANT,
-					}
-				);
-			} else {
-				storeDispatch(setWeblnConnected(false));
-				console.log('webln disabled');
-				displayToast(
-					<p className="text-sm">
-						Please unlock your Webln wallet
-						<br />
-						and try to connect again
-					</p>,
-					{
-						type: 'warning',
-						level: TOAST_LEVEL.CRITICAL,
-						toastId: 'webln-disabled',
-						// toastOptions: {
-						// 	autoClose: 2000,
-						// },
-					}
-				);
-			}
-		});
+		try {
+			res.getInfo().then(info => {
+				if (info?.node?.alias) {
+					storeDispatch(setWeblnConnected(true));
+					console.log('webln connected', info.node.alias);
+					displayToast(
+						<p className="text-sm">
+							Webln Wallet [<span className="font-bold">{info.node.alias}</span>]
+							<br />
+							was successfully loaded
+						</p>,
+						{
+							type: 'dark',
+							level: TOAST_LEVEL.IMPORTANT,
+						}
+					);
+				} else {
+					storeDispatch(setWeblnConnected(false));
+					console.log('webln disabled');
+					displayToast(
+						<p className="text-sm">
+							Please unlock your Webln wallet
+							<br />
+							and try to connect again
+						</p>,
+						{
+							type: 'warning',
+							level: TOAST_LEVEL.CRITICAL,
+							toastId: 'webln-disabled',
+							// toastOptions: {
+							// 	autoClose: 2000,
+							// },
+						}
+					);
+				}
+			});
+		} catch (err) {
+			displayToast(
+				<p className="text-sm">
+					There was an error fetching webln info
+					<br />
+					<span className="text-xs">⚠️ {err.message}</span>
+				</p>,
+				{
+					type: 'error',
+					level: TOAST_LEVEL.IMPORTANT,
+				}
+			);
+		}
 	});
 };
 

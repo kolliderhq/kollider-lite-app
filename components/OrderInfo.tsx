@@ -12,7 +12,7 @@ import { applyDp, formatNumber } from 'utils/format';
 export function OrderInfo() {
 	const { quantity, leverage } = useAppSelector(state => state.orders.order);
 	const { bestAsk, bestBid, bestAskAmount, bestBidAmount } = useOrderbookSelector(askBidSelector);
-	const { priceDp, contractSize } = useSymbolData();
+	const { priceDp, contractSize, isInversePriced, maintenanceMargin } = useSymbolData();
 	const { symbol } = useSymbols();
 	const askOrderValue = getOrderValue(bestAsk, priceDp, quantity, symbol, contractSize);
 	const askData: SideBuyData = {

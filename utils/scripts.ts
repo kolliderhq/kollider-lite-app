@@ -53,6 +53,14 @@ export const dispSymbol = (txt: string): string => {
 	return `${txt.substr(0, txt.length - 3)}•${txt.substr(txt.length - 3)}`;
 };
 
+export const waitms = (ms: number) => {
+	return new Promise(resolve => {
+		setTimeout(() => {
+			resolve();
+		}, ms);
+	});
+};
+
 export const isNumber = (input: unknown) => !isNaN(Number(input));
 
 export const timestampByInterval = (timestamp: number, interval: number): number => {

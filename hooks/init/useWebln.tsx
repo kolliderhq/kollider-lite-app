@@ -18,33 +18,33 @@ export const weblnConnectAttempt = () => {
 			storeDispatch(setWeblnConnected(false));
 			return;
 		}
-		// sendPayment is not active - wallet is locked in extension
-		const keys = Object.keys(res);
-		console.log('res', keys);
-		if (!keys.includes('sendPayment')) {
-			storeDispatch(setWeblnConnected(false));
-			displayToast(
-				<p className="text-sm">
-					Please unlock your Webln wallet
-					<br />
-					and try to connect again
-				</p>,
-				{
-					type: 'warning',
-					level: TOAST_LEVEL.CRITICAL,
-					toastId: 'webln-disabled',
-				}
-			);
-			return;
-		} else {
-			//	sendPayment is active - webln on mobile or desktop extension
-			storeDispatch(setWeblnConnected(true));
-			displayToast(<p className="text-sm">Webln detected</p>, {
-				type: 'info',
-				level: TOAST_LEVEL.INFO,
-				toastId: 'webln-found',
-			});
-		}
+		// // sendPayment is not active - wallet is locked in extension
+		// const keys = Object.keys(res);
+		// console.log('res', keys);
+		// if (!keys.includes('sendPayment')) {
+		// 	storeDispatch(setWeblnConnected(false));
+		// 	displayToast(
+		// 		<p className="text-sm">
+		// 			Please unlock your Webln wallet
+		// 			<br />
+		// 			and try to connect again
+		// 		</p>,
+		// 		{
+		// 			type: 'warning',
+		// 			level: TOAST_LEVEL.CRITICAL,
+		// 			toastId: 'webln-disabled',
+		// 		}
+		// 	);
+		// 	return;
+		// } else {
+		// 	//	sendPayment is active - webln on mobile or desktop extension
+		storeDispatch(setWeblnConnected(true));
+		displayToast(<p>Webln detected</p>, {
+			type: 'info',
+			level: TOAST_LEVEL.INFO,
+			toastId: 'webln-found',
+		});
+		// }
 	});
 };
 

@@ -1,12 +1,20 @@
 import { setWeblnConnected, storeDispatch } from 'contexts';
 import { TBigInput } from 'utils/Big';
+import { waitms } from 'utils/scripts';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 import { RequestInvoiceResponse, WebLNProvider, requestProvider } from 'utils/vendor/webln';
 
+let tried = false;
 export const weblnInit = async (): Promise<WebLNProvider | null> => {
 	try {
 		return await requestProvider();
 	} catch (err) {
+		if (!tried) {
+			tried = true;
+			await waitms(2000);
+			await weblnInit();
+			return null;
+		}
 		displayToast(
 			<p className="text-sm">
 				There was an error initializing webln
@@ -48,8 +56,8 @@ export const weblnWithdraw = async (inputState: {
 };
 
 export const weblnSendPayment = async (invoice: string, finallyCallback?: () => void) => {
-	const webln = await weblnInit();
-	if (Object.keys(webln).includes('sendPayment')) {
+	try {
+		const webln = await weblnInit();
 		if (webln) {
 			webln
 				.sendPayment(invoice)
@@ -61,13 +69,27 @@ export const weblnSendPayment = async (invoice: string, finallyCallback?: () => 
 					// displayToast('Webln Wallet is Locked. Unlock wallet and try again', 'error', null, 'WebLn Error', true);
 				})
 				.finally(finallyCallback);
+		} else {
+			displayToast(
+				<p className="text-sm">
+					There was an error initializing webln
+					<br />
+					<span className="text-xs">⚠️ Webln not detected</span>
+				</p>,
+				{
+					type: 'error',
+					level: TOAST_LEVEL.IMPORTANT,
+				}
+			);
+			storeDispatch(setWeblnConnected(false));
 		}
-	} else {
+	} catch (ex) {
+		console.error('webln send payment exception >>>', ex);
 		displayToast(
 			<p className="text-sm">
-				Could not request payment
+				There was an error initializing webln
 				<br />
-				<span className="text-xs">⚠️ Wallet is locked</span>
+				<span className="text-xs">⚠️ {ex.message}</span>
 			</p>,
 			{
 				type: 'error',

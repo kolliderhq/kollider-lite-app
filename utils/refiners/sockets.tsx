@@ -312,6 +312,12 @@ refiner.set(CHANNELS.INDEX_VALUES, v => {
 	};
 });
 
+refiner.set(CHANNELS.FUNDING_RATES, v => {
+	return {
+		...v,
+	};
+});
+
 interface RawMarkPrice extends SocketMsgWrapper {
 	data: {
 		price: string;

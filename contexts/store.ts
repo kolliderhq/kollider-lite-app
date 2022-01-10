@@ -21,6 +21,7 @@ if (process.env.NODE_ENV !== 'production') {
 						'orderbook/processOrder',
 						'prices/setIndexes',
 						'prices/setMarkPrices',
+						'prices/setFundingRates',
 						'orders/setOrderLeverage',
 					],
 					action.type

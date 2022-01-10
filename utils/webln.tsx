@@ -36,20 +36,18 @@ export const weblnWithdraw = async (inputState: {
 }): Promise<RequestInvoiceResponse | { error: string; locked: boolean }> => {
 	const webln = await weblnInit();
 	if (webln) {
-		if (Object.keys(webln).includes('makeInvoice')) {
-			try {
-				const result = await webln.makeInvoice({
-					amount: inputState.amount,
-					defaultAmount: inputState.amount,
-					defaultMemo: `Kollider Withdrawal ${inputState.amount} SATS`,
-				});
-				if (result === undefined) {
-					return { error: 'Wallet is Locked. Unlock wallet and try again', locked: true };
-				}
-				return result;
-			} catch (e) {
-				return { error: 'Invoice was rejected', locked: false };
+		try {
+			const result = await webln.makeInvoice({
+				amount: inputState.amount,
+				defaultAmount: inputState.amount,
+				defaultMemo: `Kollider Withdrawal ${inputState.amount} SATS`,
+			});
+			if (result === undefined) {
+				return { error: 'Wallet is Locked. Unlock wallet and try again', locked: true };
 			}
+			return result;
+		} catch (e) {
+			return { error: 'Invoice was rejected', locked: false };
 		}
 	}
 	return { error: 'Webln not detected', locked: true };

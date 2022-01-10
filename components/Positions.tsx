@@ -16,7 +16,7 @@ export const PositionTable = () => {
 	const position = positions[symbol];
 
 	const positionMargin = React.useMemo(() => {
-		if (!isNumber(balances?.isolatedMargin?.[symbol])) return '0';
+		if (!isNumber(balances?.isowlatedMargin?.[symbol])) return '0';
 		return formatNumber(fixed(balances?.isolatedMargin?.[symbol], 0));
 	}, [balances?.isolatedMargin, symbol]);
 

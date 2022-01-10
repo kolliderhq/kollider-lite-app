@@ -9,12 +9,19 @@ import { useAppDispatch, useSymbols } from 'hooks';
 import { fixed } from 'utils/Big';
 import { getClosestInOrderedArray, getLeverageFromSliderValue } from 'utils/slider';
 
-export const LeverageArea = () => {
+export const LeverageArea = ({ hasPositionLeverage }) => {
 	const dispatch = useAppDispatch();
 	const { symbol, symbolData } = useSymbols();
 	const [value, setValue] = React.useState<number | string>(1);
 	const [sliderValue, setSliderValue] = React.useState(1);
 	const maxLeverage = symbolData?.[symbol] ? Number(symbolData[symbol]?.maxLeverage) : 100;
+
+	React.useEffect(() => {
+		if (hasPositionLeverage) return;
+		dispatch(setOrderLeverage(1));
+		setValue('1');
+		setSliderValue(1);
+	}, [symbol]);
 
 	const updateValue = React.useCallback(
 		(newValue: number) => {

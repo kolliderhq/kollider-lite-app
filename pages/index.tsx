@@ -10,6 +10,7 @@ import { OrderArea } from 'components/OrderArea';
 import { OrderInfo } from 'components/OrderInfo';
 import { PositionTable } from 'components/Positions';
 import { TabSelect } from 'components/TabSelect';
+import { SymbolsLoadedWrapper } from 'components/wrappers/SymbolsLoadedWrapper';
 import { TABS } from 'consts';
 import { useAppSelector } from 'hooks';
 
@@ -35,7 +36,9 @@ export default function Home() {
 				{selectedTab === TABS.ORDER && (
 					<>
 						<OrderArea />
-						<OrderInfo />
+						<SymbolsLoadedWrapper>
+							<OrderInfo />
+						</SymbolsLoadedWrapper>
 					</>
 				)}
 			</section>

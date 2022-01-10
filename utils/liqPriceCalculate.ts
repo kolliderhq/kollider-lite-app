@@ -1,71 +1,67 @@
-import Big from 'big.js';
-
 import { CURRENCY } from 'consts/misc/currency';
-import { Side } from 'contexts';
-import { divide, minus, multiply } from 'utils/Big';
+import { fixed } from 'utils/Big';
 
+const SM = 100000000;
 const MAX_PRICE = 100000000000000;
 
-const calcValue = (price: number, quantity: number, contractSize: number, isInverse?: boolean) => {
+const SIDS = {
+	bid: 1,
+	ask: -1,
+};
+
+const calcValue = (price, quantity, isInverse) => {
 	if (isInverse) {
-		return Number(multiply(divide(multiply(quantity, contractSize), price), CURRENCY.SATS_PER_BTC));
+		return (quantity / price) * SM;
 	}
-	return Number(multiply(multiply(quantity, contractSize), price));
+	return quantity * price;
 };
 
-const calcLiquidationPriceFromMargin = (
-	entryPrice: number,
-	margin: number,
-	quantity: number,
-	side: Side,
-	fundingRate: number,
-	contractInfo: { contractSize: number; maintenanceRatio: number; takerFee: number; isInverse?: boolean }
+export const calcLiquidationPriceFromMargin = (
+	entryPrice,
+	margin,
+	quantity,
+	side,
+	isInverse,
+	contractSize,
+	fundingRate,
+	maintenanceRatio
 ) => {
-	const bankruptcyPrice = calcExitPriceFromPnl(
-		entryPrice,
-		-margin,
-		quantity,
-		side,
-		contractInfo.contractSize,
-		contractInfo.isInverse
-	);
-	const bankruptcyValue = calcValue(bankruptcyPrice, quantity, contractInfo.contractSize);
-	const entryValue = calcValue(entryPrice, quantity, contractInfo.contractSize);
+	if (!quantity) return 0;
+	// console.log(
+	// 	'calcLiquidationPriceFromMargin',
+	// 	entryPrice,
+	// 	margin,
+	// 	quantity,
+	// 	side,
+	// 	isInverse,
+	// 	contractSize,
+	// 	fundingRate,
+	// 	maintenanceRatio
+	// );
+	let bankruptcyPrice = calcExitPriceFromPnl(entryPrice, -margin, quantity, side, isInverse, contractSize);
+	let bankruptcyValue = calcValue(bankruptcyPrice, quantity, isInverse);
+	let entryValue = calcValue(entryPrice, quantity, isInverse);
 
-	const sideSign = side === Side.ASK ? -1 : 1;
-	const fundingAtLiq = Math.max(0, bankruptcyValue * sideSign * fundingRate);
-	const feesAtLiq = bankruptcyValue * contractInfo.takerFee;
-	const maintenanceMargin = entryValue * contractInfo.maintenanceRatio + fundingAtLiq + feesAtLiq;
+	let sideSign = SIDS[side];
+	let fundingAtLiq = Math.max(0, bankruptcyValue * sideSign * fundingRate);
+	let feesAtLiq = bankruptcyValue * CURRENCY.TAKER_FEES;
+	let maintenanceMargin = entryValue * maintenanceRatio + fundingAtLiq + feesAtLiq;
 
-	return calcExitPriceFromPnl(
-		entryPrice,
-		-(margin - maintenanceMargin),
-		quantity,
-		side,
-		contractInfo.contractSize,
-		contractInfo.isInverse
-	);
+	return calcExitPriceFromPnl(entryPrice, -(margin - maintenanceMargin), quantity, side, isInverse, contractSize);
 };
 
-const calcExitPriceFromPnl = (
-	entryPrice: number,
-	pnl: number,
-	quantity: number,
-	side: Side,
-	contractSize: number,
-	isInverse?: boolean
-) => {
-	const sideSign = side === Side.ASK ? -1 : 1;
+const calcExitPriceFromPnl = (entryPrice, pnl, quantity, side, isInverse, contractSize) => {
+	let sign = SIDS[side];
 
 	if (isInverse) {
-		const x = pnl / CURRENCY.SATS_PER_BTC;
-		const y = new Big(sideSign).mul(quantity).mul(contractSize).div(entryPrice).toNumber();
+		let x = pnl / SM;
+		let y = (sign * quantity * contractSize) / entryPrice;
 
 		if (x - y === 0) {
 			return MAX_PRICE;
 		}
 
-		const exitPrice = Number(divide(multiply(multiply(sideSign, quantity), contractSize), minus(y, x)));
+		let exitPrice = (sign * -quantity * contractSize) / (x - y);
 
 		if (exitPrice < 0) {
 			return MAX_PRICE;
@@ -78,10 +74,10 @@ const calcExitPriceFromPnl = (
 		return MAX_PRICE;
 	}
 
-	return Math.min(
-		MAX_PRICE,
-		new Big(pnl).div(new Big(sideSign).mul(quantity).mul(contractSize)).add(entryPrice).toNumber()
-	);
+	return Number(fixed(Math.min(MAX_PRICE, pnl / (sign * quantity * contractSize) + entryPrice), 1));
 };
 
-// let res = calcLiquidationPriceFromMargin(10000, 500, 1, 'Bid', true, 1, 0, 0.005);
+// let res = calcLiquidationPriceFromMargin(10000, 500, 1, 'bid', true, 1, 0, 0.005);
+let res = calcLiquidationPriceFromMargin(43767.5, 91, 1, 'bid', true, 1, 0.00025, 0.004);
+
+console.log({ res });

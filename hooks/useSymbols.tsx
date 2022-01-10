@@ -19,7 +19,6 @@ export function useSymbols() {
 		() => ({ symbols, symbolData, symbol: symbols[symbolIndex], symbolsDisplay, symbolsAssets, symbolIndex }),
 		[symbols, symbolData, symbolsDisplay, symbolsAssets, symbolIndex]
 	) as {
-		ㅂ;
 		symbols: string[];
 		symbolData: TSymbolData;
 		symbol: string;

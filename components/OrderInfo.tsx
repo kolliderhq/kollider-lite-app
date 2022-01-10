@@ -3,32 +3,81 @@ import React, { ReactNode } from 'react';
 import cn from 'clsx';
 
 import Loader from 'components/Loader';
+import { SETTINGS } from 'consts';
 import { CURRENCY } from 'consts/misc/currency';
-import { askBidSelector, useOrderbookSelector } from 'contexts';
+import { Side, askBidSelector, useOrderbookSelector } from 'contexts';
 import { useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { divide, fixed, multiply } from 'utils/Big';
 import { applyDp, formatNumber } from 'utils/format';
+import { calcLiquidationPriceFromMargin } from 'utils/liqPriceCalculate';
 
 export function OrderInfo() {
-	const { quantity, leverage } = useAppSelector(state => state.orders.order);
+	const [{ quantity, leverage }, fundingRates] = useAppSelector(state => [
+		state.orders.order,
+		state.prices.fundingRates,
+	]);
 	const { bestAsk, bestBid, bestAskAmount, bestBidAmount } = useOrderbookSelector(askBidSelector);
 	const { priceDp, contractSize, isInversePriced, maintenanceMargin } = useSymbolData();
 	const { symbol } = useSymbols();
-	const askOrderValue = getOrderValue(bestAsk, priceDp, quantity, symbol, contractSize);
-	const askData: SideBuyData = {
-		margin: divide(askOrderValue, leverage, 0),
-		orderValue: fixed(askOrderValue, 0),
-		fees: multiply(CURRENCY.TAKER_FEES, askOrderValue, 0),
-		isInaccurate: bestAskAmount < quantity,
+	const fundingRate = Number(fundingRates[symbol]);
+	const contractInfo = {
+		contractSize: Number(contractSize),
+		maintenanceRatio: Number(maintenanceMargin),
+		takerFee: CURRENCY.TAKER_FEES,
+		isInverse: isInversePriced,
 	};
-	const bidOrderValue = getOrderValue(bestBid, priceDp, quantity, symbol, contractSize);
 
-	const bidData: SideBuyData = {
-		margin: divide(bidOrderValue, leverage, 0),
-		orderValue: fixed(bidOrderValue, 0),
-		fees: multiply(CURRENCY.TAKER_FEES, bidOrderValue, 0),
-		isInaccurate: bestBidAmount < quantity,
-	};
+	const askOrderValue = getOrderValue(bestAsk, priceDp, quantity, symbol, contractSize);
+	const [askData, setAskData] = React.useState<SideData>({} as SideData);
+	React.useEffect(() => {
+		setAskData({
+			margin: divide(askOrderValue, leverage, 0),
+			orderValue: fixed(askOrderValue, 0),
+			fees: multiply(CURRENCY.TAKER_FEES, askOrderValue, 0),
+			isInaccurate: bestAskAmount < quantity,
+			liqPrice: bestAsk
+				? fixed(
+						calcLiquidationPriceFromMargin(
+							Number(applyDp(bestAsk, priceDp)),
+							Number(divide(askOrderValue, leverage, 0)),
+							quantity,
+							'ask',
+							contractInfo.isInverse,
+							contractInfo.contractSize,
+							fundingRate,
+							contractInfo.maintenanceRatio
+						),
+						priceDp
+				  )
+				: 0,
+		});
+	}, [askOrderValue, bestAsk, bestAskAmount, quantity, leverage, fundingRate]);
+	const bidOrderValue = getOrderValue(bestBid, priceDp, quantity, symbol, contractSize);
+	const [bidData, setBidData] = React.useState<SideData>({} as SideData);
+	React.useEffect(() => {
+		setBidData({
+			margin: divide(bidOrderValue, leverage, 0),
+			orderValue: fixed(bidOrderValue, 0),
+			fees: multiply(CURRENCY.TAKER_FEES, bidOrderValue, 0),
+			isInaccurate: bestBidAmount < quantity,
+			liqPrice: bestBid
+				? fixed(
+						calcLiquidationPriceFromMargin(
+							Number(applyDp(bestBid, priceDp)),
+							Number(divide(bidOrderValue, leverage, 0)),
+							quantity,
+							'bid',
+							contractInfo.isInverse,
+							contractInfo.contractSize,
+							fundingRate,
+							contractInfo.maintenanceRatio
+						),
+						priceDp
+				  )
+				: 0,
+		});
+	}, [bidOrderValue, bestBid, bestBidAmount, leverage, quantity, fundingRate]);
+
 	return (
 		<section className="mt-5 w-full">
 			<div className="grid grid-cols-2 gap-2 xs:gap-5 w-full">
@@ -43,11 +92,12 @@ export function OrderInfo() {
 	);
 }
 
-interface SideBuyData {
+interface SideData {
 	margin: string;
 	orderValue: string;
 	fees: string;
 	isInaccurate: boolean;
+	liqPrice: string;
 }
 
 const getOrderValue = (price, priceDp, quantity, symbol, contractSize) => {
@@ -65,7 +115,7 @@ const DisplayOrderData = ({
 	className = '',
 }: {
 	loaded: boolean;
-	data: SideBuyData;
+	data: SideData;
 	className?: string;
 }) => {
 	return (
@@ -88,6 +138,18 @@ const DisplayOrderData = ({
 						<LabelledValue label={'Fees'} innacurate={data.isInaccurate}>
 							{formatNumber(data.fees)}
 							<span className="pl-1 text-xs xxs:text-sm xs:text-base break-normal">SATS</span>
+						</LabelledValue>
+					</li>
+					<li>
+						<LabelledValue label={'Liq. Price'} innacurate={data.isInaccurate}>
+							{data.liqPrice > SETTINGS.LIMITS.NUMBER ? (
+								'∞'
+							) : (
+								<>
+									<span className="pr-1 text-xs xxs:text-sm xs:text-base break-normal">$</span>
+									{formatNumber(data.liqPrice)}
+								</>
+							)}
 						</LabelledValue>
 					</li>
 				</>

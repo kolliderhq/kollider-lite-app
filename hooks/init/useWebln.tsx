@@ -18,6 +18,7 @@ export const weblnConnectAttempt = () => {
 			storeDispatch(setWeblnConnected(false));
 			return;
 		}
+		console.log('webln >>', res);
 		// // sendPayment is not active - wallet is locked in extension
 		// const keys = Object.keys(res);
 		// console.log('res', keys);

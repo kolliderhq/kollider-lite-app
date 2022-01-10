@@ -43,6 +43,7 @@ const OrderInput = () => {
 	const editingLeverage = useAppSelector(state => state.layout.editingLeverage);
 
 	const hasPositionLeverage = position?.leverage && position?.quantity !== '0';
+
 	React.useEffect(() => {
 		if (!hasPositionLeverage) return;
 		dispatch(setOrderLeverage(toNumber(position.leverage)));
@@ -72,7 +73,7 @@ const OrderInput = () => {
 			</div>
 			<div className="w-full mt-1">
 				{!hasPositionLeverage && editingLeverage ? (
-					<LeverageArea />
+					<LeverageArea hasPositionLeverage={hasPositionLeverage} />
 				) : (
 					<DisplayLeverage leverage={hasPositionLeverage ? position.leverage : leverage} />
 				)}
@@ -93,11 +94,29 @@ const DisplayLeverage = ({ leverage }: { leverage: string }) => {
 };
 
 const SellButton = ({ bestBid, priceDp, className }: { bestBid: string; priceDp: number; className?: string }) => {
+	const allowedIp = useAppSelector(state => state.misc.allowedIp);
 	const { symbol } = useSymbols();
 	const order = useAppSelector(state => state.orders.order);
+	const loggedIn = useAppSelector(state => state.user.data.type === USER_TYPE.PRO);
 	return (
 		<button
 			onClick={() => {
+				if (!allowedIp) {
+					displayToast(<p className="text-sm">Not Allowed due to IP address from restricted country</p>, {
+						type: 'error',
+						level: TOAST_LEVEL.CRITICAL,
+						toastId: 'ip-not-allowed-place-order',
+					});
+					return;
+				}
+				if (!loggedIn) {
+					displayToast(<p className="text-sm">You must be logged in to place orders</p>, {
+						type: 'warning',
+						level: TOAST_LEVEL.CRITICAL,
+						toastId: 'req-login-place-order',
+					});
+					return;
+				}
 				processOrder(order, Side.ASK, priceDp, symbol);
 			}}
 			className={cn(buttonClass, className, 'bg-red-500', { 'opacity-50': !bestBid })}>
@@ -112,12 +131,21 @@ const SellButton = ({ bestBid, priceDp, className }: { bestBid: string; priceDp:
 };
 
 const BuyButton = ({ bestAsk, priceDp, className }: { bestAsk: string; priceDp: number; className?: string }) => {
+	const allowedIp = useAppSelector(state => state.misc.allowedIp);
 	const { symbol } = useSymbols();
 	const order = useAppSelector(state => state.orders.order);
 	const loggedIn = useAppSelector(state => state.user.data.type === USER_TYPE.PRO);
 	return (
 		<button
 			onClick={() => {
+				if (!allowedIp) {
+					displayToast(<p className="text-sm">Not Allowed due to IP address from restricted country</p>, {
+						type: 'error',
+						level: TOAST_LEVEL.CRITICAL,
+						toastId: 'ip-not-allowed-place-order',
+					});
+					return;
+				}
 				if (!loggedIn) {
 					displayToast(<p className="text-sm">You must be logged in to place orders</p>, {
 						type: 'warning',

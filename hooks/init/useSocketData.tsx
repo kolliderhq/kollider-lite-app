@@ -6,6 +6,7 @@ import { baseSocketClient } from 'classes/SocketClient';
 import { CHANNELS, MESSAGE_TYPES, USER_TYPE } from 'consts';
 import {
 	setBalances,
+	setFundingRates,
 	setIsWsAuthenticated,
 	setIsWsConnected,
 	setMarkPrices,
@@ -16,7 +17,13 @@ import { setIndexes } from 'contexts/modules/prices';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import useIsWindowVisible from 'hooks/useIsWindowVisible';
 
-const WATCH_TYPES = [CHANNELS.POSITION_STATES, CHANNELS.INDEX_VALUES, CHANNELS.MARK_PRICE, CHANNELS.BALANCES];
+const WATCH_TYPES = [
+	CHANNELS.POSITION_STATES,
+	CHANNELS.INDEX_VALUES,
+	CHANNELS.MARK_PRICE,
+	CHANNELS.BALANCES,
+	CHANNELS.FUNDING_RATES,
+];
 export function useSocketData() {
 	const [wsConnected, wsAuthenticated, apiKey, userType] = useAppSelector(state => [
 		state.connection.isWsConnected,
@@ -63,6 +70,7 @@ export function useSocketData() {
 			baseSocketClient.socketSend(MESSAGE_TYPES.BALANCES, {}, null, null);
 			baseSocketClient.requestChannelSubscribe(CHANNELS.MARK_PRICE, []);
 			baseSocketClient.requestChannelSubscribe(CHANNELS.INDEX_VALUES, []);
+			baseSocketClient.requestChannelSubscribe(CHANNELS.FUNDING_RATES, []);
 		} else {
 			if (wsAuthenticated) {
 				baseSocketClient.requestChannelUnsubscribe(CHANNELS.POSITION_STATES, []);
@@ -106,6 +114,9 @@ const updateChannelData = (msg: any) => {
 	} else if (msg?.type === CHANNELS.BALANCES) {
 		if (!msg.data?.cash) return;
 		storeDispatch(setBalances(msg.data));
+	} else if (msg.type === CHANNELS.FUNDING_RATES) {
+		if (!msg.data?.symbol) return;
+		storeDispatch(setFundingRates({ symbol: msg.data.symbol, rate: msg.data.rate }));
 	} else {
 		console.error(`unknown type - ${msg.type}`);
 		console.log(msg.data);

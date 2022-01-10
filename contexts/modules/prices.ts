@@ -6,6 +6,7 @@ import { Balances, IndexValues, PositionState } from 'utils/refiners/sockets';
 interface InitState {
 	indexes: Record<string, number>;
 	markPrices: Record<string, string>;
+	fundingRates: Record<string, string>;
 }
 
 const initialState: InitState = {
@@ -13,6 +14,9 @@ const initialState: InitState = {
 		['BTCUSD.PERP']: NaN,
 	},
 	markPrices: {
+		['BTCUSD.PERP']: '',
+	},
+	fundingRates: {
 		['BTCUSD.PERP']: '',
 	},
 };
@@ -33,8 +37,11 @@ export const pricesSlice = createSlice({
 		setMarkPrices: (state, action: PayloadAction<{ symbol: string; value: string }>) => {
 			state.markPrices[action.payload.symbol] = action.payload.value;
 		},
+		setFundingRates: (state, action: PayloadAction<{ symbol: string; rate: string }>) => {
+			state.fundingRates[action.payload.symbol] = action.payload.rate;
+		},
 	},
 });
 
-export const { setInitPrices, setIndexes, setMarkPrices } = pricesSlice.actions;
+export const { setInitPrices, setIndexes, setMarkPrices, setFundingRates } = pricesSlice.actions;
 export default pricesSlice.reducer;

@@ -17,7 +17,7 @@ import {
 import { setDialog, setTab } from 'contexts/modules/layout';
 import { useAppSelector } from 'hooks/redux';
 import { LOG5 } from 'utils/debug';
-import { applyDp, formatNumber } from 'utils/format';
+import { applyDp, formatNumber, toNormalCase } from 'utils/format';
 import { ReceivedOrder } from 'utils/refiners/sockets';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
@@ -54,7 +54,7 @@ const tradingListener = (msg: any) => {
 				type: 'dark',
 				level: TOAST_LEVEL.INFO,
 				toastOptions: {
-					position: 'bottom-right',
+					position: 'bottom-center',
 				},
 			}
 		);
@@ -164,7 +164,7 @@ const tradingListener = (msg: any) => {
 				type: 'dark',
 				level: TOAST_LEVEL.CRITICAL,
 				toastOptions: {
-					position: 'bottom-right',
+					position: 'bottom-center',
 				},
 			}
 		);
@@ -177,13 +177,14 @@ const tradingListener = (msg: any) => {
 		console.log('LIQUIDATION', msg.data);
 		// displayToast(<LiquidationToast data={msg.data} />, 'dark', { autoClose: 7000 }, 'Liquidation', true);
 	} else if (msg.type === TRADING_TYPES.WITHDRAWAL_REJECTION) {
-		// displayToast(
-		// 	<p className="text-sm">{msg.data.reason}</p>,
-		// 	'dark',
-		// 	{ autoClose: 7000 },
-		// 	'Withdrawal Rejection',
-		// 	true
-		// );
+		displayToast(<p className="text-sm">Withdrawal Rejection</p>, {
+			type: 'dark',
+			level: TOAST_LEVEL.CRITICAL,
+			toastId: 'withdrawal-rejection',
+			toastOptions: {
+				position: 'bottom-center',
+			},
+		});
 	} else if (msg.type === TRADING_TYPES.DEPOSIT_SUCCESS) {
 		if (msg?.data?.deposit?.amount) {
 			displayToast(
@@ -197,7 +198,7 @@ const tradingListener = (msg: any) => {
 					type: 'dark',
 					level: TOAST_LEVEL.CRITICAL,
 					toastOptions: {
-						position: 'bottom-right',
+						position: 'bottom-center',
 					},
 				}
 			);
@@ -215,6 +216,8 @@ const tradingListener = (msg: any) => {
 		if (!paymentRequest) return;
 	} else if (msg.type === TRADING_TYPES.ADL_NOTICE) {
 		// displayToast(<ADLToast data={msg.data} />, 'error', { position: 'top-right' }, 'Auto Deleverage Notice', true);
+	} else if (msg.type === TRADING_TYPES.ORDER_REJECTION) {
+		//	do nothing, toast is displayed at refiner
 	} else {
 		console.warn('unprocessed msg type', msg?.type);
 		console.log(msg);

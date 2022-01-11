@@ -167,7 +167,7 @@ const API: I_API = {
 			},
 		},
 		HISTORICAL_OHLC: {
-			route: (symbol, intervalSize, start, end) =>
+			route: (symbol, intervalSize, limit) =>
 				`/market/historical_ohlc?symbol=${symbol}&interval_size=${intervalSize}${applyOptionalParams(
 					{ start, end },
 					false
@@ -187,8 +187,16 @@ const API: I_API = {
 			},
 		},
 		HISTORICAL_INDEX_PRICES: {
-			route: (symbol, intervalSize, limit) =>
-				`/market/historic_index_prices?symbol=${symbol}&interval_size=${intervalSize}&limit=${limit}`,
+			route: (symbol, intervalSize, start, end) =>
+				`/market/historic_index_prices?symbol=${symbol}&interval_size=${intervalSize}&start=${start}&end=${end}`,
+			method: 'get',
+			base: END_POINTS.BACK,
+			stale: API_TIME.NONE,
+			allowNull: true,
+		},
+		HISTORICAL_MARK_PRICES: {
+			route: (symbol, intervalSize, start, end) =>
+				`/market/historical_mark_price?symbol=${symbol}&interval_size=${intervalSize}&start=${start}&end=${end}`,
 			method: 'get',
 			base: END_POINTS.BACK,
 			stale: API_TIME.NONE,

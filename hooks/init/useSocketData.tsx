@@ -5,6 +5,7 @@ import includes from 'lodash-es/includes';
 import { baseSocketClient } from 'classes/SocketClient';
 import { CHANNELS, MESSAGE_TYPES, USER_TYPE } from 'consts';
 import {
+	reduxStore,
 	setBalances,
 	setFundingRates,
 	setIsWsAuthenticated,
@@ -81,18 +82,22 @@ export function useSocketData() {
 	}, [visible, wsConnected]);
 }
 
-const authorizeClientAndSubscribe = (apiKey: string) => {
+const authorizeClientAndSubscribe = async (apiKey: string) => {
 	baseSocketClient.authorizeClient(apiKey, () => {
-		storeDispatch(setIsWsAuthenticated(true));
-		baseSocketClient.socketSend(MESSAGE_TYPES.BALANCES, {}, null, null);
-		baseSocketClient.socketSend(MESSAGE_TYPES.WITHDRAWAL_LIMIT_INFO, {}, null, null);
-		baseSocketClient.socketSend(MESSAGE_TYPES.POSITIONS, {}, null, null);
-		baseSocketClient.socketSend(MESSAGE_TYPES.OPEN_ORDERS, {}, null, null);
-		baseSocketClient.socketSend(MESSAGE_TYPES.ADVANCED_ORDERS, {}, null, null);
+		setTimeout(() => {
+			storeDispatch(setIsWsAuthenticated(true));
+			baseSocketClient.socketSend(MESSAGE_TYPES.BALANCES, {}, null, null);
+			baseSocketClient.socketSend(MESSAGE_TYPES.WITHDRAWAL_LIMIT_INFO, {}, null, null);
+			baseSocketClient.socketSend(MESSAGE_TYPES.POSITIONS, {}, null, null);
+			baseSocketClient.socketSend(MESSAGE_TYPES.OPEN_ORDERS, {}, null, null);
+			baseSocketClient.socketSend(MESSAGE_TYPES.ADVANCED_ORDERS, {}, null, null);
+			const { symbols, symbolIndex } = reduxStore.getState().symbols;
+			baseSocketClient.requestChannelSubscribe(CHANNELS.ORDERBOOK_LEVEL2, [symbols[symbolIndex]]);
 
-		baseSocketClient.requestChannelSubscribe(CHANNELS.POSITION_STATES, []);
-		baseSocketClient.requestChannelSubscribe(CHANNELS.MARK_PRICE, []);
-		baseSocketClient.requestChannelSubscribe(CHANNELS.INDEX_VALUES, []);
+			baseSocketClient.requestChannelSubscribe(CHANNELS.POSITION_STATES, []);
+			baseSocketClient.requestChannelSubscribe(CHANNELS.MARK_PRICE, []);
+			baseSocketClient.requestChannelSubscribe(CHANNELS.INDEX_VALUES, []);
+		}, 100);
 	});
 };
 

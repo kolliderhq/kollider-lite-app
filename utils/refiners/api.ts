@@ -149,6 +149,11 @@ refiner.set(API_NAMES.HISTORICAL_INDEX_PRICES, data => {
 	return { ...data, data: data.data.map(v => [parseTime(v.time), v.mean]) };
 });
 
+refiner.set(API_NAMES.HISTORICAL_MARK_PRICES, data => {
+	LOG2(data, 'HISTORICAL_MARK_PRICES');
+	return { ...data, data: data.data.map(v => [parseTime(v.time), v.price]) };
+});
+
 // interface IHistoricAssetValue {
 // 	mean_maket_value: number;
 // 	mean_notional_value: number;

@@ -11,14 +11,13 @@ import { timestampByInterval } from 'utils/scripts';
 
 export const IndexPriceSparkLine = () => {
 	const { symbol } = useSymbols();
-	const [indexSymbol, setIndexSymbol] = React.useState('');
-	React.useEffect(() => {
-		if (!symbol) return;
-		setIndexSymbol('.' + symbol.split('.')[0]);
-	}, [symbol]);
+	const dayAgo = [
+		timestampByInterval(Date.now() - TIME.HOUR * 24 * 7, TIME.HOUR),
+		timestampByInterval(Date.now(), TIME.HOUR),
+	];
 	const { data } = useSWR(
-		indexSymbol ? [API_NAMES.HISTORICAL_INDEX_PRICES, indexSymbol, '1h', 168] : null,
-		getSWROptions(API_NAMES.HISTORICAL_INDEX_PRICES)
+		symbol ? [API_NAMES.HISTORICAL_MARK_PRICES, symbol, '1h', dayAgo[0], dayAgo[1]] : null,
+		getSWROptions(API_NAMES.HISTORICAL_MARK_PRICES)
 	);
 	const [series, setSeries] = React.useState<any>();
 	const [yAxis, setYAxis] = React.useState({});

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import empty from 'is-empty';
 import capitalize from 'lodash-es/capitalize';
 import each from 'lodash-es/each';
@@ -17,11 +19,12 @@ import {
 } from 'consts/websocket';
 import { LOG3, LOG5 } from 'utils/debug';
 import { mapKeyValues } from 'utils/scripts';
+import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
 import { add, divide } from '../Big';
 import { createAccumulatedArray, sortObjByKeys } from '../complexSort';
 import { CustomError } from '../error';
-import { camelCaseAllKeys } from '../format';
+import { camelCaseAllKeys, toNormalCase } from '../format';
 import { parseTime } from '../time';
 import { KeysToCamelCase } from '../types/utils';
 
@@ -114,6 +117,18 @@ refiner.set(TRADING_TYPES.FILL, v => {
 
 refiner.set(TRADING_TYPES.ORDER_REJECTION, v => {
 	LOG3(v?.data, 'Order fail');
+	displayToast(
+		<p className="text-sm">
+			Order Failed
+			<br />
+			{toNormalCase(v?.data?.reason)}
+		</p>,
+		{
+			type: 'warning',
+			level: TOAST_LEVEL.CRITICAL,
+			toastId: 'req-login-place-order',
+		}
+	);
 	// TODO : do something to the UI
 	return v;
 });

@@ -171,7 +171,14 @@ const BuyButton = ({ bestAsk, priceDp, className }: { bestAsk: string; priceDp: 
 };
 
 export const processOrder = (order: Order, side: Side, priceDp: number, symbol: string, localSave?: string) => {
-	if (order.quantity === 0 || !order.quantity) return;
+	if (order.quantity === 0 || !order.quantity) {
+		displayToast(<p className="text-sm">Missing Quantity</p>, {
+			type: 'error',
+			level: TOAST_LEVEL.IMPORTANT,
+			toastId: 'req-quantity-place-order',
+		});
+		return;
+	}
 	const obj = {
 		leverage: Number(order.leverage),
 		quantity: order.quantity,

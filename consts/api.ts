@@ -186,6 +186,14 @@ const API: I_API = {
 				...postOptions,
 			},
 		},
+		HISTORICAL_INDEX_PRICES: {
+			route: (symbol, intervalSize, limit) =>
+				`/market/historic_index_prices?symbol=${symbol}&interval_size=${intervalSize}&limit=${limit}`,
+			method: 'get',
+			base: END_POINTS.BACK,
+			stale: API_TIME.NONE,
+			allowNull: true,
+		},
 		HISTORIC_ASSET_VALUES: {
 			route: (start, end, granularity, symbol) =>
 				`/user/historic_asset_values?${applyOptionalParams({ start, end, symbol, interval_size: granularity }, true)}`,

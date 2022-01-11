@@ -6,6 +6,8 @@ import { Dialogs } from 'components/dialogs/DIalogs';
 import { Popups } from 'components/dialogs/Popups';
 import { SymbolSelectDropdown } from 'components/Dropdown';
 import { Header } from 'components/Header';
+import { IndexPriceSparkLine } from 'components/IndexPriceSparkLine';
+import Loader from 'components/Loader';
 import { OrderArea } from 'components/OrderArea';
 import { OrderInfo } from 'components/OrderInfo';
 import { PositionTable } from 'components/Positions';
@@ -26,7 +28,17 @@ export default function Home() {
 					<SymbolSelectDropdown />
 				</div>
 			</div>
-			<section className="w-full py-3 px-2 xs:py-4 rounded-md border border-gray-600 bg-gray-800 relative z-0">
+			<SymbolsLoadedWrapper
+				loader={
+					<div className="h-[150px] w-full">
+						<Loader />
+					</div>
+				}>
+				<div className="w-full relative z-5 py-1">
+					<IndexPriceSparkLine />
+				</div>
+			</SymbolsLoadedWrapper>
+			<section className="w-full py-3 px-2 xs:py-4 rounded-md border border-gray-600 bg-gray-800">
 				{selectedTab === TABS.POSITIONS && (
 					<>
 						<PositionTable />

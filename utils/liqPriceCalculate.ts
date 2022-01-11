@@ -78,6 +78,6 @@ const calcExitPriceFromPnl = (entryPrice, pnl, quantity, side, isInverse, contra
 };
 
 // let res = calcLiquidationPriceFromMargin(10000, 500, 1, 'bid', true, 1, 0, 0.005);
-let res = calcLiquidationPriceFromMargin(43767.5, 91, 1, 'bid', true, 1, 0.00025, 0.004);
-
-console.log({ res });
+// let res = calcLiquidationPriceFromMargin(43767.5, 91, 1, 'bid', true, 1, 0.00025, 0.004);
+//
+// console.log({ res });

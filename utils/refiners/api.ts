@@ -144,6 +144,11 @@ export interface IOHLC {
 	volume: Nullable<number>;
 }
 
+refiner.set(API_NAMES.HISTORICAL_INDEX_PRICES, data => {
+	LOG2(data, 'HISTORICAL_INDEX_PRICES');
+	return { ...data, data: data.data.map(v => [parseTime(v.time), v.mean]) };
+});
+
 // interface IHistoricAssetValue {
 // 	mean_maket_value: number;
 // 	mean_notional_value: number;

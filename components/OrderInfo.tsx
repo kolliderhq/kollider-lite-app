@@ -49,7 +49,7 @@ export function OrderInfo() {
 						),
 						priceDp
 				  )
-				: 0,
+				: '0',
 		});
 	}, [askOrderValue, bestAsk, bestAskAmount, quantity, leverage, fundingRate]);
 	const bidOrderValue = getOrderValue(bestBid, priceDp, quantity, symbol, contractSize);
@@ -74,7 +74,7 @@ export function OrderInfo() {
 						),
 						priceDp
 				  )
-				: 0,
+				: '0',
 		});
 	}, [bidOrderValue, bestBid, bestBidAmount, leverage, quantity, fundingRate]);
 
@@ -142,7 +142,7 @@ const DisplayOrderData = ({
 					</li>
 					<li>
 						<LabelledValue label={'Liq. Price'} innacurate={data.isInaccurate}>
-							{data.liqPrice > SETTINGS.LIMITS.NUMBER ? (
+							{Number(data.liqPrice) > SETTINGS.LIMITS.NUMBER ? (
 								'∞'
 							) : (
 								<>

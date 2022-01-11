@@ -1,9 +1,9 @@
 import React from 'react';
 
+import compact from 'lodash/compact';
 import useSWR from 'swr';
 
 import { SparkLine } from 'components/charts/SparkLine';
-import Loader from 'components/Loader';
 import { API_NAMES, TIME } from 'consts';
 import { useSymbols } from 'hooks';
 import { getSWROptions } from 'utils/fetchers';
@@ -59,6 +59,6 @@ const generateSeries = data => {
 };
 
 const getMinMax = arr => {
-	const valueArr = arr.map(item => item[1]);
-	return [Math.min(...valueArr) * 0.99, Math.max(...valueArr) * 1.01];
+	const valueArr = compact(arr.map(item => item[1]));
+	return [Math.min(...(valueArr as number[])) * 0.99, Math.max(...(valueArr as number[])) * 1.01];
 };

@@ -167,7 +167,7 @@ const API: I_API = {
 			},
 		},
 		HISTORICAL_OHLC: {
-			route: (symbol, intervalSize, limit) =>
+			route: (symbol, intervalSize, start, end) =>
 				`/market/historical_ohlc?symbol=${symbol}&interval_size=${intervalSize}${applyOptionalParams(
 					{ start, end },
 					false

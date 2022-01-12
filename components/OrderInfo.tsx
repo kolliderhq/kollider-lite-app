@@ -79,16 +79,14 @@ export function OrderInfo() {
 	}, [bidOrderValue, bestBid, bestBidAmount, leverage, quantity, fundingRate]);
 
 	return (
-		<section className="mt-5 w-full">
-			<div className="grid grid-cols-2 gap-2 xs:gap-5 w-full">
-				<div className="border border-red-600 border-opacity-75 bg-gray-950 p-4">
-					<DisplayOrderData loaded={!!bestBid} data={bidData} />
-				</div>
-				<div className="border border-green-600 border-opacity-75 bg-gray-950 p-4">
-					<DisplayOrderData loaded={!!bestAsk} data={askData} className="text-right" />
-				</div>
+		<div className="grid grid-cols-2 gap-2 xs:gap-5 w-full">
+			<div className="border border-red-600 border-opacity-75 bg-gray-950 p-4">
+				<DisplayOrderData loaded={!!bestBid} data={bidData} />
 			</div>
-		</section>
+			<div className="border border-green-600 border-opacity-75 bg-gray-950 p-4">
+				<DisplayOrderData loaded={!!bestAsk} data={askData} className="text-right" />
+			</div>
+		</div>
 	);
 }
 

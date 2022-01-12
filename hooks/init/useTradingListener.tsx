@@ -14,7 +14,7 @@ import {
 	setUserWithdrawlLimits,
 	storeDispatch,
 } from 'contexts';
-import { setDialog, setTab } from 'contexts/modules/layout';
+import { setDialog, setPopup, setPopupClose, setTab } from 'contexts/modules/layout';
 import { useAppSelector } from 'hooks/redux';
 import { LOG5 } from 'utils/debug';
 import { applyDp, formatNumber, toNormalCase } from 'utils/format';
@@ -115,6 +115,7 @@ const tradingListener = (msg: any) => {
 		console.log(data, currentInvoice);
 		if (currentInvoice?.extOrderId === data.extOrderId) {
 			storeDispatch(setInvoiceSettled(data.symbol));
+			storeDispatch(setPopupClose());
 		}
 	} else if (msg.type === TRADING_TYPES.TRADE) {
 		const data = msg.data;

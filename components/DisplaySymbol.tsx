@@ -62,7 +62,7 @@ export const DisplaySymbol = ({ asset, value, symbol }) => {
 	);
 };
 
-const useMarkPrice = symbol => {
+export const useMarkPrice = symbol => {
 	const { symbolData } = useSymbols();
 	const priceDp = symbolData[symbol]?.priceDp;
 	const markPriceObj = useAppSelector(state => state.prices.markPrices);

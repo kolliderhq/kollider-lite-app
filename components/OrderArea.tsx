@@ -7,7 +7,6 @@ import { baseSocketClient } from 'classes/SocketClient';
 import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
 import { SETTINGS, TABS, USER_TYPE } from 'consts';
 import { Order, Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
-import { setTab } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { applyDp, formatNumber, optionalDecimal } from 'utils/format';
 import { isPositiveInteger } from 'utils/scripts';

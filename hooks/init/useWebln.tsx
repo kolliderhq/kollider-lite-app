@@ -54,6 +54,12 @@ export const useWebln = () => {
 	//	initialize webln - runs on startup
 	React.useEffect(() => {
 		weblnConnectAttempt();
+		if (detectMobile())
+			setTimeout(() => {
+				if (!reduxStore.getState().connection.isWeblnConnected) {
+					weblnConnectAttempt();
+				}
+			}, 3000);
 	}, []);
 
 	useProcessAutoWithdrawWebln();
@@ -135,3 +141,8 @@ const useProcessAutoWithdrawWebln = () => {
 		}
 	}, [isWeblnConnected, cash]);
 };
+
+function detectMobile() {
+	if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) return true;
+	return false;
+}

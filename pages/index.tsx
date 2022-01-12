@@ -4,6 +4,7 @@ import { AccountInfo } from 'components/AccountInfo';
 import { BalanceInfo } from 'components/BalanceInfo';
 import { Dialogs } from 'components/dialogs/DIalogs';
 import { Popups } from 'components/dialogs/Popups';
+import { DisplayMarkPrice } from 'components/DisplayMarkPrice';
 import { SymbolSelectDropdown } from 'components/Dropdown';
 import { Header } from 'components/Header';
 import { IndexPriceSparkLine } from 'components/IndexPriceSparkLine';
@@ -23,8 +24,11 @@ export default function Home() {
 			<Dialogs />
 			<Popups />
 			<Header />
-			<div className="flex items-center justify-end h-10 w-full mb-4 z-10">
-				<div className="w-3/4 xs:w-1/2">
+			<div className="grid grid-rows-2 grid-cols-1 xxs:grid-rows-1 xxs:grid-cols-10 xs:grid-cols-2 xxs:h-[50px] w-full mb-4 z-10">
+				<div className="order-2 xxs:order-1 col-span-1 xxs:col-span-4 xs:col-span-1 mt-5 xxs:mt-0">
+					<DisplayMarkPrice />
+				</div>
+				<div className="order-1 xxs:order-2 col-span-6 xs:col-span-1 w-full h-10">
 					<SymbolSelectDropdown />
 				</div>
 			</div>
@@ -38,7 +42,7 @@ export default function Home() {
 					<IndexPriceSparkLine />
 				</div>
 			</SymbolsLoadedWrapper>
-			<section className="w-full py-3 xs:px-3 px-4 xs:py-4 rounded-md border border-gray-600 bg-gray-800">
+			<section className="w-full py-3 xs:px-3 px-4 xs:py-4 rounded-md bg-gray-800">
 				{selectedTab === TABS.POSITIONS && (
 					<>
 						<PositionTable />
@@ -46,12 +50,16 @@ export default function Home() {
 					</>
 				)}
 				{selectedTab === TABS.ORDER && (
-					<>
-						<OrderArea />
-						<SymbolsLoadedWrapper>
-							<OrderInfo />
-						</SymbolsLoadedWrapper>
-					</>
+					<div className="flex flex-col">
+						<section className="xs:order-1 order-2">
+							<OrderArea />
+						</section>
+						<section className="mt-0 xs:mt-5 pb-2 xs:pb-0 xs:order-2 order-1">
+							<SymbolsLoadedWrapper>
+								<OrderInfo />
+							</SymbolsLoadedWrapper>
+						</section>
+					</div>
 				)}
 			</section>
 			<BalanceInfo />

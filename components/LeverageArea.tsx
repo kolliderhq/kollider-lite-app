@@ -52,7 +52,6 @@ export const LeverageArea = ({ hasPositionLeverage }) => {
 		() => (
 			<section className="w-full">
 				<div className="w-full">
-					<label className="text-xs text-gray-300 tracking-wider">Leverage</label>
 					<div className="h-10 xs:h-9 bg-gray-700 border-transparent border-2 rounded-md w-full relative">
 						<input
 							onFocus={() => dispatch(setTab(TABS.ORDER))}
@@ -92,8 +91,7 @@ export const ChangeLeverageButton = () => {
 		<div className="w-full flex items-center justify-end">
 			<button
 				onClick={() => dispatch(setEditLeverage(true))}
-				className="hover:opacity-80 mt-2 px-4 py-2 border-theme-main border rounded-lg flex items-center justify-center w-fit"
-			>
+				className="hover:opacity-80 mt-2 px-4 py-2 border-theme-main border rounded-lg flex items-center justify-center w-fit">
 				<p className="text-xs">Change Leverage</p>
 			</button>
 		</div>
@@ -112,8 +110,7 @@ const LeverageSliderTicks = ({ maxLeverage }: { maxLeverage: number }) => {
 							<span
 								key={index}
 								className="absolute text-[10px] text-gray-"
-								style={{ left: `${(index * 100) / tickDiv}%`, transform: 'translate(-50%, -5px)' }}
-							>
+								style={{ left: `${(index * 100) / tickDiv}%`, transform: 'translate(-50%, -5px)' }}>
 								{value}
 							</span>
 						);

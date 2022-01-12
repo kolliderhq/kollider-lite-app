@@ -73,7 +73,7 @@ const QuantityInput = () => {
 				{toggleQuantityInput ? (
 					<div className="bg-gray-700 border-transparent rounded-md w-full">
 						<input
-							onFocus={() => dispatch(setTab(TABS.ORDER))}
+							id={'input-order-quantity'}
 							min={1}
 							max={SETTINGS.LIMITS.NUMBER}
 							step={1}

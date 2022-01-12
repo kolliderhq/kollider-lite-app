@@ -54,11 +54,11 @@ export enum DIALOGS {
 	CHANGE_MARGIN_INVOICE,
 	SETTLE_INVOICE,
 	SETTINGS,
-	WELCOME,
 }
 
 // stuff that is triggered and suddenly appear
 export enum POPUPS {
 	NONE,
 	INVOICE,
+	WELCOME,
 }

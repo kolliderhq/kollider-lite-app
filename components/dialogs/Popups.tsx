@@ -2,8 +2,9 @@ import React from 'react';
 
 import { WrapBasePopup } from 'components/dialogs/base';
 import { InvoicePopup } from 'components/dialogs/Invoice';
+import { WelcomePopup } from 'components/dialogs/Welcome';
 import { DIALOGS, POPUPS } from 'consts';
-import { setInvoiceSettled, setViewing } from 'contexts';
+import { setViewing } from 'contexts';
 import { setDialog, setPopup, setPopupClose } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
 
@@ -38,10 +39,17 @@ export const Popups = () => {
 		dispatch(setDialog(DIALOGS.NONE));
 	}, [currentPopup]);
 
+	// React.useEffect(() => {
+	// 	dispatch(setPopup(POPUPS.WELCOME));
+	// }, [currentPopup]);
+
 	return (
 		<>
 			<WrapBasePopup isOpen={currentPopup === POPUPS.INVOICE} close={close}>
 				<InvoicePopup />
+			</WrapBasePopup>
+			<WrapBasePopup isOpen={currentPopup === POPUPS.WELCOME} close={close}>
+				<WelcomePopup />
 			</WrapBasePopup>
 		</>
 	);

@@ -29,7 +29,8 @@ export const Popups = () => {
 		if (invoiceViewing) {
 			dispatch(setPopup(POPUPS.INVOICE));
 		} else {
-			dispatch(setPopup(POPUPS.NONE));
+			if (currentPopup === POPUPS.WELCOME) return;
+			dispatch(setPopupClose);
 		}
 	}, [onlyWeblnIfEnabled, invoiceViewing, isWeblnConnected]);
 

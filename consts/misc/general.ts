@@ -10,7 +10,7 @@ export const GENERAL = Object.freeze({
 	URL_DOCS: 'https://docs.kollider.xyz/docs/',
 	LN_EMAIL: '-lnurl-auth@kollider.xyz',
 	LOCAL_STORAGE_NAMESPACES: {
-		DEFAULT: 'kollider-default',
+		DEFAULT: 'kollider-light-default',
 	},
 	LINKS: {
 		LANDING: 'https://kollider.xyz/',

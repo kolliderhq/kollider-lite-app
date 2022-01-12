@@ -19,19 +19,14 @@ export function useInitialize() {
 const persistSettings = () => {
 	const settings = defaultLocalStore.get('settings');
 	//	first load display the welcome popup
-	//  setTimeout used to prevent popup being closed by initialization code
 	console.log('settings >>>>>>> ', settings);
 	if (empty(settings)) {
-		setTimeout(() => {
-			storeDispatch(setPopup(POPUPS.WELCOME));
-		}, 500);
+		storeDispatch(setPopup(POPUPS.WELCOME));
 		storeDispatch(setFirstLoad());
 	} else {
 		storeDispatch(setPersistSettings(settings));
 		if (settings.isFirstRun) {
-			setTimeout(() => {
-				storeDispatch(setPopup(POPUPS.WELCOME));
-			}, 500);
+			storeDispatch(setPopup(POPUPS.WELCOME));
 			storeDispatch(setFirstLoad());
 		}
 	}

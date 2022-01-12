@@ -33,11 +33,7 @@ export const OrderArea = () => {
 
 const OrderInput = () => {
 	const { symbol } = useSymbols();
-	const [quantity, leverage, positions] = useAppSelector(state => [
-		Number(state.orders.order.quantity),
-		String(state.orders.order.leverage),
-		state.trading.positions,
-	]);
+	const [leverage, positions] = useAppSelector(state => [String(state.orders.order.leverage), state.trading.positions]);
 	const position = positions[symbol];
 	const dispatch = useAppDispatch();
 	const editingLeverage = useAppSelector(state => state.layout.editingLeverage);
@@ -51,27 +47,9 @@ const OrderInput = () => {
 
 	return (
 		<div className="h-full w-full">
-			<div className="w-full">
-				<label className="text-xs text-gray-300 tracking-wider">Quantity</label>
-				<div className="bg-gray-700 border-transparent rounded-md w-full">
-					<input
-						onFocus={() => dispatch(setTab(TABS.ORDER))}
-						min={1}
-						max={SETTINGS.LIMITS.NUMBER}
-						step={1}
-						onInput={(e: FormEvent<HTMLInputElement>) => {
-							if (!isPositiveInteger) return;
-							if (Number((e.target as HTMLInputElement).value) > SETTINGS.LIMITS.NUMBER) return;
-							dispatch(setOrderQuantity((e.target as HTMLInputElement).value));
-						}}
-						value={quantity ? quantity : ''}
-						type="number"
-						placeholder="Quantity"
-						className="h-10 xs:h-9 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
-					/>
-				</div>
-			</div>
+			<QuantityInput />
 			<div className="w-full mt-1">
+				<label className="text-xs text-gray-300 tracking-wider">Leverage</label>
 				{!hasPositionLeverage && editingLeverage ? (
 					<LeverageArea hasPositionLeverage={hasPositionLeverage} />
 				) : (
@@ -84,9 +62,43 @@ const OrderInput = () => {
 	);
 };
 
+const QuantityInput = () => {
+	const dispatch = useAppDispatch();
+	const quantity = useAppSelector(state => Number(state.orders.order.quantity));
+	const [toggleQuantityInput, setToggleQuantityInput] = React.useState(true);
+	return (
+		<div className="w-full">
+			<label className="text-xs text-gray-300 tracking-wider">Quantity</label>
+			<div className="h-9">
+				{toggleQuantityInput ? (
+					<div className="bg-gray-700 border-transparent rounded-md w-full">
+						<input
+							onFocus={() => dispatch(setTab(TABS.ORDER))}
+							min={1}
+							max={SETTINGS.LIMITS.NUMBER}
+							step={1}
+							onInput={(e: FormEvent<HTMLInputElement>) => {
+								if (!isPositiveInteger) return;
+								if (Number((e.target as HTMLInputElement).value) > SETTINGS.LIMITS.NUMBER) return;
+								dispatch(setOrderQuantity((e.target as HTMLInputElement).value));
+							}}
+							value={quantity ? quantity : ''}
+							type="number"
+							placeholder="Quantity"
+							className="h-10 xs:h-9 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
+						/>
+					</div>
+				) : (
+					<div>Custom selector</div>
+				)}
+			</div>
+		</div>
+	);
+};
+
 const DisplayLeverage = ({ leverage }: { leverage: string }) => {
 	return (
-		<div className="mt-2 h-10 xs:h-9 bg-gray-900 border-transparent border-2 rounded-md w-full relative flex items-center">
+		<div className="h-10 xs:h-9 bg-gray-900 border-transparent border-2 rounded-md w-full relative flex items-center">
 			<p className="text-right w-full pr-5">{optionalDecimal(leverage)}</p>
 			<p className="text-base text-gray-400 pt-[2px] w-[2%] absolute right-[12px] bottom-[6px] xs:bottom-[4px]">x</p>
 		</div>

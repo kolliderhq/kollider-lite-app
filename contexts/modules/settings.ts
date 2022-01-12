@@ -11,6 +11,7 @@ export interface Settings {
 	weblnAutoWithdraw: number;
 	isToastsShown: boolean;
 	persisted: boolean;
+	isFirstRun: boolean;
 }
 
 const initialState: Settings = {
@@ -20,6 +21,7 @@ const initialState: Settings = {
 	weblnAutoWithdraw: 100, //	auto withdrawal does not happen if enabled
 	isToastsShown: true, //	not sure whether market makers will be here but ok
 	persisted: false,
+	isFirstRun: true,
 };
 
 export const settingsSlice = createSlice({
@@ -36,6 +38,7 @@ export const settingsSlice = createSlice({
 		},
 		setFirstLoad: state => {
 			state.persisted = true;
+			state.isFirstRun = false;
 		},
 		setDenom: (state, action: PayloadAction<string>) => {
 			state.denom = action.payload;

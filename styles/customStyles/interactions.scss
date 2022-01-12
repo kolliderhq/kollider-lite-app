@@ -1,114 +1,114 @@
 .s-filter-white {
-  filter: brightness(0%) invert(100%);
+	filter: brightness(0%) invert(100%);
 }
 
 .s_hover-filter-white {
-  &:hover {
-    filter: brightness(0%) invert(100%);
-  }
+	&:hover {
+		filter: brightness(0%) invert(100%);
+	}
 }
 
 //	oh dear what's going on
 .s_hover-filter-child-img-white {
-  &:hover {
-    > img {
-      filter: brightness(0%) invert(60%);
-    }
-  }
+	&:hover {
+		> img {
+			filter: brightness(0%) invert(60%);
+		}
+	}
 }
 
 .s-dropdown-spin-arrow {
-  > :first-child {
-    > div {
-      > img {
-        transform: rotate(180deg);
-      }
-    }
-  }
+	> :first-child {
+		> div {
+			> img {
+				transform: rotate(180deg);
+			}
+		}
+	}
 }
 
 .s-dropdown-hover {
-  > :not(:first-child) {
-    display: none;
-  }
+	> :not(:first-child) {
+		display: none;
+	}
 
-  &:hover {
-    > :not(:first-child) {
-      display: flex;
-    }
-  }
+	&:hover {
+		> :not(:first-child) {
+			display: flex;
+		}
+	}
 }
 
 .s-dropdown-display {
-  > :not(:first-child) {
-    display: flex;
-  }
+	> :not(:first-child) {
+		display: flex;
+	}
 }
 
 .s-filter-gray-300 {
-  filter: brightness(0%) invert(48%) sepia(9%) saturate(442%) hue-rotate(167deg) brightness(92%) contrast(87%);
+	filter: brightness(0%) invert(48%) sepia(9%) saturate(442%) hue-rotate(167deg) brightness(92%) contrast(87%);
 }
 
 .s-filter-yellow-300 {
-  filter: invert(100%) sepia(24%) saturate(6919%) hue-rotate(345deg) brightness(105%) contrast(104%);
+	filter: invert(100%) sepia(24%) saturate(6919%) hue-rotate(345deg) brightness(105%) contrast(104%);
 }
 
 .s-filter-yellow-0 {
-  filter: invert(96%) sepia(59%) saturate(5093%) hue-rotate(359deg) brightness(108%) contrast(102%);
+	filter: invert(96%) sepia(59%) saturate(5093%) hue-rotate(359deg) brightness(108%) contrast(102%);
 }
 
 .s-filter-green-400 {
-  filter: brightness(0%) invert(72%) sepia(41%) saturate(706%) hue-rotate(103deg) brightness(91%) contrast(87%);
+	filter: brightness(0%) invert(72%) sepia(41%) saturate(706%) hue-rotate(103deg) brightness(91%) contrast(87%);
 }
 .s-filter-red-400 {
-  filter: brightness(0%) invert(63%) sepia(37%) saturate(4302%) hue-rotate(318deg) brightness(104%) contrast(95%);
+	filter: brightness(0%) invert(63%) sepia(37%) saturate(4302%) hue-rotate(318deg) brightness(104%) contrast(95%);
 }
 
 .s-filter-theme-main {
-  filter: brightness(0%) invert(40%) sepia(77%) saturate(1054%) hue-rotate(215deg) brightness(99%) contrast(96%);
+	filter: brightness(0%) invert(40%) sepia(77%) saturate(1054%) hue-rotate(215deg) brightness(99%) contrast(96%);
 }
 
 .s-filter-theme-main-hover {
-  &:hover {
-    filter: brightness(0%) invert(40%) sepia(77%) saturate(1054%) hue-rotate(215deg) brightness(99%) contrast(96%);
-  }
+	&:hover {
+		filter: brightness(0%) invert(40%) sepia(77%) saturate(1054%) hue-rotate(215deg) brightness(99%) contrast(96%);
+	}
 }
 
 .s-shadow {
-  box-shadow: 0 3px 6px 0 rgba(255, 255, 255, 0.1);
+	box-shadow: 0 3px 6px 0 rgba(255, 255, 255, 0.1);
 }
 
 .s-shadow-red {
-  box-shadow: 0 0 4px 2px rgba(255, 0, 0, 0.3);
+	box-shadow: 0 0 4px 2px rgba(255, 0, 0, 0.3);
 }
 .s-shadow-box {
-  box-shadow: 0 0 4px 2px rgba(64, 64, 64, 0.3);
+	box-shadow: 0 0 4px 2px rgba(64, 64, 64, 0.3);
 }
 .s-shadow-box-dark {
-  box-shadow: 0 0 4px 2px rgba(19, 19, 19, 0.3);
+	box-shadow: 0 0 4px 2px rgba(19, 19, 19, 0.3);
 }
 
 .s-shadow-yellow {
-  box-shadow: 0 0 6px 3px rgba(255, 255, 0, 0.3);
+	box-shadow: 0 0 6px 3px rgba(255, 255, 0, 0.3);
 }
 .s-shadow-green {
-  box-shadow: 0 0 6px 3px rgba(78, 209, 100, 0.3);
+	box-shadow: 0 0 6px 3px rgba(78, 209, 100, 0.3);
 }
 
 .s_hover-shadow-green-400 {
-  &:hover {
-    box-shadow: 0 0 6px 3px rgba(78, 209, 100, 0.3);
-  }
+	&:hover {
+		box-shadow: 0 0 6px 3px rgba(78, 209, 100, 0.3);
+	}
 }
 
 .s_hover-shadow-gray-600 {
-  &:hover {
-    box-shadow: 0 0 6px 3px rgba(76, 82, 100, 0.7);
-  }
+	&:hover {
+		box-shadow: 0 0 6px 3px rgba(76, 82, 100, 0.7);
+	}
 }
 
 //  for toggle
 input:checked ~ .dot {
-  transform: translateX(100%);
-  background-color: #48bb78;
+	transform: translateX(100%);
+	background-color: #48bb78;
 }

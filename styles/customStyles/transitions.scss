@@ -1,69 +1,69 @@
 .s-transition-pulse {
-  transform: translate3d(0, 0, -0.01);
-  transition: all 2s ease-in-out;
+	transform: translate3d(0, 0, -0.01);
+	transition: all 2s ease-in-out;
 }
 
 .s-transition-rotate {
-  transform: translate3d(0, 0, -0.01);
-  transition: transform 0.3s ease-in-out
+	transform: translate3d(0, 0, -0.01);
+	transition: transform 0.3s ease-in-out;
 }
 
 .s-transition-all {
-  transform: translate3d(0, 0, -0.01);
-  transition: all 0.3s ease-in-out;
+	transform: translate3d(0, 0, -0.01);
+	transition: all 0.3s ease-in-out;
 }
 
 .s-transition-right {
-  transform: translate3d(0, 0, -0.01);
-  transition: right 0.3s ease-in-out;
+	transform: translate3d(0, 0, -0.01);
+	transition: right 0.3s ease-in-out;
 }
 
 .s-transition-left {
-  transform: translate3d(0, 0, -0.01);
-  transition: left 0.3s ease-in-out;
+	transform: translate3d(0, 0, -0.01);
+	transition: left 0.3s ease-in-out;
 }
 
 .s-transition-orderbook {
-  transform: translate3d(0, 0, -0.01);
-  transition: background-color 0.1s linear;
+	transform: translate3d(0, 0, -0.01);
+	transition: background-color 0.1s linear;
 }
 
 .s-transition-maxwidth {
-  transform: translate3d(0, 0, -0.1);
-  transition: max-width 0.3s ease-in-out;
+	transform: translate3d(0, 0, -0.1);
+	transition: max-width 0.3s ease-in-out;
 }
 
 .s-transition-maxheight {
-  transform: translate3d(0, 0, -0.1);
-  transition: max-height 0.25s ease-in-out;
+	transform: translate3d(0, 0, -0.1);
+	transition: max-height 0.25s ease-in-out;
 }
 
 .s-transition-maxheight-slow {
-  transform: translate3d(0, 0, -0.1);
-  transition: max-height 0.5s ease-in-out;
+	transform: translate3d(0, 0, -0.1);
+	transition: max-height 0.5s ease-in-out;
 }
 
 .s-transition-padding {
-  transform: translate3d(0, 0, -0.1);
-  transition: padding 0.3s ease-in-out;
+	transform: translate3d(0, 0, -0.1);
+	transition: padding 0.3s ease-in-out;
 }
 
 .s-transition-all-fast {
-  transform: translate3d(0, 0, -0.1);
-  transition: all 0.1s ease-in-out;
+	transform: translate3d(0, 0, -0.1);
+	transition: all 0.1s ease-in-out;
 }
 
 .s-transition-page-unload {
-  transform: translate3d(0, 0, -0.1);
-  transition: opacity 0.5s ease-in-out, max-height 1s ease-in-out;
+	transform: translate3d(0, 0, -0.1);
+	transition: opacity 0.5s ease-in-out, max-height 1s ease-in-out;
 }
 
 .s-transition-page-load {
-  transform: translate3d(0, 0, -0.1);
-  transition: opacity 1s ease-in-out, max-height 1s ease-in-out;
+	transform: translate3d(0, 0, -0.1);
+	transition: opacity 1s ease-in-out, max-height 1s ease-in-out;
 }
 
 .s-transition-fast-opacity {
-  transform: translate3d(0, 0, -0.1);
-  transition: opacity 0.1s cubic-bezier(1, 0, 1, 0.25);
+	transform: translate3d(0, 0, -0.1);
+	transition: opacity 0.1s cubic-bezier(1, 0, 1, 0.25);
 }

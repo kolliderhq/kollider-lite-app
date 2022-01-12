@@ -38,7 +38,7 @@ export default function Home() {
 					<IndexPriceSparkLine />
 				</div>
 			</SymbolsLoadedWrapper>
-			<section className="w-full py-3 px-2 xs:py-4 rounded-md border border-gray-600 bg-gray-800">
+			<section className="w-full py-3 xs:px-3 px-4 xs:py-4 rounded-md border border-gray-600 bg-gray-800">
 				{selectedTab === TABS.POSITIONS && (
 					<>
 						<PositionTable />

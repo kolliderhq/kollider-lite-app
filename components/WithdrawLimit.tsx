@@ -65,7 +65,8 @@ export const WithdrawLimitLine = () => {
 						)}`,
 					}}
 					className="h-2 w-full rounded-full grid bg-transparent opacity-85 hover:opacity-100"
-					role="presentation">
+					role="presentation"
+				>
 					<div
 						className={cn('h-full bg-transparent border-l rounded-l-full border border-theme-main', {
 							'rounded-r border-r-full': lightningLimit.percent >= 0.999,

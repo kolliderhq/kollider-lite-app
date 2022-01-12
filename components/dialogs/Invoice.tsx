@@ -6,7 +6,6 @@ import findIndex from 'lodash-es/findIndex';
 import map from 'lodash-es/map';
 import Img from 'next/image';
 
-import { WrapBasePopup, wrapBasePopup } from 'components/dialogs/base';
 import Loader from 'components/Loader';
 import { QrCode } from 'components/QrCode';
 import { POPUPS, SETTINGS } from 'consts';

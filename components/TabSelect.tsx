@@ -26,12 +26,14 @@ const TabButton = ({ tab, label }: { tab: TABS; label: string }) => {
 			className={cn(
 				tab === selectedTab ? 'border-theme-main bg-gray-700' : 'border-gray-400 hover:border-theme-main bg-gray-900',
 				'border-t-2 flex items-center justify-center py-2 xs:py-3 group'
-			)}>
+			)}
+		>
 			<p
 				className={cn(
 					'text-xs xs:text-sm',
 					tab === selectedTab ? 'text-gray-100' : 'text-gray-400 group-hover:text-gray-100'
-				)}>
+				)}
+			>
 				{label}
 			</p>
 		</button>

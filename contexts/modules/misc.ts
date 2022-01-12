@@ -13,7 +13,6 @@ interface InitMisc {
 
 	utmSource: string;
 	symbolLoad: string;
-	// confirmation: Confirmation; -> reduced to
 }
 
 const initialState: InitMisc = {

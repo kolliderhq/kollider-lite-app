@@ -1,4 +1,5 @@
-import isNumber from 'lodash-es/isNumber';
+import each from 'lodash-es/each';
+import isArray from 'lodash-es/isArray';
 import keys from 'lodash-es/keys';
 import map from 'lodash-es/map';
 
@@ -54,7 +55,7 @@ export const dispSymbol = (txt: string): string => {
 };
 
 export const waitms = (ms: number) => {
-	return new Promise(resolve => {
+	return new Promise<void>(resolve => {
 		setTimeout(() => {
 			resolve();
 		}, ms);

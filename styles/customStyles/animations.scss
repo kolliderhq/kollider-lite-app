@@ -1,94 +1,94 @@
 $loader-color: #dddddd;
 .s-loader {
-  background: $loader-color;
-  position: relative;
-  animation: s-loader 1s ease-in-out infinite;
-  animation-delay: 0.3s;
-  width: 0.2em;
-  height: 0.5em;
-  margin: 0 0.5em;
+	background: $loader-color;
+	position: relative;
+	animation: s-loader 1s ease-in-out infinite;
+	animation-delay: 0.3s;
+	width: 0.2em;
+	height: 0.5em;
+	margin: 0 0.5em;
 
-  &:after,
-  &:before {
-    content: '';
-    position: absolute;
-    width: inherit;
-    height: inherit;
-    background: inherit;
-    animation: inherit;
-  }
+	&:after,
+	&:before {
+		content: '';
+		position: absolute;
+		width: inherit;
+		height: inherit;
+		background: inherit;
+		animation: inherit;
+	}
 
-  &:before {
-    right: 0.5em;
-    animation-delay: 0.2s;
-  }
+	&:before {
+		right: 0.5em;
+		animation-delay: 0.2s;
+	}
 
-  &:after {
-    left: 0.5em;
-    animation-delay: 0.6s;
-  }
+	&:after {
+		left: 0.5em;
+		animation-delay: 0.6s;
+	}
 }
 
 @keyframes s-loader {
-  0%,
-  100% {
-    box-shadow: 0 0 0 $loader-color, 0 0 0 $loader-color;
-  }
-  50% {
-    box-shadow: 0 -0.25em 0 $loader-color, 0 0.25em 0 $loader-color;
-  }
+	0%,
+	100% {
+		box-shadow: 0 0 0 $loader-color, 0 0 0 $loader-color;
+	}
+	50% {
+		box-shadow: 0 -0.25em 0 $loader-color, 0 0.25em 0 $loader-color;
+	}
 }
 
 .s-pulse {
-  box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
-  transform: scale(1);
-  animation: pulse-red 2s infinite;
+	box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
+	transform: scale(1);
+	animation: pulse-red 2s infinite;
 }
 @media not all and (pointer: coarse) {
-  .s_hover-pulse {
-    &:hover {
-      box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
-      transform: scale(1);
-      animation: pulse 2s infinite;
-    }
-  }
-  .s-pulse {
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
-    transform: scale(1);
-    animation: pulse 2s infinite;
-  }
+	.s_hover-pulse {
+		&:hover {
+			box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
+			transform: scale(1);
+			animation: pulse 2s infinite;
+		}
+	}
+	.s-pulse {
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
+		transform: scale(1);
+		animation: pulse 2s infinite;
+	}
 }
 
 @keyframes pulse {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-  }
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+	}
 
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
-  }
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+	}
 
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-  }
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+	}
 }
 
 @keyframes pulse-red {
-  0% {
-    //transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
-  }
+	0% {
+		//transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+	}
 
-  70% {
-    //transform: scale(1);
-    box-shadow: 0 0 0 20px rgba(255, 0, 0, 0);
-  }
+	70% {
+		//transform: scale(1);
+		box-shadow: 0 0 0 20px rgba(255, 0, 0, 0);
+	}
 
-  100% {
-    //transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
-  }
+	100% {
+		//transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+	}
 }

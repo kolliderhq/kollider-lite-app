@@ -1,66 +1,65 @@
-
 .container-default {
-  @apply w-full p-2 xs:p-5 rounded-md border border-gray-600 bg-gray-800 flex flex-col items-center
+	@apply w-full p-2 xs:p-5 rounded-md border border-gray-600 bg-gray-800 flex flex-col items-center;
 }
 
 .container-spacious {
-  @apply w-full py-3 px-3 xs:py-6 xs:px-6 rounded-md border border-gray-600 bg-gray-800 flex flex-col items-center
+	@apply w-full py-3 px-3 xs:py-6 xs:px-6 rounded-md border border-gray-600 bg-gray-800 flex flex-col items-center;
 }
 
 .container-children-bottom-border {
-  > &:not(:last-child) {
-    @apply border-b border-gray-400
-  }
+	> &:not(:last-child) {
+		@apply border-b border-gray-400;
+	}
 }
 
 .input-default {
-  text-align: right;
-  background: inherit;
-  //overflow: hidden;
-  padding: 4px 20px 4px 8px;
+	text-align: right;
+	background: inherit;
+	//overflow: hidden;
+	padding: 4px 20px 4px 8px;
 
-  &::placeholder {
-    /* Chrome, Firefox, Opera, Safari 10.1+ */
-    font-size: 16px;
-    color: #7a859b; // gray-200
-  }
+	&::placeholder {
+		/* Chrome, Firefox, Opera, Safari 10.1+ */
+		font-size: 16px;
+		color: #7a859b; // gray-200
+	}
 
-  &:-ms-input-placeholder {
-    /* Internet Explorer 10-11 */
-    font-size: 16px;
-    color: #7a859b; // gray-200
-  }
+	&:-ms-input-placeholder {
+		/* Internet Explorer 10-11 */
+		font-size: 16px;
+		color: #7a859b; // gray-200
+	}
 }
 
 @mixin absolute-middle {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .s-qrWrapper {
-  position: relative;
-  > div {
-    position: relative;
-    z-index: 999;
-  }
+	position: relative;
+	> div {
+		position: relative;
+		z-index: 999;
+	}
 
-  &:before {
-    @include absolute-middle;
-    z-index: 99;
-    content: '';
-    width: calc(103% + 4px);
-    height: calc(90% + 4px);
-    background-color: white;
-  }
+	&:before {
+		@include absolute-middle;
+		z-index: 99;
+		content: '';
+		width: calc(103% + 4px);
+		height: calc(90% + 4px);
+		background-color: white;
+	}
 
-  &:after {
-    @include absolute-middle;
-    z-index: 99;
-    content: '';
-    width: calc(90% + 4px);
-    height: calc(103% + 4px);
-    background-color: white;
-  }
+	&:after {
+		@include absolute-middle;
+		z-index: 99;
+		content: '';
+		width: calc(90% + 4px);
+		height: calc(103% + 4px);
+		background-color: white;
+	}
 }

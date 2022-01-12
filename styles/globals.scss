@@ -1,32 +1,32 @@
 @font-face {
-  font-family: SFMono;
-  font-weight: 400;
-  src: url('/assets/fonts/SFMonoMedium.otf');
+	font-family: SFMono;
+	font-weight: 400;
+	src: url('/assets/fonts/SFMonoMedium.otf');
 }
 
 @font-face {
-  font-family: SFMono;
-  font-weight: 700;
-  src: url('/assets/fonts/SFMonoBold.otf');
+	font-family: SFMono;
+	font-weight: 700;
+	src: url('/assets/fonts/SFMonoBold.otf');
 }
 
 html,
 body {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  @apply font-sans;
-  letter-spacing: -0.025em;
-  @apply text-gray-100;
-  background-color: #161719;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	@apply font-sans;
+	letter-spacing: -0.025em;
+	@apply text-gray-100;
+	background-color: #161719;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+	&::-webkit-scrollbar {
+		display: none;
+	}
 
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
 }
 
 //html {
@@ -37,37 +37,37 @@ body {
 //}
 
 a {
-  color: inherit;
-  text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 button,
 input,
 textarea {
-  &:focus {
-    outline: none;
-  }
+	&:focus {
+		outline: none;
+	}
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+	-webkit-appearance: none;
+	margin: 0;
 }
 
 /* Firefox */
 input[type='number'] {
-  -moz-appearance: textfield;
+	-moz-appearance: textfield;
 }
 
 #__next {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
 }
 
 #__next::-webkit-scrollbar {
-  display: none;
+	display: none;
 }

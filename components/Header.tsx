@@ -31,7 +31,8 @@ export const Header = () => {
 				{!loggedIn && (
 					<button
 						onClick={() => dispatch(setDialog(DIALOGS.LOGIN))}
-						className="py-1 px-2 border border-gray-100 shadow-elevation-08dp hover:border-theme-main rounded-md group hover:opacity-80">
+						className="py-1 px-2 border border-gray-100 shadow-elevation-08dp hover:border-theme-main rounded-md group hover:opacity-80"
+					>
 						<p className="text-xs xxs:text-sm flex flex-col items-center xs:block">
 							<img className="xs:inline mr-1" width={16} height={16} src="/assets/common/lightning.svg" />
 							Login
@@ -40,7 +41,8 @@ export const Header = () => {
 				)}
 				<button
 					onClick={() => dispatch(setDialog(DIALOGS.SETTINGS))}
-					className={cn('min-w-[28px] pr-2 py-2 flex items-center justify-center group hover:opacity-80')}>
+					className={cn('min-w-[28px] pr-2 py-2 flex items-center justify-center group hover:opacity-80')}
+				>
 					<Img
 						className={cn(
 							{ 'rotate-90 s-filter-theme-main': currentDialog === DIALOGS.SETTINGS },
@@ -60,7 +62,8 @@ export const Header = () => {
 					onClick={() => {
 						auth.logoutUser();
 					}}
-					className="s-filter-theme-main-hover cursor-pointer px-2">
+					className="s-filter-theme-main-hover cursor-pointer px-2"
+				>
 					<img className="h-5 w-5 min-w-[20px]" src={'/assets/common/logout.svg'} alt="logout" />
 				</button>
 			)}
@@ -74,7 +77,8 @@ const WeblnButton = () => {
 	return !isWeblnConnected ? (
 		<button
 			onClick={() => weblnConnectAttempt()}
-			className="py-1 px-2 border border-gray-100 shadow-elevation-24dp hover:border-theme-main rounded-md group hover:opacity-80">
+			className="py-1 px-2 border border-gray-100 shadow-elevation-24dp hover:border-theme-main rounded-md group hover:opacity-80"
+		>
 			<p className="text-xs xxs:text-sm flex flex-col items-center xs:block">
 				<img className="xs:inline mr-1" width={16} height={16} src="/assets/common/socket.svg" />
 				Webln

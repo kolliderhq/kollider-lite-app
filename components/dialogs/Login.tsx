@@ -13,10 +13,6 @@ import { useAppDispatch, useAppSelector } from 'hooks';
 import useTimer from 'hooks/useTimer';
 import { getSWROptions } from 'utils/fetchers';
 
-export const Login = () => {
-	return <LoginDialog />;
-};
-
 export const LoginDialog = () => {
 	return (
 		<WrapHasLightClient
@@ -24,7 +20,8 @@ export const LoginDialog = () => {
 				<div className="h-[364px]">
 					<Loader />
 				</div>
-			}>
+			}
+		>
 			<LoginContents />
 		</WrapHasLightClient>
 	);

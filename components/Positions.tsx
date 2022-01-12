@@ -5,7 +5,7 @@ import Img from 'next/image';
 
 import { processOrder } from 'components/OrderArea';
 import { Order, Side } from 'contexts';
-import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
+import { useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { fixed } from 'utils/Big';
 import { formatNumber, formatUSD } from 'utils/format';
 import { isNumber } from 'utils/scripts';
@@ -16,7 +16,7 @@ export const PositionTable = () => {
 	const position = positions[symbol];
 
 	const positionMargin = React.useMemo(() => {
-		if (!isNumber(balances?.isowlatedMargin?.[symbol])) return '0';
+		if (!isNumber(balances?.isolatedMargin?.[symbol])) return '0';
 		return formatNumber(fixed(balances?.isolatedMargin?.[symbol], 0));
 	}, [balances?.isolatedMargin, symbol]);
 
@@ -30,7 +30,7 @@ export const PositionTable = () => {
 				</div>
 			</div>
 			<div className="col-span-2 grid grid-cols-2 xs:grid-cols-2 grid-rows-2 gap-x-1 xxs:gap-x-2 gap-y-2 w-full xs:px-5 sm:px-0">
-				<LabelledValue label="invested SATS" value={hasPosition ? positionMargin : '-'} />
+				<LabelledValue label="Invested SATS" value={hasPosition ? positionMargin : '-'} />
 				<LabelledValue label="Amount" value={hasPosition ? position?.quantity : '-'} />
 				<LabelledValue label="Purchase Price" value={hasPosition ? formatUSD(position?.entryPrice) : '-'} />
 				<LabelledValue label="Liq. Price" value={hasPosition ? formatUSD(position?.liqPrice) : '-'} />

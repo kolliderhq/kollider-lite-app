@@ -16,7 +16,7 @@ export function SymbolSelectDropdown() {
 			<DropdownWrapper
 				onClick={() => setIsShowing(v => !v)}
 				dataCy="dropdown-symbol-select"
-				customClass={cn('bg-gray-975 absolute w-full s-transition-all rounded-lg', {
+				customClass={cn('bg-gray-975 absolute w-full s-transition-all rounded-lg border-gray-600 border', {
 					's-dropdown-display s-dropdown-spin-arrow': isShowing,
 				})}>
 				<DropdownSelected customClass="h-12 flex items-center px-3">

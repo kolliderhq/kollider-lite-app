@@ -50,16 +50,18 @@ export default function Home() {
 					</>
 				)}
 				{selectedTab === TABS.ORDER && (
-					<div className="flex flex-col">
-						<section className="xs:order-1 order-2">
-							<OrderArea />
-						</section>
-						<section className="mt-0 xs:mt-5 pb-2 xs:pb-0 xs:order-2 order-1">
+					// <div className="flex flex-col">
+					<>
+						{/*<section className="xs:order-1 order-2">*/}
+						<OrderArea />
+						{/*</section>*/}
+						<section className="mt-3 pb-2 xs:pb-0 xs:order-2 order-1">
 							<SymbolsLoadedWrapper>
 								<OrderInfo />
 							</SymbolsLoadedWrapper>
 						</section>
-					</div>
+					</>
+					// </div>
 				)}
 			</section>
 			<BalanceInfo />

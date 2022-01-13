@@ -54,6 +54,7 @@ export enum DIALOGS {
 	CHANGE_MARGIN_INVOICE,
 	SETTLE_INVOICE,
 	SETTINGS,
+	MAKE_ORDER,
 }
 
 // stuff that is triggered and suddenly appear

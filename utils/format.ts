@@ -12,13 +12,19 @@ import map from 'lodash-es/map';
 import reduce from 'lodash-es/reduce';
 import toString from 'lodash-es/toString';
 
+import { UI } from 'consts';
+import { reduxStore } from 'contexts';
 import { TBigInput, divide, fixed, multiply } from 'utils/Big';
 
 import { parseTime } from './time';
 
 moment.extend(duration);
+export const getSatsToDollar = num => {
+	const btcDollar = reduxStore.getState().prices.indexes['BTCUSD'];
+	return multiply(num, multiply(UI.DENOM.BTC.MULT, btcDollar, 10), 2);
+};
 
-export const applyDp = (value: TBigInput, dp: number): TBigInput => {
+export const applyDp = (value: TBigInput, dp: number): string => {
 	return divide(value, Math.pow(10, dp), dp);
 };
 

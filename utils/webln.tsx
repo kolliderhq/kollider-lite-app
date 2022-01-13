@@ -5,27 +5,22 @@ import { TOAST_LEVEL, displayToast } from 'utils/toast';
 import { RequestInvoiceResponse, WebLNProvider, requestProvider } from 'utils/vendor/webln';
 
 let tried = false;
-export const weblnInit = async (): Promise<WebLNProvider | null> => {
+export const weblnInit = async (hideToast?: boolean): Promise<WebLNProvider | null> => {
 	try {
 		return await requestProvider();
 	} catch (err) {
-		if (!tried) {
-			tried = true;
-			await waitms(2000);
-			await weblnInit();
-			return null;
-		}
-		displayToast(
-			<p className="text-sm">
-				There was an error initializing webln
-				<br />
-				<span className="text-xs">⚠️ {err.message}</span>
-			</p>,
-			{
-				type: 'error',
-				level: TOAST_LEVEL.IMPORTANT,
-			}
-		);
+		if (!hideToast)
+			displayToast(
+				<p className="text-sm">
+					There was an error initializing webln
+					<br />
+					<span className="text-xs">⚠️ {err.message}</span>
+				</p>,
+				{
+					type: 'error',
+					level: TOAST_LEVEL.IMPORTANT,
+				}
+			);
 		console.log('Webln request provider error', err.message);
 		return null;
 	}

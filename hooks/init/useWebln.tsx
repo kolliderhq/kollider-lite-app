@@ -12,8 +12,8 @@ import { FixedLengthArray } from 'utils/types/utils';
 import { RequestInvoiceResponse, WebLNProvider } from 'utils/vendor/webln';
 import { weblnInit, weblnSendPayment, weblnWithdraw } from 'utils/webln';
 
-export const weblnConnectAttempt = () => {
-	weblnInit().then(res => {
+export const weblnConnectAttempt = (hideToast?: boolean) => {
+	weblnInit(hideToast).then(res => {
 		if (!res) {
 			storeDispatch(setWeblnConnected(false));
 			return;
@@ -53,7 +53,7 @@ export const useWebln = () => {
 	const dispatch = useAppDispatch();
 	//	initialize webln - runs on startup
 	React.useEffect(() => {
-		weblnConnectAttempt();
+		weblnConnectAttempt(true);
 		if (detectMobile())
 			setTimeout(() => {
 				if (!reduxStore.getState().connection.isWeblnConnected) {

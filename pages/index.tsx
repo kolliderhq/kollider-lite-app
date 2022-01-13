@@ -49,20 +49,7 @@ export default function Home() {
 						<AccountInfo />
 					</>
 				)}
-				{selectedTab === TABS.ORDER && (
-					// <div className="flex flex-col">
-					<>
-						{/*<section className="xs:order-1 order-2">*/}
-						<OrderArea />
-						{/*</section>*/}
-						<section className="mt-3 pb-2 xs:pb-0 xs:order-2 order-1">
-							<SymbolsLoadedWrapper>
-								<OrderInfo />
-							</SymbolsLoadedWrapper>
-						</section>
-					</>
-					// </div>
-				)}
+				{selectedTab === TABS.ORDER && <OrderArea />}
 			</section>
 			<BalanceInfo />
 		</div>

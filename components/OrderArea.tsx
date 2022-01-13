@@ -3,10 +3,12 @@ import React, { FormEvent } from 'react';
 import cn from 'clsx';
 import toNumber from 'lodash-es/toNumber';
 
-import { baseSocketClient } from 'classes/SocketClient';
+import { DialogWrapper } from 'components/dialogs/DIalogs';
+import { MakeOrderDialog } from 'components/dialogs/MakeOrder';
 import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
-import { SETTINGS, TABS, USER_TYPE } from 'consts';
-import { Order, Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
+import { DIALOGS, SETTINGS, USER_TYPE } from 'consts';
+import { Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
+import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { applyDp, formatNumber, optionalDecimal } from 'utils/format';
 import { isPositiveInteger } from 'utils/scripts';
@@ -15,17 +17,79 @@ import { TOAST_LEVEL, displayToast } from 'utils/toast';
 const buttonClass =
 	'h-14 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp flex flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
 export const OrderArea = () => {
+	const dispatch = useAppDispatch();
 	const { bestAsk, bestBid } = useOrderbookSelector(askBidSelector);
 	const { priceDp } = useSymbolData();
+
+	const [allowedIp, loggedIn, order, quantity] = useAppSelector(state => [
+		state.misc.allowedIp,
+		state.user.data.type === USER_TYPE.PRO,
+		state.orders.order,
+		state.orders.order.quantity,
+	]);
+	const { symbol } = useSymbols();
+	const [clickedSide, setClickedSide] = React.useState<Side>();
+
+	const onButtonClick = React.useCallback(
+		(side: Side) => {
+			if (quantity === 0 || !quantity) {
+				displayToast(<p className="text-sm">Missing Quantity</p>, {
+					type: 'error',
+					level: TOAST_LEVEL.IMPORTANT,
+					toastId: 'req-quantity-place-order',
+				});
+				return;
+			}
+
+			setClickedSide(side);
+			if (!allowedIp) {
+				displayToast(<p className="text-sm">Not Allowed due to IP address from restricted country</p>, {
+					type: 'error',
+					level: TOAST_LEVEL.CRITICAL,
+					toastId: 'ip-not-allowed-place-order',
+				});
+				return;
+			}
+			if (!loggedIn) {
+				displayToast(<p className="text-sm">You must be logged in to place orders</p>, {
+					type: 'warning',
+					level: TOAST_LEVEL.CRITICAL,
+					toastId: 'req-login-place-order',
+				});
+				return;
+			}
+			dispatch(setDialog(DIALOGS.MAKE_ORDER));
+		},
+		[allowedIp, loggedIn, order, quantity]
+	);
+
+	const confirmationDialog = React.useMemo(() => {
+		return (
+			<DialogWrapper dialogType={DIALOGS.MAKE_ORDER}>
+				<MakeOrderDialog order={order} side={clickedSide} />
+			</DialogWrapper>
+		);
+	}, [clickedSide]);
+
 	return (
 		<section className="w-full flex flex-col items-center xs:grid xs:grid-rows-1 xs:grid-cols-7 h-full xs:h-[160px] w-full gap-4 xs:gap-4">
-			<SellButton className="hidden xs:flex" bestBid={bestBid} priceDp={priceDp} />
+			<SellButton
+				onButtonClick={() => onButtonClick(Side.ASK)}
+				className="hidden xs:flex"
+				bestBid={bestBid}
+				priceDp={priceDp}
+			/>
 			<div className="xs:col-span-3 xs:row-span-1 w-full">
 				<OrderInput />
 			</div>
-			<SellButton className="flex xs:hidden" bestBid={bestBid} priceDp={priceDp} />
-
-			<BuyButton bestAsk={bestAsk} priceDp={priceDp} />
+			<SellButton
+				onButtonClick={() => onButtonClick(Side.ASK)}
+				className="flex xs:hidden"
+				bestBid={bestBid}
+				priceDp={priceDp}
+			/>
+			<BuyButton onButtonClick={() => onButtonClick(Side.BID)} bestAsk={bestAsk} priceDp={priceDp} />
+			{confirmationDialog}
 		</section>
 	);
 };
@@ -104,33 +168,19 @@ const DisplayLeverage = ({ leverage }: { leverage: string }) => {
 	);
 };
 
-const SellButton = ({ bestBid, priceDp, className }: { bestBid: string; priceDp: number; className?: string }) => {
-	const allowedIp = useAppSelector(state => state.misc.allowedIp);
-	const { symbol } = useSymbols();
-	const order = useAppSelector(state => state.orders.order);
-	const loggedIn = useAppSelector(state => state.user.data.type === USER_TYPE.PRO);
+const SellButton = ({
+	onButtonClick,
+	bestBid,
+	priceDp,
+	className,
+}: {
+	onButtonClick: () => void;
+	bestBid: string;
+	priceDp: number;
+	className?: string;
+}) => {
 	return (
-		<button
-			onClick={() => {
-				if (!allowedIp) {
-					displayToast(<p className="text-sm">Not Allowed due to IP address from restricted country</p>, {
-						type: 'error',
-						level: TOAST_LEVEL.CRITICAL,
-						toastId: 'ip-not-allowed-place-order',
-					});
-					return;
-				}
-				if (!loggedIn) {
-					displayToast(<p className="text-sm">You must be logged in to place orders</p>, {
-						type: 'warning',
-						level: TOAST_LEVEL.CRITICAL,
-						toastId: 'req-login-place-order',
-					});
-					return;
-				}
-				processOrder(order, Side.ASK, priceDp, symbol);
-			}}
-			className={cn(buttonClass, className, 'bg-red-500', { 'opacity-50': !bestBid })}>
+		<button onClick={onButtonClick} className={cn(buttonClass, className, 'bg-red-500', { 'opacity-50': !bestBid })}>
 			<p className="text-sm xs:text-base">
 				Sell
 				<span className="pr-1" />/<span className="pr-1" />
@@ -141,32 +191,20 @@ const SellButton = ({ bestBid, priceDp, className }: { bestBid: string; priceDp:
 	);
 };
 
-const BuyButton = ({ bestAsk, priceDp, className }: { bestAsk: string; priceDp: number; className?: string }) => {
-	const allowedIp = useAppSelector(state => state.misc.allowedIp);
-	const { symbol } = useSymbols();
-	const order = useAppSelector(state => state.orders.order);
-	const loggedIn = useAppSelector(state => state.user.data.type === USER_TYPE.PRO);
+const BuyButton = ({
+	onButtonClick,
+	bestAsk,
+	priceDp,
+	className,
+}: {
+	onButtonClick: () => void;
+	bestAsk: string;
+	priceDp: number;
+	className?: string;
+}) => {
 	return (
 		<button
-			onClick={() => {
-				if (!allowedIp) {
-					displayToast(<p className="text-sm">Not Allowed due to IP address from restricted country</p>, {
-						type: 'error',
-						level: TOAST_LEVEL.CRITICAL,
-						toastId: 'ip-not-allowed-place-order',
-					});
-					return;
-				}
-				if (!loggedIn) {
-					displayToast(<p className="text-sm">You must be logged in to place orders</p>, {
-						type: 'warning',
-						level: TOAST_LEVEL.CRITICAL,
-						toastId: 'req-login-place-order',
-					});
-					return;
-				}
-				processOrder(order, Side.BID, priceDp, symbol);
-			}}
+			onClick={onButtonClick}
 			className={cn(buttonClass, className, 'bg-green-600', {
 				'opacity-50': !bestAsk,
 			})}>
@@ -179,28 +217,4 @@ const BuyButton = ({ bestAsk, priceDp, className }: { bestAsk: string; priceDp: 
 			<p className="text-sm xs:text-base">{bestAsk && <>${formatNumber(applyDp(bestAsk, priceDp))}</>}</p>
 		</button>
 	);
-};
-
-export const processOrder = (order: Order, side: Side, priceDp: number, symbol: string, localSave?: string) => {
-	if (order.quantity === 0 || !order.quantity) {
-		displayToast(<p className="text-sm">Missing Quantity</p>, {
-			type: 'error',
-			level: TOAST_LEVEL.IMPORTANT,
-			toastId: 'req-quantity-place-order',
-		});
-		return;
-	}
-	const obj = {
-		leverage: Number(order.leverage),
-		quantity: order.quantity,
-		orderType: 'market',
-		price: '1',
-		isInstant: order.isInstant,
-		side: side === Side.BID ? 'Bid' : 'Ask',
-		symbol,
-		priceDp,
-		localSave: localSave,
-	};
-	if (order.isInstant) obj.localSave = 'instantOrders';
-	baseSocketClient.sendOrder(obj);
 };

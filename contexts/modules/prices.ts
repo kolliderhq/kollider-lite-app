@@ -11,7 +11,7 @@ interface InitState {
 
 const initialState: InitState = {
 	indexes: {
-		['BTCUSD.PERP']: NaN,
+		['BTCUSD']: NaN,
 	},
 	markPrices: {
 		['BTCUSD.PERP']: '',

@@ -26,7 +26,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 						refreshInterval: 0,
 						fetcher: fetcher,
 						onErrorRetry: defaultOnErrorRetry,
-					}}>
+					}}
+				>
 					<DefaultSeo
 						title="Kollider Light"
 						description="Instant Derivative Trading. Access any asset with Bitcoin simply and fast."

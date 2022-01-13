@@ -31,7 +31,8 @@ export const MakeOrderDialog = ({ order, side }: { order: Order; side: Side }) =
 					onClick={() => {
 						dispatch(setDialogClose());
 						processOrder(order, side, priceDp, symbol);
-					}}>
+					}}
+				>
 					<p>Confirm {side === Side.ASK ? 'Sell' : 'Buy'}</p>
 				</button>
 			</div>

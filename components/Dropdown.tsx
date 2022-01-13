@@ -18,7 +18,8 @@ export function SymbolSelectDropdown() {
 				dataCy="dropdown-symbol-select"
 				customClass={cn('bg-gray-975 absolute w-full s-transition-all rounded-lg border-gray-600 border', {
 					's-dropdown-display s-dropdown-spin-arrow': isShowing,
-				})}>
+				})}
+			>
 				<DropdownSelected customClass="h-12 flex items-center px-3">
 					<DisplaySymbol
 						asset={symbolsAssets[symbolIndex]}
@@ -33,7 +34,8 @@ export function SymbolSelectDropdown() {
 							onClick={() => dispatch(setSymbolIndex(i))}
 							customClass="h-12 px-3 hidden"
 							key={value}
-							checked={symbolIndex === i}>
+							checked={symbolIndex === i}
+						>
 							<DisplaySymbol key={symbolsAssets[i]} asset={symbolsAssets[i]} symbol={symbols[i]} value={value} />
 						</DropdownItem>
 					);
@@ -75,7 +77,8 @@ export function DropdownSelected({
 	return (
 		<div
 			style={{ gridTemplateColumns: '1fr 25px' }}
-			className={cn('grid px-2 w-full hover:opacity-75 cursor-pointer', customClass)}>
+			className={cn('grid px-2 w-full hover:opacity-75 cursor-pointer', customClass)}
+		>
 			<div className="w-full">{children}</div>
 			<div className="flex items-center justify-end">
 				<img
@@ -111,7 +114,8 @@ export function DropdownItem({
 					? 'border-opacity-100 border-gray-100 border-theme-main'
 					: 'border-gray-100 hover:opacity-75 hover:border-opacity-100 cursor-pointer',
 				customClass
-			)}>
+			)}
+		>
 			{children}
 		</button>
 	);

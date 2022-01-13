@@ -27,7 +27,6 @@ export const OrderArea = () => {
 		state.orders.order,
 		state.orders.order.quantity,
 	]);
-	const { symbol } = useSymbols();
 	const [clickedSide, setClickedSide] = React.useState<Side>();
 
 	const onButtonClick = React.useCallback(
@@ -207,7 +206,8 @@ const BuyButton = ({
 			onClick={onButtonClick}
 			className={cn(buttonClass, className, 'bg-green-600', {
 				'opacity-50': !bestAsk,
-			})}>
+			})}
+		>
 			<p className="text-sm xs:text-base">
 				Buy
 				<span className="pr-1" />

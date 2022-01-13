@@ -37,7 +37,8 @@ export default function Home() {
 					<div className="h-[150px] w-full">
 						<Loader />
 					</div>
-				}>
+				}
+			>
 				<div className="w-full relative z-5 py-1">
 					<IndexPriceSparkLine />
 				</div>

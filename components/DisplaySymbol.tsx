@@ -42,21 +42,24 @@ export const DisplaySymbol = ({ asset, value, symbol }) => {
 
 	return (
 		<div className="flex items-center w-full justify-between">
-			<div className="flex items-center" style={{ minWidth: '110px' }}>
-				<figure className="mr-2 flex items-center">
-					<Img width={24} height={24} src={asset} />
-				</figure>
-				<p className="text-sm text-gray-100">{dispSymbol(value)}</p>
-			</div>
 			<div className="flex items-center">
 				{!isValidating && markPrice && !isNil(priceInc) ? (
-					<p className="flex flex-col items-end">
-						<span className="text-xs tracking-tighter font-mono">${formatNumber(markPrice)}</span>
-						<span className={cn('text-xs font-mono tracking-tighter', getNumberColour(priceInc))}>{priceInc}%</span>
+					<p className="flex flex-col items-end px-3">
+						<span className="text-xl tracking-tighter font-mono">
+							<span className="text-sm pr-1">$</span>
+							{formatNumber(markPrice)}
+						</span>
+						<span className={cn('text-sm font-mono tracking-tighter', getNumberColour(priceInc))}>{priceInc}%</span>
 					</p>
 				) : (
 					<DefaultLoader />
 				)}
+			</div>
+			<div className="flex items-center mr-2">
+				<figure className="mr-2 flex items-center">
+					<Img width={28} height={28} src={asset} />
+				</figure>
+				<p className="text-base text-gray-100">{dispSymbol(value)}</p>
 			</div>
 		</div>
 	);

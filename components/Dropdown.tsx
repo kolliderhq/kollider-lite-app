@@ -12,15 +12,14 @@ export function SymbolSelectDropdown() {
 	const { symbolsDisplay, symbolsAssets, symbols, symbolIndex } = useSymbols();
 	const dispatch = useAppDispatch();
 	return (
-		<div className="h-12 relative z-10 pointer-events-none">
+		<div className="h-16 relative z-10 pointer-events-none">
 			<DropdownWrapper
 				onClick={() => setIsShowing(v => !v)}
 				dataCy="dropdown-symbol-select"
 				customClass={cn('bg-gray-975 absolute w-full s-transition-all rounded-lg border-gray-600 border', {
 					's-dropdown-display s-dropdown-spin-arrow': isShowing,
-				})}
-			>
-				<DropdownSelected customClass="h-12 flex items-center px-3">
+				})}>
+				<DropdownSelected customClass="h-16 flex items-center px-3">
 					<DisplaySymbol
 						asset={symbolsAssets[symbolIndex]}
 						symbol={symbols[symbolIndex]}
@@ -32,10 +31,9 @@ export function SymbolSelectDropdown() {
 						<DropdownItem
 							dataCy={`dropdown-symbol-item-${i}`}
 							onClick={() => dispatch(setSymbolIndex(i))}
-							customClass="h-12 px-3 hidden"
+							customClass="h-16 px-3 hidden"
 							key={value}
-							checked={symbolIndex === i}
-						>
+							checked={symbolIndex === i}>
 							<DisplaySymbol key={symbolsAssets[i]} asset={symbolsAssets[i]} symbol={symbols[i]} value={value} />
 						</DropdownItem>
 					);
@@ -77,8 +75,7 @@ export function DropdownSelected({
 	return (
 		<div
 			style={{ gridTemplateColumns: '1fr 25px' }}
-			className={cn('grid px-2 w-full hover:opacity-75 cursor-pointer', customClass)}
-		>
+			className={cn('grid px-2 w-full hover:opacity-75 cursor-pointer', customClass)}>
 			<div className="w-full">{children}</div>
 			<div className="flex items-center justify-end">
 				<img
@@ -114,8 +111,7 @@ export function DropdownItem({
 					? 'border-opacity-100 border-gray-100 border-theme-main'
 					: 'border-gray-100 hover:opacity-75 hover:border-opacity-100 cursor-pointer',
 				customClass
-			)}
-		>
+			)}>
 			{children}
 		</button>
 	);

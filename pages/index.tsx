@@ -24,22 +24,16 @@ export default function Home() {
 			<Dialogs />
 			<Popups />
 			<Header />
-			<div className="grid grid-rows-2 grid-cols-1 xxs:grid-rows-1 xxs:grid-cols-10 xs:grid-cols-2 xxs:h-[50px] w-full mb-4 z-10">
-				<div className="order-2 xxs:order-1 col-span-1 xxs:col-span-4 xs:col-span-1 mt-5 xxs:mt-0">
-					<DisplayMarkPrice />
-				</div>
-				<div className="order-1 xxs:order-2 col-span-6 xs:col-span-1 w-full h-10">
-					<SymbolSelectDropdown />
-				</div>
+			<div className="my-1">
+				<SymbolSelectDropdown />
 			</div>
 			<SymbolsLoadedWrapper
 				loader={
 					<div className="h-[150px] w-full">
 						<Loader />
 					</div>
-				}
-			>
-				<div className="w-full relative z-5 py-1">
+				}>
+				<div className="w-full relative z-5 mb-2">
 					<IndexPriceSparkLine />
 				</div>
 			</SymbolsLoadedWrapper>

@@ -15,7 +15,7 @@ export const Footer = () => {
 			</div>
 
 			<div className="w-full flex items-center bg-gray-800 h-8 border-t border-gray-600 z-80">
-				<div className="max-w-sm min-w-xxxs mx-auto w-full flex items-center gap-5 sm:gap-10 px-2 sm:px-4">
+				<div className="max-w-sm min-w-xxxs mx-auto w-full flex items-center gap-5 sm:gap-10 px-5 sm:px-8">
 					<SocketStatus />
 					<WeblnStatus />
 				</div>

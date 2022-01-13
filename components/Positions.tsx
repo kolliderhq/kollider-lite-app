@@ -3,7 +3,7 @@ import React from 'react';
 import cn from 'clsx';
 import Img from 'next/image';
 
-import { processOrder } from 'components/OrderArea';
+import { processOrder } from 'components/dialogs/MakeOrder';
 import { Order, Side } from 'contexts';
 import { useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { fixed } from 'utils/Big';
@@ -60,18 +60,33 @@ const ClosePosition = () => {
 			className={cn(
 				hasPosition ? 'hover:opacity-80 cursor-pointer' : 'opacity-50 cursor-not-allowed',
 				'flex items-center justify-center border border-theme-main rounded-md py-1 px-1.5'
-			)}
-		>
+			)}>
 			<p className="text-[10px]">Close Position</p>
 		</button>
 	);
 };
 
-export const LabelledValue = ({ label, value, className }: { label: string; value: string; className?: string }) => {
+export const LabelledValue = ({
+	label,
+	value,
+	className,
+	coloured,
+}: {
+	label: string;
+	value: string;
+	className?: string;
+	coloured?: boolean;
+}) => {
 	return (
 		<div className={cn('flex flex-col items-center justify-center gap-2 sm:gap-0.5 h-10 xxs:h-14', className)}>
 			<p className="leading-none tracking-tight text-xs sm:text-sm text-gray-400 text-center">{label}</p>
-			<p className="leading-none tracking-normal text-base sm:text-lg text-right">{value}</p>
+			<p
+				className={cn(
+					coloured && (Number(value) < 0 ? 'text-red-400' : 'text-green-400'),
+					'leading-none tracking-normal text-base sm:text-lg text-right'
+				)}>
+				{value}
+			</p>
 		</div>
 	);
 };
@@ -94,8 +109,7 @@ const PositionData = () => {
 			}}
 			className={cn(
 				'bg-gray-700 rounded-lg flex flex-col items-center justify-center px-2 py-2 xxs:py-3 min-w-[100px] xs:h-20'
-			)}
-		>
+			)}>
 			<div className="flex flex-col items-center gap-0.5">
 				<div className="flex items-center gap-1 mb-0.5">
 					<Img width={18} height={18} className="rounded-full" src={largeAsset} />
@@ -104,8 +118,7 @@ const PositionData = () => {
 						className={cn(
 							'text-base',
 							hasPosition ? (position.side === 'Bid' ? 'text-green-400' : 'text-red-400') : 'text-gray-100'
-						)}
-					>
+						)}>
 						{hasPosition ? (position.side === 'Bid' ? ' Long' : ' Short') : '  '}
 					</p>
 				</div>

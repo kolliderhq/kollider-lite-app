@@ -60,5 +60,6 @@ const generateSeries = data => {
 
 const getMinMax = arr => {
 	const valueArr = compact(arr.map(item => item[1]));
-	return [Math.min(...(valueArr as number[])) * 0.99, Math.max(...(valueArr as number[])) * 1.01];
+	// the numbers are pretty much used to add margin to the graph itself
+	return [Math.min(...(valueArr as number[])) * 0.99, Math.max(...(valueArr as number[])) * 1.004];
 };

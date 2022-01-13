@@ -7,6 +7,8 @@ import { OrderTemplate } from 'utils/trading';
 
 interface InitState {
 	positions: Record<string, Partial<PositionState> & { quantity: string }>;
+	// for the position tab update dot
+	positionChange: Record<string, number>;
 	balances: Balances;
 	instantOrders: Record<string, Record<string, Partial<OrderTemplate & { extOrderId: string }>>>;
 	orderIds: Record<string, Record<string, Partial<ReceivedOrder>>>;
@@ -17,6 +19,9 @@ const initialState: InitState = {
 		['BTCUSD.PERP']: {
 			quantity: '0',
 		},
+	},
+	positionChange: {
+		['BTCUSD.PERP']: 0,
 	},
 	balances: {
 		cash: '0',
@@ -40,6 +45,13 @@ export const tradingSlice = createSlice({
 		},
 		setPositionsData: (state, action: PayloadAction<{ symbol: string; data: PositionState }>) => {
 			state.positions[action.payload.symbol] = action.payload.data;
+			//	change only on quantity change
+			if (state.positions[action.payload.symbol]?.quantity !== action.payload.data.quantity)
+				console.log('positionData change');
+			state.positionChange = {
+				...state.positionChange,
+				[action.payload.symbol]: state.positionChange[action.payload.symbol] + 1,
+			};
 		},
 		setPositionClosed: (state, action: PayloadAction<string>) => {
 			state.positions[action.payload].quantity = '0';

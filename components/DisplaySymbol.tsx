@@ -52,7 +52,7 @@ export const DisplaySymbol = ({ asset, value, symbol }) => {
 						<span className={cn('text-sm font-mono tracking-tighter', getNumberColour(priceInc))}>{priceInc}%</span>
 					</p>
 				) : (
-					<DefaultLoader />
+					<DefaultLoader wrapperClass="ml-10" loaderSize={24} />
 				)}
 			</div>
 			<div className="flex items-center mr-2">

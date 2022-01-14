@@ -139,7 +139,7 @@ const useProcessAutoWithdrawWebln = () => {
 			//	cash was below the limit when requested
 			if (ref.current.timeout) clearTimeout(ref.current.timeout);
 		}
-	}, [isWeblnConnected, cash]);
+	}, [isWeblnConnected, cash, weblnAutoWithdraw]);
 };
 
 function detectMobile() {

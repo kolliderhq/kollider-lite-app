@@ -72,6 +72,13 @@ export class Orderbook {
 		this._orderbook[symbol] = value;
 	}
 
+	public getBestBidAsk(symbol) {
+		const { bids, asks } = this._orderbook[symbol];
+		const bestBid = bids[0][0];
+		const bestAsk = asks[asks.length - 1][0];
+		return { bestBid, bestAsk };
+	}
+
 	//	rushed into a class so not optimal
 	private makeChildHandler(emitKey) {
 		return {

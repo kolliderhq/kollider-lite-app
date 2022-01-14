@@ -10,8 +10,10 @@ import { DIALOGS, SETTINGS, USER_TYPE } from 'consts';
 import { Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
-import { applyDp, formatNumber, optionalDecimal } from 'utils/format';
-import { isPositiveInteger } from 'utils/scripts';
+import usePrevious from 'hooks/usePrevious';
+import { divide } from 'utils/Big';
+import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, optionalDecimal, roundDecimal } from 'utils/format';
+import { isPositiveInteger, isPositiveNumber, isWithinStringDecimalLimit } from 'utils/scripts';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
 const buttonClass =
@@ -31,7 +33,7 @@ export const OrderArea = () => {
 
 	const onButtonClick = React.useCallback(
 		(side: Side) => {
-			if (quantity === 0 || !quantity) {
+			if (quantity === '0' || !quantity) {
 				displayToast(<p className="text-sm">Missing Quantity</p>, {
 					type: 'error',
 					level: TOAST_LEVEL.IMPORTANT,
@@ -107,6 +109,16 @@ const OrderInput = () => {
 		dispatch(setOrderLeverage(toNumber(position.leverage)));
 	}, [hasPositionLeverage, position?.leverage]);
 
+	const quantity = useAppSelector(state => state.orders.order.quantity);
+	const prevSymbol = usePrevious(symbol);
+
+	//	convert dollar input to SATS on symbolSwitch
+	React.useEffect(() => {
+		if (prevSymbol && symbol !== 'BTCUSD.PERP' && symbol !== prevSymbol) {
+			dispatch(setOrderQuantity(roundDecimal(getDollarsToSATS(Number(quantity)), 0)));
+		}
+	}, [symbol, prevSymbol]);
+
 	return (
 		<div className="h-full w-full">
 			<QuantityInput />
@@ -126,38 +138,91 @@ const OrderInput = () => {
 
 const QuantityInput = () => {
 	const { isInversePriced } = useSymbolData();
-	const dispatch = useAppDispatch();
-	const quantity = useAppSelector(state => Number(state.orders.order.quantity));
-	// TODO : implement a few boxes users can touch for easy input quantity values
-	const [toggleQuantityInput, setToggleQuantityInput] = React.useState(true);
 	return (
 		<div className="w-full">
-			{/*<label className="text-xs text-gray-300 tracking-wider">Amount({isInversePriced ? 'USD' : 'SATS'})</label>*/}
-			<label className="text-xs text-gray-300 tracking-wider">Quantity</label>
-			<div className="h-9">
-				{toggleQuantityInput ? (
-					<div className="bg-gray-700 border-transparent rounded-md w-full">
-						<input
-							id={'input-order-quantity'}
-							min={1}
-							max={SETTINGS.LIMITS.NUMBER}
-							step={1}
-							onInput={(e: FormEvent<HTMLInputElement>) => {
-								if (!isPositiveInteger) return;
-								if (Number((e.target as HTMLInputElement).value) > SETTINGS.LIMITS.NUMBER) return;
-								dispatch(setOrderQuantity((e.target as HTMLInputElement).value));
-							}}
-							value={quantity ? quantity : ''}
-							type="number"
-							// placeholder="Amount"
-							placeholder="Quantity"
-							className="h-10 xs:h-9 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
-						/>
-					</div>
-				) : (
-					<div>Custom selector</div>
-				)}
+			<label className="text-xs text-gray-300 tracking-wider">Amount({isInversePriced ? 'USD' : 'SATS'})</label>
+			{/*because default is BTC and it is inverse*/}
+			<div>{isInversePriced === undefined || isInversePriced ? <DollarInput /> : <SATSInput />}</div>
+		</div>
+	);
+};
+
+const SATSInput = () => {
+	const dispatch = useAppDispatch();
+	const quantity = useAppSelector(state => state.orders.order.quantity);
+
+	return (
+		<div>
+			<div className="bg-gray-700 border-transparent rounded-md w-full h-9">
+				<input
+					autoComplete="off"
+					id={'input-order-quantity-sats'}
+					min={1}
+					max={SETTINGS.LIMITS.NUMBER}
+					step={1}
+					onInput={(e: FormEvent<HTMLInputElement>) => {
+						const value = (e.target as HTMLInputElement).value;
+						if (value === '') return dispatch(setOrderQuantity(value));
+						if (!isPositiveInteger(value)) return;
+
+						if (Number(value) > SETTINGS.LIMITS.SATS_NUMBER) return;
+						dispatch(setOrderQuantity(value));
+					}}
+					value={quantity ? quantity : ''}
+					type="text" //	 because of a supposedly android 12 bug, switch to "number" if it gets fixed by breez or android
+					placeholder="Amount"
+					// placeholder="Quantity"
+					className="h-10 xs:h-9 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
+				/>
 			</div>
+			<p className="text-sm text-right pt-2">
+				<>≈${quantity ? formatNumber(getSatsToDollar(quantity)) : 0}</>
+			</p>
+		</div>
+	);
+};
+
+const DollarInput = () => {
+	const dispatch = useAppDispatch();
+	const [quantity, leverage] = useAppSelector(state => [state.orders.order.quantity, state.orders.order.leverage]);
+
+	//	convert SATS input to dollars
+	React.useEffect(() => {
+		if (quantity === '') return;
+		dispatch(setOrderQuantity(roundDecimal(getSatsToDollar(Number(quantity)), 1)));
+	}, []);
+
+	return (
+		<div>
+			<div className="bg-gray-700 border-transparent rounded-md w-full h-9">
+				<input
+					autoComplete="off"
+					id={'input-order-quantity-dollar'}
+					min={0}
+					max={SETTINGS.LIMITS.NUMBER}
+					step={0.01}
+					onInput={(e: FormEvent<HTMLInputElement>) => {
+						const value = (e.target as HTMLInputElement).value;
+						if (value === '') return dispatch(setOrderQuantity(value));
+						if (!isWithinStringDecimalLimit(value, 2)) return;
+						if (!isPositiveNumber(value)) return;
+
+						if (Number(value) > SETTINGS.LIMITS.NUMBER) return;
+						dispatch(setOrderQuantity(value));
+					}}
+					value={quantity ? quantity : ''}
+					type="text" //	 because of a supposedly android 12 bug, switch to "number" if it gets fixed by breez or android
+					placeholder="Amount"
+					// placeholder="Quantity"
+					className="h-10 xs:h-9 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
+				/>
+			</div>
+			<p className="text-sm text-right pt-2">
+				<>
+					≈{quantity ? formatNumber(getDollarsToSATS(quantity)) : 0}
+					<span className="text-xs pl-1">SATS</span>
+				</>
+			</p>
 		</div>
 	);
 };

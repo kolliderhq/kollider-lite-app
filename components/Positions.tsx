@@ -4,8 +4,8 @@ import cn from 'clsx';
 import Img from 'next/image';
 
 import { AccountInfo } from 'components/AccountInfo';
-import { processOrder } from 'components/dialogs/MakeOrder';
-import { Order, Side } from 'contexts';
+import { processOrder, pureCloseOrder } from 'components/dialogs/MakeOrder';
+import { Order, Side, askBidSelector, useOrderbookSelector } from 'contexts';
 import { useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { fixed } from 'utils/Big';
 import { formatNumber, formatUSD, getSatsToDollar } from 'utils/format';
@@ -58,18 +58,18 @@ export const PositionTable = () => {
 
 const ClosePosition = () => {
 	const { symbol } = useSymbols();
-	const { priceDp } = useSymbolData();
+	const { priceDp, isInversePriced, contractSize } = useSymbolData();
 	const positions = useAppSelector(state => state.trading.positions);
 	const position = positions[symbol];
 	const hasPosition = position?.quantity ? position.quantity !== '0' : false;
 	const onClosePosition = React.useCallback(() => {
 		if (!hasPosition) return;
 		const order = {
-			quantity: Number(position.quantity),
+			quantity: position.quantity,
 			leverage: Number(position.leverage),
 			isInstant: true,
 		} as Order;
-		processOrder(order, position.side === 'Ask' ? Side.BID : Side.ASK, priceDp, symbol);
+		pureCloseOrder(order, order.quantity, position.side === 'Ask' ? Side.BID : Side.ASK, priceDp, symbol);
 	}, [hasPosition, position, priceDp, symbol]);
 	return (
 		<button

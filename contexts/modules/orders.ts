@@ -10,7 +10,7 @@ export enum Side {
 }
 
 export interface Order {
-	quantity: number;
+	quantity: string;
 	leverage: number;
 	isInstant: boolean;
 }
@@ -30,7 +30,7 @@ interface InitState {
 const initialState: InitState = {
 	inputError: InputError.NONE,
 	order: {
-		quantity: undefined, //	 deliberate undefined. null gets turned into a 0.
+		quantity: '', //	 deliberate undefined. null gets turned into a 0.
 		leverage: 1,
 		isInstant: true,
 	},
@@ -52,8 +52,16 @@ export const ordersSlice = createSlice({
 		},
 		setOrderQuantity: (state, action: PayloadAction<string>) => {
 			//	only undefined seems to empty it
-			if (action.payload === '') state.order.quantity = undefined;
-			else state.order.quantity = Number(action.payload);
+			if (action.payload === '') {
+				state.order.quantity = '';
+				return;
+			}
+			// last input is a decimal dot
+			if (action.payload.charAt(action.payload.length - 1) === '.' && !isNaN(Number(action.payload.slice(0, -1)))) {
+				state.order.quantity = action.payload;
+				return;
+			}
+			state.order.quantity = isNaN(Number(action.payload)) ? undefined : action.payload;
 		},
 		setOrderLeverage: (state, action: PayloadAction<number>) => {
 			state.order.leverage = Number(optionalDecimal(toString(action.payload)));

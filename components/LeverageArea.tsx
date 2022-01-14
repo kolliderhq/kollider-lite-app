@@ -3,7 +3,7 @@ import React, { FormEvent } from 'react';
 import { Slider } from 'components/Slider';
 import { TABS } from 'consts';
 import { SLIDER } from 'consts/misc/slider';
-import { setOrderLeverage } from 'contexts';
+import { reduxStore, setOrderLeverage } from 'contexts';
 import { setEditLeverage, setTab } from 'contexts/modules/layout';
 import { useAppDispatch, useSymbols } from 'hooks';
 import { fixed } from 'utils/Big';
@@ -15,6 +15,15 @@ export const LeverageArea = ({ hasPositionLeverage }) => {
 	const [value, setValue] = React.useState<number | string>(1);
 	const [sliderValue, setSliderValue] = React.useState(1);
 	const maxLeverage = symbolData?.[symbol] ? Number(symbolData[symbol]?.maxLeverage) : 100;
+
+	//	retrieve leverage from store on symbol change
+	React.useEffect(() => {
+		let storeLeverage = reduxStore.getState().orders.order.leverage;
+		console.log('storeLeverage', storeLeverage);
+		if (!storeLeverage) storeLeverage = 1;
+		setValue(storeLeverage);
+		setSliderValue(Number(storeLeverage));
+	}, [symbol]);
 
 	React.useEffect(() => {
 		if (hasPositionLeverage) return;
@@ -91,8 +100,7 @@ export const ChangeLeverageButton = () => {
 		<div className="w-full flex items-center justify-end">
 			<button
 				onClick={() => dispatch(setEditLeverage(true))}
-				className="hover:opacity-80 mt-2 px-4 py-2 border-theme-main border rounded-lg flex items-center justify-center w-fit"
-			>
+				className="hover:opacity-80 mt-2 px-4 py-2 border-theme-main border rounded-lg flex items-center justify-center w-fit">
 				<p className="text-xs">Change Leverage</p>
 			</button>
 		</div>
@@ -111,8 +119,7 @@ const LeverageSliderTicks = ({ maxLeverage }: { maxLeverage: number }) => {
 							<span
 								key={index}
 								className="absolute text-[10px] text-gray-"
-								style={{ left: `${(index * 100) / tickDiv}%`, transform: 'translate(-50%, -5px)' }}
-							>
+								style={{ left: `${(index * 100) / tickDiv}%`, transform: 'translate(-50%, -5px)' }}>
 								{value}
 							</span>
 						);

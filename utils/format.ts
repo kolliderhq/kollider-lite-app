@@ -19,9 +19,20 @@ import { TBigInput, divide, fixed, multiply } from 'utils/Big';
 import { parseTime } from './time';
 
 moment.extend(duration);
+
+export const roundDecimal = (value: string, decimal: number) => {
+	const factor = Math.pow(10, decimal);
+	return optionalDecimal(divide(Math.ceil(Number(multiply(value, factor))), factor, decimal));
+};
+
 export const getSatsToDollar = num => {
 	const btcDollar = reduxStore.getState().prices.indexes['BTCUSD'];
 	return multiply(num, multiply(UI.DENOM.BTC.MULT, btcDollar, 10), 2);
+};
+
+export const getDollarsToSATS = num => {
+	const btcDollar = reduxStore.getState().prices.indexes['BTCUSD'];
+	return divide(num, multiply(UI.DENOM.BTC.MULT, btcDollar, 10), 0);
 };
 
 export const applyDp = (value: TBigInput, dp: number): string => {

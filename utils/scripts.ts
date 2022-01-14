@@ -7,6 +7,15 @@ import { divide, multiply } from 'utils/Big';
 
 import { FixedLengthArray } from './types/utils';
 
+export const isWithinStringDecimalLimit = (value: string, decimalLimit: number = 2) => {
+	if (value.includes('.')) {
+		const split = value.split('.');
+		if (split[1].length > decimalLimit) return false;
+		return true;
+	}
+	return true;
+};
+
 export const getDollarPrefix = (value: string) => {
 	if (value === '0.00') return '>';
 	else if (value === '-0.00') return '<';
@@ -79,6 +88,8 @@ export const mapKeyValues = <T>(obj: Record<any, T>, cb = (k: string, v: T) => u
 
 export const isPositiveInteger = (input: unknown) =>
 	isNumber(input) && Number(input) >= 0 && !String(input).includes('.');
+
+export const isPositiveNumber = (input: unknown) => isNumber(input) && Number(input) >= 0;
 
 export const deepFreeze = (obj: any) => {
 	Object.keys(obj).forEach(prop => {

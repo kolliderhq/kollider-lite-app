@@ -4218,10 +4218,9 @@ react-dom@17.0.2:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
-react-input-slider@^6.0.1:
+react-input-slider@kolliderhq/react-input-slider:
   version "6.0.1"
-  resolved "https://registry.yarnpkg.com/react-input-slider/-/react-input-slider-6.0.1.tgz#e866993796e9c25366f7960e7f6bd7c1838316ca"
-  integrity sha512-WASm/k0rVw3cXzvfkoUa4wMnF74SbifeuwSmjPC+zanhV4W9KAmPM+H6yXhIZAjJL4TU+sUw/pgyUyAt/txvIw==
+  resolved "https://codeload.github.com/kolliderhq/react-input-slider/tar.gz/031b7fe97ce97e4d16b49221d1e513b4b0337659"
   dependencies:
     "@babel/runtime" "^7.9.2"
     "@emotion/core" "^10.0.14"

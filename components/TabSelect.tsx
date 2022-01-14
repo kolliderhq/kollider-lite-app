@@ -37,7 +37,7 @@ const PositionsTabButton = () => {
 
 	//	update changed boolean to true if value was updated
 	React.useEffect(() => {
-		if (empty(changeRef.current)) return;
+		if (empty(changeRef.current) || selectedTab === TABS.POSITIONS) return;
 		if (positionChange[symbol] !== changeRef.current[symbol]) setChanged(true);
 	}, [positionChange, symbol]);
 

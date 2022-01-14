@@ -15,10 +15,13 @@ export const IndexPriceSparkLine = () => {
 		timestampByInterval(Date.now() - TIME.HOUR * 24 * 7, TIME.HOUR),
 		timestampByInterval(Date.now(), TIME.HOUR),
 	];
-	const { data } = useSWR(
-		symbol ? [API_NAMES.HISTORICAL_MARK_PRICES, symbol, '1h', dayAgo[0], dayAgo[1]] : null,
-		getSWROptions(API_NAMES.HISTORICAL_MARK_PRICES)
-	);
+	console.log(timestampByInterval(Date.now(), TIME.HOUR) - Date.now());
+	//	custom stale timeout -> adjusts according to the closest hour
+	const { data } = useSWR(symbol ? [API_NAMES.HISTORICAL_MARK_PRICES, symbol, '1h', dayAgo[0], dayAgo[1]] : null, {
+		...getSWROptions(API_NAMES.HISTORICAL_MARK_PRICES),
+		dedupingInterval: timestampByInterval(Date.now(), TIME.HOUR) - Date.now(),
+		refreshInterval: timestampByInterval(Date.now(), TIME.HOUR) - Date.now(),
+	});
 	const [series, setSeries] = React.useState<any>();
 	const [yAxis, setYAxis] = React.useState({});
 
@@ -33,7 +36,7 @@ export const IndexPriceSparkLine = () => {
 	return <SparkLine series={series} yAxis={yAxis} />;
 };
 
-const generateSeries = data => {
+function generateSeries(data) {
 	if (data?.length === 0) return null;
 	return [
 		{
@@ -56,7 +59,7 @@ const generateSeries = data => {
 			data,
 		},
 	];
-};
+}
 
 const getMinMax = arr => {
 	const valueArr = compact(arr.map(item => item[1]));

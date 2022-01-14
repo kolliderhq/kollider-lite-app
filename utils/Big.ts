@@ -41,13 +41,17 @@ export const gte = (input1: TBigInput = '0', input2: TBigInput = '0'): boolean =
 	return new B(empty(input1) ? 0 : input1).gte(new B(empty(input2) ? 0 : input2));
 };
 
+export const abs = (input1: TBigInput = '0', places: number): string => {
+	return new B(empty(input1) ? 0 : input1).abs().toFixed(places);
+};
+
 export const gt = (input1: TBigInput = '0', input2: TBigInput = '0'): boolean => {
 	return new B(empty(input1) ? 0 : input1).gt(new B(empty(input2) ? 0 : input2));
 };
 
 export const add = (input1: TBigInput = '0', input2: TBigInput = '0', places = DEFAULT_PLACES): string => {
 	try {
-		return new B(empty(input1) ? 0 : input1).plus(empty(input2) ? 0 : input2).toFixed(places);
+		return new B(empty(input1) ? 0 : input1).plus(empty(input2) ? 0 : input2).toFixed(isNumber(places) ? places : 2);
 	} catch (ex) {
 		// console.warn(`Big error ${input1} * ${input2}`, ex.message);
 		return '0';

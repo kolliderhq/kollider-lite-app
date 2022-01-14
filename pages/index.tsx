@@ -41,7 +41,6 @@ export default function Home() {
 				{selectedTab === TABS.POSITIONS && (
 					<>
 						<PositionTable />
-						<AccountInfo />
 					</>
 				)}
 				{selectedTab === TABS.ORDER && <OrderArea />}

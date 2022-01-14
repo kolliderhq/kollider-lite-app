@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import cn from 'clsx';
 import Img from 'next/image';
 
+import { AccountInfo } from 'components/AccountInfo';
 import { processOrder } from 'components/dialogs/MakeOrder';
 import { Order, Side } from 'contexts';
 import { useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { fixed } from 'utils/Big';
-import { formatNumber, formatUSD } from 'utils/format';
+import { formatNumber, formatUSD, getSatsToDollar } from 'utils/format';
 import { isNumber } from 'utils/scripts';
 
 export const PositionTable = () => {
@@ -21,6 +22,18 @@ export const PositionTable = () => {
 	}, [balances?.isolatedMargin, symbol]);
 
 	const hasPosition = position?.quantity ? position.quantity !== '0' : false;
+	const investedAmount = React.useMemo(() => {
+		if (!hasPosition) return '-';
+		return (
+			<>
+				{positionMargin}
+				<span className="pl-1 leading-none tracking-normal text-sm sm:text-base">
+					SATS ≈<span className="text-xs sm:text-sm">$</span>
+					{getSatsToDollar(positionMargin)}
+				</span>
+			</>
+		);
+	}, [hasPosition, positionMargin]);
 	return (
 		<section className="grid grid-rows-[fit-content(100%),1fr] xxs:grid-rows-1 grid-cols-1 xxs:grid-cols-3 gap-1">
 			<div className="py-2 xxs:py-0 xxs:col-span-1 w-full h-full">
@@ -29,11 +42,15 @@ export const PositionTable = () => {
 					<ClosePosition />
 				</div>
 			</div>
-			<div className="col-span-2 grid grid-cols-2 xs:grid-cols-2 grid-rows-2 gap-x-1 xxs:gap-x-2 gap-y-2 w-full xs:px-5 sm:px-0">
-				<LabelledValue label="Invested SATS" value={hasPosition ? positionMargin : '-'} />
-				<LabelledValue label="Amount" value={hasPosition ? position?.quantity : '-'} />
+			<div className="col-span-2 grid grid-cols-2 xs:grid-cols-2 grid-rows-3 gap-x-1 xxs:gap-x-2 gap-y-2 w-full xs:px-5 sm:px-0">
+				<div className="col-span-2">
+					<LabelledValue label="Invested Amount" value={hasPosition ? investedAmount : '-'} />
+				</div>
 				<LabelledValue label="Purchase Price" value={hasPosition ? formatUSD(position?.entryPrice) : '-'} />
-				<LabelledValue label="Liq. Price" value={hasPosition ? formatUSD(position?.liqPrice) : '-'} />
+				<LabelledValue label="Liquidation Price" value={hasPosition ? formatUSD(position?.liqPrice) : '-'} />
+				<div className="col-span-2">
+					<AccountInfo />
+				</div>
 			</div>
 		</section>
 	);
@@ -71,18 +88,20 @@ export const LabelledValue = ({
 	value,
 	className,
 	coloured,
+	actualValue,
 }: {
 	label: string;
-	value: string;
+	value: string | ReactNode;
 	className?: string;
 	coloured?: boolean;
+	actualValue?: string; //	for colouring the value according to the actual value
 }) => {
 	return (
 		<div className={cn('flex flex-col items-center justify-center gap-2 sm:gap-0.5 h-10 xxs:h-14', className)}>
 			<p className="leading-none tracking-tight text-xs sm:text-sm text-gray-400 text-center">{label}</p>
 			<p
 				className={cn(
-					coloured && (Number(value) < 0 ? 'text-red-400' : 'text-green-400'),
+					coloured && (Number(actualValue ? actualValue : value) < 0 ? 'text-red-400' : 'text-green-400'),
 					'leading-none tracking-normal text-base sm:text-lg text-right'
 				)}>
 				{value}

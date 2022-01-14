@@ -7,6 +7,12 @@ import { divide, multiply } from 'utils/Big';
 
 import { FixedLengthArray } from './types/utils';
 
+export const getDollarPrefix = (value: string) => {
+	if (value === '0.00') return '>';
+	else if (value === '-0.00') return '<';
+	return '≈';
+};
+
 export function categorizeBySymbol<T>(
 	root: Record<string, T> | T[],
 	symbolGetter: (element: T) => string,

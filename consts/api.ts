@@ -199,7 +199,7 @@ const API: I_API = {
 				`/market/historical_mark_price?symbol=${symbol}&interval_size=${intervalSize}&start=${start}&end=${end}`,
 			method: 'get',
 			base: END_POINTS.BACK,
-			stale: API_TIME.NONE,
+			stale: API_TIME.HOUR,
 			allowNull: true,
 		},
 		HISTORIC_ASSET_VALUES: {

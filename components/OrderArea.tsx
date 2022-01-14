@@ -125,12 +125,13 @@ const OrderInput = () => {
 };
 
 const QuantityInput = () => {
+	const { isInversePriced } = useSymbolData();
 	const dispatch = useAppDispatch();
 	const quantity = useAppSelector(state => Number(state.orders.order.quantity));
 	const [toggleQuantityInput, setToggleQuantityInput] = React.useState(true);
 	return (
 		<div className="w-full">
-			<label className="text-xs text-gray-300 tracking-wider">Quantity</label>
+			<label className="text-xs text-gray-300 tracking-wider">Amount({isInversePriced ? 'USD' : 'SATS'})</label>
 			<div className="h-9">
 				{toggleQuantityInput ? (
 					<div className="bg-gray-700 border-transparent rounded-md w-full">
@@ -146,7 +147,7 @@ const QuantityInput = () => {
 							}}
 							value={quantity ? quantity : ''}
 							type="number"
-							placeholder="Quantity"
+							placeholder="Amount"
 							className="h-10 xs:h-9 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
 						/>
 					</div>
@@ -206,8 +207,7 @@ const BuyButton = ({
 			onClick={onButtonClick}
 			className={cn(buttonClass, className, 'bg-green-600', {
 				'opacity-50': !bestAsk,
-			})}
-		>
+			})}>
 			<p className="text-sm xs:text-base">
 				Buy
 				<span className="pr-1" />

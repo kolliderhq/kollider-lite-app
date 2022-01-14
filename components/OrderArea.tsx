@@ -140,7 +140,7 @@ const QuantityInput = () => {
 	const { isInversePriced } = useSymbolData();
 	return (
 		<div className="w-full">
-			<label className="text-xs text-gray-300 tracking-wider">Amount({isInversePriced ? 'USD' : 'SATS'})</label>
+			<label className="text-xs text-gray-300 tracking-wider">Amount</label>
 			{/*because default is BTC and it is inverse*/}
 			<div>{isInversePriced === undefined || isInversePriced ? <DollarInput /> : <SATSInput />}</div>
 		</div>
@@ -153,7 +153,8 @@ const SATSInput = () => {
 
 	return (
 		<div>
-			<div className="bg-gray-700 border-transparent rounded-md w-full h-9">
+			<div className="bg-gray-700 border-transparent rounded-md w-full h-9 relative">
+				<p className="text-xs absolute right-[9px] bottom-[6px]">SATS</p>
 				<input
 					autoComplete="off"
 					id={'input-order-quantity-sats'}
@@ -171,8 +172,9 @@ const SATSInput = () => {
 					value={quantity ? quantity : ''}
 					type="text" //	 because of a supposedly android 12 bug, switch to "number" if it gets fixed by breez or android
 					placeholder="Amount"
+					style={{ paddingRight: '40px' }}
 					// placeholder="Quantity"
-					className="h-10 xs:h-9 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
+					className="h-10 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
 				/>
 			</div>
 			<p className="text-sm text-right pt-2">
@@ -194,7 +196,8 @@ const DollarInput = () => {
 
 	return (
 		<div>
-			<div className="bg-gray-700 border-transparent rounded-md w-full h-9">
+			<div className="bg-gray-700 border-transparent rounded-md w-full h-9 relative">
+				<p className="text-xs absolute right-[14px] bottom-[6px]">USD</p>
 				<input
 					autoComplete="off"
 					id={'input-order-quantity-dollar'}
@@ -214,6 +217,7 @@ const DollarInput = () => {
 					type="text" //	 because of a supposedly android 12 bug, switch to "number" if it gets fixed by breez or android
 					placeholder="Amount"
 					// placeholder="Quantity"
+					style={{ paddingRight: '40px' }}
 					className="h-10 xs:h-9 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
 				/>
 			</div>

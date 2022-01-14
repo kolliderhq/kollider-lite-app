@@ -11,7 +11,6 @@ import { setDialogClose } from 'contexts/modules/layout';
 import { useAppDispatch, useSymbolData, useSymbols } from 'hooks';
 import { divide, multiply } from 'utils/Big';
 import { applyDp } from 'utils/format';
-import { displayToast } from 'utils/toast';
 
 export const MakeOrderDialog = ({ order, side }: { order: Order; side: Side }) => {
 	const dispatch = useAppDispatch();

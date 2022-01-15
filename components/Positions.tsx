@@ -18,7 +18,7 @@ export const PositionTable = () => {
 
 	const positionMargin = React.useMemo(() => {
 		if (!isNumber(balances?.isolatedMargin?.[symbol])) return '0';
-		return formatNumber(fixed(balances?.isolatedMargin?.[symbol], 0));
+		return fixed(balances?.isolatedMargin?.[symbol], 0);
 	}, [balances?.isolatedMargin, symbol]);
 
 	const hasPosition = position?.quantity ? position.quantity !== '0' : false;
@@ -26,10 +26,10 @@ export const PositionTable = () => {
 		if (!hasPosition) return '-';
 		return (
 			<>
-				{positionMargin}
+				{formatNumber(positionMargin)}
 				<span className="pl-1 leading-none tracking-normal text-sm sm:text-base">
 					SATS ≈<span className="text-xs sm:text-sm">$</span>
-					{getSatsToDollar(positionMargin)}
+					{formatNumber(getSatsToDollar(positionMargin))}
 				</span>
 			</>
 		);
@@ -44,7 +44,7 @@ export const PositionTable = () => {
 			</div>
 			<div className="col-span-2 grid grid-cols-2 xs:grid-cols-2 grid-rows-3 gap-x-1 xxs:gap-x-2 gap-y-2 w-full xs:px-5 sm:px-0">
 				<div className="col-span-2">
-					<LabelledValue label="Invested Amount" value={hasPosition ? investedAmount : '-'} />
+					<LabelledValue label="Invested Amount" value={investedAmount} />
 				</div>
 				<LabelledValue label="Purchase Price" value={hasPosition ? formatUSD(position?.entryPrice) : '-'} />
 				<LabelledValue label="Liquidation Price" value={hasPosition ? formatUSD(position?.liqPrice) : '-'} />

@@ -2,8 +2,8 @@ import React from 'react';
 
 import { LabelledValue } from 'components/Positions';
 import { useAppSelector, useSymbols } from 'hooks';
-import { abs, gte } from 'utils/Big';
-import { getSatsToDollar } from 'utils/format';
+import { abs, gt } from 'utils/Big';
+import { formatNumber, getSatsToDollar } from 'utils/format';
 import { getDollarPrefix } from 'utils/scripts';
 
 export const AccountInfo = () => {
@@ -16,12 +16,12 @@ export const AccountInfo = () => {
 		const dollarValue = getSatsToDollar(position.upnl);
 		return (
 			<>
-				{position.upnl}
+				{formatNumber(position.upnl)}
 				<span className="pl-1 leading-none tracking-normal text-sm sm:text-base">
 					SATS {getDollarPrefix(dollarValue)}
-					{gte(0, dollarValue) ? '-' : ''}
+					{gt(0, dollarValue) ? '-' : ''}
 					<span className="text-xs sm:text-sm">$</span>
-					{abs(dollarValue, 2)}
+					{formatNumber(abs(dollarValue, 2))}
 				</span>
 			</>
 		);

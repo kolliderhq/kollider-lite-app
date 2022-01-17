@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 
 import { WrapBaseDialog } from 'components/dialogs/base';
+import { ContractInfoDialog } from 'components/dialogs/ContractInfo';
 import { LoginDialog } from 'components/dialogs/Login';
 import { SettingsDialog } from 'components/dialogs/Settings';
 import { WithdrawAvailableDialog } from 'components/dialogs/WithdrawAvailable';
@@ -23,6 +24,9 @@ export const Dialogs = () => {
 			</WrapBaseDialog>
 			<WrapBaseDialog isOpen={currentDialog === DIALOGS.SETTLE_INVOICE} close={close}>
 				<WithdrawAvailableDialog />
+			</WrapBaseDialog>
+			<WrapBaseDialog isOpen={currentDialog === DIALOGS.CONTRACT_INFO} close={close}>
+				<ContractInfoDialog />
 			</WrapBaseDialog>
 		</>
 	);

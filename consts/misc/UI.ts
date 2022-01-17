@@ -55,6 +55,7 @@ export enum DIALOGS {
 	SETTLE_INVOICE,
 	SETTINGS,
 	MAKE_ORDER,
+	CONTRACT_INFO,
 }
 
 // stuff that is triggered and suddenly appear

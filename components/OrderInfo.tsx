@@ -110,7 +110,7 @@ const getOrderValue = (price, leverage, priceDp, quantity, symbol, contractSize)
 		return minus(value, mod(value, divide(div, leverage)), priceDp);
 	}
 	const div = multiply(actualPrice, contractSize);
-	const value = multiply(!isNaN(Number(div)) ? div : 0, quantity ? divide(quantity, actualPrice) : 0, 10);
+	const value = divide(multiply(!isNaN(Number(div)) ? div : 0, quantity ? quantity : 0, 10), leverage, 0);
 	if (Number(value) < Number(actualPrice)) {
 		return actualPrice;
 	}

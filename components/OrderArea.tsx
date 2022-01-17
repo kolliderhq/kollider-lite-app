@@ -5,14 +5,15 @@ import toNumber from 'lodash-es/toNumber';
 
 import { DialogWrapper } from 'components/dialogs/DIalogs';
 import { MakeOrderDialog } from 'components/dialogs/MakeOrder';
+import { useMarkPrice } from 'components/DisplaySymbol';
 import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
 import { DIALOGS, SETTINGS, USER_TYPE } from 'consts';
 import { Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import usePrevious from 'hooks/usePrevious';
-import { divide } from 'utils/Big';
-import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, optionalDecimal, roundDecimal } from 'utils/format';
+import { divide, multiply } from 'utils/Big';
+import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, optionalDecimal } from 'utils/format';
 import { isPositiveInteger, isPositiveNumber, isWithinStringDecimalLimit } from 'utils/scripts';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
@@ -73,7 +74,7 @@ export const OrderArea = () => {
 	}, [clickedSide]);
 
 	return (
-		<section className="w-full flex flex-col items-center xs:grid xs:grid-rows-1 xs:grid-cols-7 h-full xs:h-[160px] w-full gap-4 xs:gap-4">
+		<section className="w-full flex flex-col items-center xs:grid xs:grid-rows-1 xs:grid-cols-7 h-full xs:h-[200px] w-full gap-4 xs:gap-4">
 			<SellButton
 				onButtonClick={() => onButtonClick(Side.ASK)}
 				className="hidden xs:flex"
@@ -112,10 +113,12 @@ const OrderInput = () => {
 	const quantity = useAppSelector(state => state.orders.order.quantity);
 	const prevSymbol = usePrevious(symbol);
 
-	//	convert dollar input to SATS on symbolSwitch
+	//	reset input on symbol switch
 	React.useEffect(() => {
-		if (prevSymbol && symbol !== 'BTCUSD.PERP' && symbol !== prevSymbol) {
-			dispatch(setOrderQuantity(roundDecimal(getDollarsToSATS(Number(quantity)), 0)));
+		// only reset if switching over from BTCUSD.PERP
+		if (prevSymbol === 'BTCUSD.PERP' && symbol !== 'BTCUSD.PERP') {
+			dispatch(setOrderQuantity(''));
+			// dispatch(setOrderQuantity(roundDecimal(getDollarsToSATS(Number(quantity)), 0)));
 		}
 	}, [symbol, prevSymbol]);
 
@@ -142,22 +145,33 @@ const QuantityInput = () => {
 		<div className="w-full">
 			<label className="text-xs text-gray-300 tracking-wider">Amount</label>
 			{/*because default is BTC and it is inverse*/}
-			<div>{isInversePriced === undefined || isInversePriced ? <DollarInput /> : <SATSInput />}</div>
+			<div>{isInversePriced === undefined || isInversePriced ? <DollarInput /> : <ContractsInput />}</div>
 		</div>
 	);
 };
 
-const SATSInput = () => {
+const ContractsInput = () => {
 	const dispatch = useAppDispatch();
-	const quantity = useAppSelector(state => state.orders.order.quantity);
+	const [quantity, leverage] = useAppSelector(state => [state.orders.order.quantity, state.orders.order.leverage]);
+	const { symbol } = useSymbols();
+	const markPrice = useMarkPrice(symbol);
 
+	const satsValue = divide(multiply(quantity ? quantity : 0, markPrice, 0), leverage, 0);
 	return (
 		<div>
-			<div className="bg-gray-700 border-transparent rounded-md w-full h-9 relative">
-				<p className="text-xs absolute right-[9px] bottom-[6px]">SATS</p>
+			<div className="bg-gray-700 border-transparent rounded-md w-full relative">
+				<div
+					style={{ transform: 'translate3d(0,-50%,0)' }}
+					className="absolute top-[50%] right-[8px] pl-2 border-l border-gray-600">
+					<button
+						onClick={() => dispatch(setDialog(DIALOGS.CONTRACT_INFO))}
+						className="border border-theme-main rounded-lg px-2 py-1 flex items-center justify-center hover:opacity-80">
+						<p className="text-xs">QTY</p>
+					</button>
+				</div>
 				<input
 					autoComplete="off"
-					id={'input-order-quantity-sats'}
+					id={'input-order-quantity-contracts'}
 					min={1}
 					max={SETTINGS.LIMITS.NUMBER}
 					step={1}
@@ -166,19 +180,23 @@ const SATSInput = () => {
 						if (value === '') return dispatch(setOrderQuantity(value));
 						if (!isPositiveInteger(value)) return;
 
-						if (Number(value) > SETTINGS.LIMITS.SATS_NUMBER) return;
+						if (Number(value) > SETTINGS.LIMITS.NUMBER) return;
 						dispatch(setOrderQuantity(value));
 					}}
 					value={quantity ? quantity : ''}
 					type="text" //	 because of a supposedly android 12 bug, switch to "number" if it gets fixed by breez or android
 					placeholder="Amount"
-					style={{ paddingRight: '40px' }}
+					style={{ paddingRight: '60px' }}
 					// placeholder="Quantity"
-					className="h-10 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
+					className="h-10 xs:h-9 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
 				/>
 			</div>
-			<p className="text-sm text-right pt-2">
-				<>≈${quantity ? formatNumber(getSatsToDollar(quantity)) : 0}</>
+			<p className="text-xs text-right pt-2">
+				<>
+					≈$<span>{formatNumber(getSatsToDollar(satsValue))}</span>
+					<br />≈{quantity ? formatNumber(satsValue) : 0}
+					<span className="text-[10px] pl-1">SATS</span>
+				</>
 			</p>
 		</div>
 	);
@@ -191,13 +209,22 @@ const DollarInput = () => {
 	//	convert SATS input to dollars
 	React.useEffect(() => {
 		if (quantity === '') return;
-		dispatch(setOrderQuantity(roundDecimal(getSatsToDollar(Number(quantity)), 1)));
+		dispatch(setOrderQuantity(''));
+		// dispatch(setOrderQuantity(roundDecimal(getSatsToDollar(Number(quantity)), 1)));
 	}, []);
 
 	return (
 		<div>
-			<div className="bg-gray-700 border-transparent rounded-md w-full h-9 relative">
-				<p className="text-xs absolute right-[14px] bottom-[6px]">USD</p>
+			<div className="bg-gray-700 border-transparent rounded-md w-full relative">
+				<div
+					style={{ transform: 'translate3d(0,-50%,0)' }}
+					className="absolute top-[50%] right-[8px] pl-2 border-l border-gray-600">
+					<button
+						onClick={() => dispatch(setDialog(DIALOGS.CONTRACT_INFO))}
+						className="border border-theme-main rounded-lg px-2 py-1 flex items-center justify-center hover:opacity-80">
+						<p className="text-xs">USD</p>
+					</button>
+				</div>
 				<input
 					autoComplete="off"
 					id={'input-order-quantity-dollar'}
@@ -217,7 +244,7 @@ const DollarInput = () => {
 					type="text" //	 because of a supposedly android 12 bug, switch to "number" if it gets fixed by breez or android
 					placeholder="Amount"
 					// placeholder="Quantity"
-					style={{ paddingRight: '40px' }}
+					style={{ paddingRight: '60px' }}
 					className="h-10 xs:h-9 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
 				/>
 			</div>
@@ -288,5 +315,43 @@ const BuyButton = ({
 			</p>
 			<p className="text-sm xs:text-base">{bestAsk && <>${formatNumber(applyDp(bestAsk, priceDp))}</>}</p>
 		</button>
+	);
+};
+
+// unused
+const SATSInput = () => {
+	const dispatch = useAppDispatch();
+	const quantity = useAppSelector(state => state.orders.order.quantity);
+
+	return (
+		<div>
+			<div className="bg-gray-700 border-transparent rounded-md w-full h-9 relative">
+				<p className="text-xs text-gray-400 absolute right-[9px] bottom-[6px]">SATS</p>
+			</div>
+			<input
+				autoComplete="off"
+				id={'input-order-quantity-sats'}
+				min={1}
+				max={SETTINGS.LIMITS.NUMBER}
+				step={1}
+				onInput={(e: FormEvent<HTMLInputElement>) => {
+					const value = (e.target as HTMLInputElement).value;
+					if (value === '') return dispatch(setOrderQuantity(value));
+					if (!isPositiveInteger(value)) return;
+
+					if (Number(value) > SETTINGS.LIMITS.SATS_NUMBER) return;
+					dispatch(setOrderQuantity(value));
+				}}
+				value={quantity ? quantity : ''}
+				type="text" //	 because of a supposedly android 12 bug, switch to "number" if it gets fixed by breez or android
+				placeholder="Amount"
+				style={{ paddingRight: '40px' }}
+				// placeholder="Quantity"
+				className="h-10 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
+			/>
+			<p className="text-sm text-right pt-2">
+				<>≈${quantity ? formatNumber(getSatsToDollar(quantity)) : 0}</>
+			</p>
+		</div>
 	);
 };

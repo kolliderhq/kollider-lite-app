@@ -101,7 +101,9 @@ export const LabelledValue = ({
 			<p className="leading-none tracking-tight text-xs sm:text-sm text-gray-400 text-center">{label}</p>
 			<p
 				className={cn(
-					coloured && (Number(actualValue ? actualValue : value) < 0 ? 'text-red-400' : 'text-green-400'),
+					coloured &&
+						value !== '-' &&
+						(Number(actualValue ? actualValue : value) < 0 ? 'text-red-400' : 'text-green-400'),
 					'leading-none tracking-normal text-base sm:text-lg text-right'
 				)}>
 				{value}

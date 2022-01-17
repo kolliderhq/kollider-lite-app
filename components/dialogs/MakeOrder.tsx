@@ -33,7 +33,7 @@ export const MakeOrderDialog = ({ order, side }: { order: Order; side: Side }) =
 					)}
 					onClick={() => {
 						dispatch(setDialogClose());
-						processOrder(order, side, priceDp, symbol, isInversePriced, contractSize);
+						processOrder(order, side, priceDp, symbol, isInversePriced);
 					}}>
 					<p>Confirm {side === Side.ASK ? 'Sell' : 'Buy'}</p>
 				</button>
@@ -42,27 +42,18 @@ export const MakeOrderDialog = ({ order, side }: { order: Order; side: Side }) =
 	);
 };
 
-export const processOrder = (
-	order: Order,
-	side: Side,
-	priceDp: number,
-	symbol: string,
-	isInversePriced: boolean,
-	contractSize: string
-) => {
+export const processOrder = (order: Order, side: Side, priceDp: number, symbol: string, isInversePriced: boolean) => {
 	let contractQuantity;
 	//	inverse price means dollar == quantity
 	if (isInversePriced) {
 		contractQuantity = Math.floor(Number(multiply(order.quantity, order.leverage)));
 	} else {
-		const { bestBid, bestAsk } = orderbook.getBestBidAsk(symbol);
-		const price = applyDp(side === Side.ASK ? bestBid : bestAsk, priceDp);
-		const contractPrice = multiply(divide(multiply(order.quantity, contractSize), order.leverage), price);
-		contractQuantity = Math.floor(Number(divide(order.quantity, contractPrice)));
+		contractQuantity = order.quantity;
 	}
 	if (contractQuantity < 1) {
 		contractQuantity = 1;
 	}
+	console.log('processOrder', order, contractQuantity, side, priceDp, symbol);
 	pureCloseOrder(order, contractQuantity, side, priceDp, symbol);
 };
 

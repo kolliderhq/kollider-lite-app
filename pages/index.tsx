@@ -25,9 +25,11 @@ export default function Home() {
 			<Dialogs />
 			<Popups />
 			<Header />
-			<div className="my-1">
-				<SymbolSelectDropdown />
-			</div>
+			{selectedTab === TABS.ORDER && (
+				<div className="my-1">
+					<SymbolSelectDropdown />
+				</div>
+			)}
 			<SymbolsLoadedWrapper
 				loader={
 					<div className="h-[150px] w-full">

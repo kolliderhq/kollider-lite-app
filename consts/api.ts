@@ -29,6 +29,8 @@ if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
 } else {
 	if (process.env.NEXT_PUBLIC_BACK_ENV === 'production') {
 		back = 'https://api.kollider.xyz/v1';
+		// TODO : remove after you debug the issue
+		return;
 		// remove console messages on prod
 		(() => {
 			let method;

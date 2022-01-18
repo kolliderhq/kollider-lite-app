@@ -179,6 +179,14 @@ refiner.set(API_NAMES.USER_ACCOUNT, (data: IUserAccount) => {
 	LOG(data, 'USER_ACCOUNT');
 	return { ...camelCaseAllKeys(data) };
 });
+type TUserData = {
+	uid: number;
+	username: string;
+};
+refiner.set(API_NAMES.MULTI_USER_DATA, (data: TUserData[]) => {
+	LOG(data, 'MULTI_USER_DATA');
+	return data;
+});
 
 refiner.set(API_NAMES.HISTORICAL_INDEX_PRICES, data => {
 	LOG2(data, 'HISTORICAL_INDEX_PRICES');

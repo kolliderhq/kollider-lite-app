@@ -122,7 +122,7 @@ const OrderInput = () => {
 	return (
 		<div className="h-full w-full">
 			<QuantityInput />
-			<div className="w-full mt-1">
+			<div className="w-full">
 				<label className="text-xs text-gray-300 tracking-wider">Leverage</label>
 				{!hasPositionLeverage && editingLeverage ? (
 					<LeverageArea hasPositionLeverage={hasPositionLeverage} />

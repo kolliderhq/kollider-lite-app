@@ -26,10 +26,10 @@ export const PositionTable = () => {
 		if (!hasPosition) return '-';
 		return (
 			<>
-				{formatNumber(positionMargin)}
+				{positionMargin ? formatNumber(positionMargin) : '-'}
 				<span className="pl-1 leading-none tracking-normal text-sm sm:text-base">
 					SATS ≈<span className="text-xs sm:text-sm">$</span>
-					{formatNumber(getSatsToDollar(positionMargin))}
+					{positionMargin ? formatNumber(getSatsToDollar(positionMargin)) : '-'}
 				</span>
 			</>
 		);

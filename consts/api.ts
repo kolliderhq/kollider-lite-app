@@ -200,6 +200,18 @@ const API: I_API = {
 			base: END_POINTS.BACK,
 			stale: API_TIME.NONE,
 		},
+		MULTI_USER_DATA: {
+			route: () => `/users`,
+			method: 'post',
+			base: END_POINTS.BACK,
+			stale: API_TIME.NONE,
+			createBody: params => ({ ...params }),
+			customOptions: {
+				dedupingInterval: 0,
+				revalidateOnFocus: false,
+				revalidateOnMount: true,
+			},
+		},
 		TRADE_LEADERBOARD: {
 			route: (symbol, start, end) => `/market/trade_leaderboard?${applyOptionalParams({ symbol, start, end }, true)}`,
 			method: 'get',

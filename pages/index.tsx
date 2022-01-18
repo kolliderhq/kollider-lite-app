@@ -8,6 +8,7 @@ import { DisplayMarkPrice } from 'components/DisplayMarkPrice';
 import { SymbolSelectDropdown } from 'components/Dropdown';
 import { Header } from 'components/Header';
 import { IndexPriceSparkLine } from 'components/IndexPriceSparkLine';
+import { Leaderboard } from 'components/Leaderboard';
 import Loader from 'components/Loader';
 import { OrderArea } from 'components/OrderArea';
 import { OrderInfo } from 'components/OrderInfo';
@@ -41,6 +42,7 @@ export default function Home() {
 				{selectedTab === TABS.POSITIONS && (
 					<>
 						<PositionTable />
+						<Leaderboard />
 					</>
 				)}
 				{selectedTab === TABS.ORDER && <OrderArea />}

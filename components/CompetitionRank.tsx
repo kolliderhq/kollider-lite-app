@@ -8,7 +8,9 @@ import map from 'lodash/map';
 import upperFirst from 'lodash/upperFirst';
 import useSWR from 'swr';
 
-import { API_NAMES, TIME } from 'consts';
+import Loader from 'components/Loader';
+import { API_NAMES, GENERAL, SETTINGS, TIME, USER_TYPE } from 'consts';
+import { useAppSelector } from 'hooks';
 import { divide } from 'utils/Big';
 import { getSWROptions } from 'utils/fetchers';
 import { timestampByInterval } from 'utils/scripts';
@@ -30,12 +32,36 @@ export const CompetitionRank = () => {
 	const start =
 		timestampByInterval(dayjs().utc().valueOf(), TIME.HOUR * 24) - (weekDay === 0 ? 7 : weekDay) * TIME.HOUR * 24;
 	const end = start + TIME.HOUR * 24 * 7;
-	const { data, isValidating } = useSWR(
+	const { data } = useSWR(
 		symbol ? [API_NAMES.TRADE_LEADERBOARD, null, start, end] : undefined,
 		getSWROptions(API_NAMES.TRADE_LEADERBOARD)
 	);
+
+	const [requestBody, setRequestBody] = React.useState({ uids: null });
+
+	React.useEffect(() => {
+		if (!data) return;
+		setRequestBody(prevState => {
+			prevState.uids = map(data, v => Number(v.uid));
+			return { ...prevState };
+		});
+	}, [data]);
+
+	const { data: userData } = useSWR(
+		requestBody.uids ? [API_NAMES.MULTI_USER_DATA, GENERAL.DEFAULT.ARR, requestBody] : undefined,
+		getSWROptions(API_NAMES.MULTI_USER_DATA)
+	);
+
 	const hasCompetition = COMPETITION_SYMBOL === symbol;
-	return <Content />;
+
+	const [userType, hasToken] = useAppSelector(state => [state.user.data.type, state.connection.apiKey]);
+	//	get username
+	const { data: myUserData } = useSWR(
+		userType !== USER_TYPE.LIGHT ? [API_NAMES.USER_ACCOUNT, hasToken] : undefined,
+		getSWROptions(API_NAMES.USER_ACCOUNT)
+	);
+	const myUsername = myUserData?.username;
+	return data ? <Content /> : <Loader />;
 };
 
 const Content = () => {

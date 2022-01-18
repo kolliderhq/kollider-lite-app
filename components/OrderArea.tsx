@@ -9,7 +9,7 @@ import { useMarkPrice } from 'components/DisplaySymbol';
 import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
 import { DIALOGS, SETTINGS, USER_TYPE } from 'consts';
 import { Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
-import { setDialog } from 'contexts/modules/layout';
+import { setDialog, setEditLeverage } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import usePrevious from 'hooks/usePrevious';
 import { divide, multiply } from 'utils/Big';
@@ -17,8 +17,6 @@ import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, optionalDecim
 import { isPositiveInteger, isPositiveNumber, isWithinStringDecimalLimit } from 'utils/scripts';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
-const buttonClass =
-	'h-14 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp flex flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
 export const OrderArea = () => {
 	const dispatch = useAppDispatch();
 	const { bestAsk, bestBid } = useOrderbookSelector(askBidSelector);
@@ -104,13 +102,11 @@ const OrderInput = () => {
 	const editingLeverage = useAppSelector(state => state.layout.editingLeverage);
 
 	const hasPositionLeverage = position?.leverage && position?.quantity !== '0';
-
 	React.useEffect(() => {
 		if (!hasPositionLeverage) return;
 		dispatch(setOrderLeverage(toNumber(position.leverage)));
 	}, [hasPositionLeverage, position?.leverage]);
 
-	const quantity = useAppSelector(state => state.orders.order.quantity);
 	const prevSymbol = usePrevious(symbol);
 
 	//	reset input on symbol switch
@@ -118,6 +114,7 @@ const OrderInput = () => {
 		// only reset if switching over from BTCUSD.PERP
 		if (prevSymbol === 'BTCUSD.PERP' && symbol !== 'BTCUSD.PERP') {
 			dispatch(setOrderQuantity(''));
+			dispatch(setOrderLeverage(1));
 			// dispatch(setOrderQuantity(roundDecimal(getDollarsToSATS(Number(quantity)), 0)));
 		}
 	}, [symbol, prevSymbol]);
@@ -191,7 +188,7 @@ const ContractsInput = () => {
 					className="h-10 xs:h-9 input-default w-full border-transparent border rounded-md focus:border-gray-300 hover:border-gray-300 text-gray-100 bg-gray-700"
 				/>
 			</div>
-			<p className="text-xs text-right pt-2">
+			<p className="text-xs text-right pt-1">
 				<>
 					≈$<span>{formatNumber(getSatsToDollar(satsValue))}</span>
 					<br />≈{quantity ? formatNumber(satsValue) : 0}
@@ -267,6 +264,8 @@ const DisplayLeverage = ({ leverage }: { leverage: string }) => {
 	);
 };
 
+const buttonClass =
+	'h-14 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp flex flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
 const SellButton = ({
 	onButtonClick,
 	bestBid,

@@ -1,6 +1,8 @@
 import { sort } from 'fast-sort';
 import each from 'lodash-es/each';
+import filter from 'lodash-es/filter';
 import identity from 'lodash-es/identity';
+import includes from 'lodash-es/includes';
 import isArray from 'lodash-es/isArray';
 import isFunction from 'lodash-es/isFunction';
 import isNil from 'lodash-es/isNil';
@@ -143,6 +145,40 @@ export interface IOHLC {
 	time: Nullable<number>;
 	volume: Nullable<number>;
 }
+
+const BOT_UIDS = ['1', '7', '12', '13', '14', '406', '1163'];
+
+type TTradeLeaderboard = {
+	mean_leverage: number;
+	number_of_trades: number;
+	total_rpnl: number;
+	total_volume: number;
+	uid: string;
+}[];
+
+refiner.set(API_NAMES.TRADE_LEADERBOARD, (data: TTradeLeaderboard) => {
+	LOG(data, 'TRADE_LEADERBOARD');
+	return filter(
+		map(data, v => camelCaseAllKeys(v)),
+		v => !includes(BOT_UIDS, v.uid)
+	);
+});
+
+interface IUserAccount {
+	created_at: {
+		nanos_since_epoch: number;
+		secs_since_epoch: number;
+	};
+	email: string;
+	lnauth_enabled: boolean;
+	user_type: string;
+	username: string;
+	validated_email: boolean;
+}
+refiner.set(API_NAMES.USER_ACCOUNT, (data: IUserAccount) => {
+	LOG(data, 'USER_ACCOUNT');
+	return { ...camelCaseAllKeys(data) };
+});
 
 refiner.set(API_NAMES.HISTORICAL_INDEX_PRICES, data => {
 	LOG2(data, 'HISTORICAL_INDEX_PRICES');

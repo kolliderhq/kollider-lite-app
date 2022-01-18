@@ -21,6 +21,7 @@ export const calcLiquidationPriceFromMargin = (
 	margin,
 	quantity,
 	side,
+
 	isInverse,
 	contractSize,
 	fundingRate,

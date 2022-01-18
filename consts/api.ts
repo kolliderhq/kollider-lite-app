@@ -194,6 +194,18 @@ const API: I_API = {
 			stale: API_TIME.NONE,
 			allowNull: true,
 		},
+		USER_ACCOUNT: {
+			route: () => `/user/account`,
+			method: 'get',
+			base: END_POINTS.BACK,
+			stale: API_TIME.NONE,
+		},
+		TRADE_LEADERBOARD: {
+			route: (symbol, start, end) => `/market/trade_leaderboard?${applyOptionalParams({ symbol, start, end }, true)}`,
+			method: 'get',
+			base: END_POINTS.BACK,
+			stale: API_TIME.LONGER,
+		},
 		HISTORICAL_MARK_PRICES: {
 			route: (symbol, intervalSize, start, end) =>
 				`/market/historical_mark_price?symbol=${symbol}&interval_size=${intervalSize}&start=${start}&end=${end}`,

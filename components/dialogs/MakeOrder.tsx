@@ -15,8 +15,8 @@ import { applyDp } from 'utils/format';
 export const MakeOrderDialog = ({ order, side }: { order: Order; side: Side }) => {
 	const dispatch = useAppDispatch();
 	const { symbolsAssets, symbolIndex, symbol } = useSymbols();
-	const { priceDp, isInversePriced, contractSize } = useSymbolData();
-
+	const { priceDp, isInversePriced } = useSymbolData();
+	console.log(order);
 	return (
 		<div className="w-full h-full mt-5">
 			<div className="flex items-center w-full justify-center gap-2">

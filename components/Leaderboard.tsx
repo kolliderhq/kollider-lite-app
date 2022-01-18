@@ -54,7 +54,7 @@ export const Leaderboard = () => {
 			}
 			return ret;
 		});
-		return fastSort(merged).desc(user => user.totalVolume);
+		return fastSort(merged).desc(user => user?.totalVolume);
 	}, [userData, leaderboardData]);
 
 	//	0 -> not init, -1 -> not found, the rest is found
@@ -65,7 +65,7 @@ export const Leaderboard = () => {
 	React.useEffect(() => {
 		if (!myUserData || empty(mergedData)) return;
 		const rank = mergedData.findIndex(v => v.username === myUsername);
-		const volume = fixed(mergedData[rank].totalVolume, 0);
+		const volume = fixed(mergedData[rank]?.totalVolume, 0);
 		setMyData({ rank, volume });
 	}, [myUsername, mergedData]);
 
@@ -110,7 +110,7 @@ const LeaderboardRow = ({ data, rank }: { data: LeaderboardValue; rank: number }
 				</li>
 				<li className="my-auto overflow-x-auto">
 					<p className="text-xs text-center">
-						{formatNumber(fixed(data.totalVolume, 0))}
+						{formatNumber(fixed(data?.totalVolume, 0))}
 						<span className="pl-1 text-[10px]">SATS</span>
 					</p>
 				</li>

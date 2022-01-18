@@ -3,14 +3,12 @@ import React from 'react';
 import cn from 'clsx';
 import Img from 'next/image';
 
-import { orderbook } from 'classes/Orderbook';
 import { baseSocketClient } from 'classes/SocketClient';
 import { OrderInfo } from 'components/OrderInfo';
-import { Order, Side, askBidSelector, useOrderbookSelector } from 'contexts';
+import { Order, Side } from 'contexts';
 import { setDialogClose } from 'contexts/modules/layout';
 import { useAppDispatch, useSymbolData, useSymbols } from 'hooks';
-import { divide, multiply } from 'utils/Big';
-import { applyDp } from 'utils/format';
+import { multiply } from 'utils/Big';
 
 export const MakeOrderDialog = ({ order, side }: { order: Order; side: Side }) => {
 	const dispatch = useAppDispatch();

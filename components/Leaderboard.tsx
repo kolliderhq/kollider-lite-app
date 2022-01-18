@@ -6,10 +6,8 @@ import utc from 'dayjs/plugin/utc';
 import { sort as fastSort } from 'fast-sort';
 import empty from 'is-empty';
 import find from 'lodash/find';
-import lowerCase from 'lodash/lowerCase';
 import map from 'lodash/map';
 import toNumber from 'lodash/toNumber';
-import upperFirst from 'lodash/upperFirst';
 import useSWR from 'swr';
 
 import Loader, { DefaultLoader } from 'components/Loader';
@@ -21,10 +19,6 @@ import { formatNumber, getSatsToDollar } from 'utils/format';
 import { timestampByInterval } from 'utils/scripts';
 
 dayjs.extend(utc);
-
-const SORT_CRITERIA = ['totalVolume', 'totalRpnl'];
-const DISPLAY_CRITERIA = map(SORT_CRITERIA, v => upperFirst(lowerCase(v)));
-const SYMBOL_LIST = ['BTCUSD.PERP', 'ETHUSD.PERP'];
 
 export const Leaderboard = () => {
 	const leaderboardData = useGetLeaderboardData();

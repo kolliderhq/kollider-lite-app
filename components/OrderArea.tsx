@@ -169,7 +169,7 @@ const ContractsInput = () => {
 				<input
 					autoComplete="off"
 					id={'input-order-quantity-contracts'}
-					min={1}
+					min={0}
 					max={SETTINGS.LIMITS.NUMBER}
 					step={1}
 					onInput={(e: FormEvent<HTMLInputElement>) => {
@@ -181,7 +181,7 @@ const ContractsInput = () => {
 						dispatch(setOrderQuantity(value));
 					}}
 					value={quantity ? quantity : ''}
-					type="text" //	 because of a supposedly android 12 bug, switch to "number" if it gets fixed by breez or android
+					type="number" //	 because of a supposedly android 12 bug, switch to "number" if it gets fixed by breez or android
 					placeholder="Amount"
 					style={{ paddingRight: '60px' }}
 					// placeholder="Quantity"
@@ -238,7 +238,7 @@ const DollarInput = () => {
 						dispatch(setOrderQuantity(value));
 					}}
 					value={quantity ? quantity : ''}
-					type="text" //	 because of a supposedly android 12 bug, switch to "number" if it gets fixed by breez or android
+					type="number"
 					placeholder="Amount"
 					// placeholder="Quantity"
 					style={{ paddingRight: '60px' }}

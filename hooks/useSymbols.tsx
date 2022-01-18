@@ -28,8 +28,8 @@ export function useSymbols() {
 	};
 }
 
-export function useSymbolData() {
+export function useSymbolData(inputSymbol?: string) {
 	const { symbols, symbolData, symbolIndex } = useAppSelector(state => state.symbols);
-	const symbol = symbols[symbolIndex];
+	const symbol = inputSymbol ? inputSymbol : symbols[symbolIndex];
 	return (symbolData[symbol] ? symbolData[symbol] : GENERAL.DEFAULT.OBJ) as ISymbolData;
 }

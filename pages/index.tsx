@@ -34,18 +34,16 @@ export default function Home() {
 						<Loader />
 					</div>
 				}>
-				<div className="w-full relative z-5 mb-2">
-					<IndexPriceSparkLine />
-				</div>
-			</SymbolsLoadedWrapper>
-			<section className="w-full py-3 xs:px-3 px-4 xs:py-4 rounded-md bg-gray-800">
-				{selectedTab === TABS.POSITIONS && (
-					<>
-						<PositionTable />
-						<Leaderboard />
-					</>
+				{selectedTab === TABS.ORDER && (
+					<div className="w-full relative z-5 mb-2">
+						<IndexPriceSparkLine />
+					</div>
 				)}
+			</SymbolsLoadedWrapper>
+			<section className="w-full mt-2 py-3 xs:px-3 px-4 xs:py-4 rounded-md bg-gray-800">
+				{selectedTab === TABS.POSITIONS && <PositionTable />}
 				{selectedTab === TABS.ORDER && <OrderArea />}
+				{selectedTab === TABS.RANKS && <Leaderboard />}
 			</section>
 			<BalanceInfo />
 		</div>

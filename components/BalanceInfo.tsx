@@ -12,7 +12,7 @@ export const BalanceInfo = () => {
 	const balances = useAppSelector(state => state.trading.balances);
 	const cash = fixed(balances.cash, 0);
 	return (
-		<div className="mt-4 pb-10 gap-x-5 flex flex-wrap xs:flex-nowrap items-center justify-between">
+		<div className="mt-2 pb-10 gap-x-5 flex flex-wrap xs:flex-nowrap items-center justify-between">
 			<div className="flex items-center justify-start gap-6">
 				<div>
 					<p className="text-xs tracking-tightest leading-none text-gray-400">Available</p>
@@ -28,8 +28,7 @@ export const BalanceInfo = () => {
 					className={cn(
 						Number(cash) > 0 ? 'hover:opacity-80 cursor-pointer' : 'opacity-50 cursor-not-allowed',
 						'py-2 px-4 border border-theme-main rounded-lg'
-					)}
-				>
+					)}>
 					<p className="text-xs">Withdraw</p>
 				</button>
 			</div>

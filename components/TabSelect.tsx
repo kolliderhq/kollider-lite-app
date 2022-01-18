@@ -11,9 +11,10 @@ import { useAppDispatch, useAppSelector, useSymbols } from 'hooks';
 export const TabSelect = () => {
 	return (
 		<div className="w-full">
-			<div className="w-full grid grid-cols-2">
+			<div className="w-full grid grid-cols-3">
 				<TabButton tab={TABS.ORDER} label={'Order'} />
 				<PositionsTabButton />
+				<TabButton tab={TABS.RANKS} label={'Rank'} />
 			</div>
 		</div>
 	);
@@ -58,7 +59,7 @@ const PositionsTabButton = () => {
 				TABS.POSITIONS === selectedTab
 					? 'border-theme-main bg-gray-700'
 					: 'border-gray-400 hover:border-theme-main bg-gray-900',
-				'border-t-2 flex items-center justify-center py-2 xs:py-3 group'
+				'border-t-2 flex items-center justify-center py-2 xs:py-3 group relative'
 			)}>
 			<p
 				className={cn(
@@ -67,7 +68,9 @@ const PositionsTabButton = () => {
 				)}>
 				Positions
 			</p>
-			<div className="ml-2 h-1 w-1">{changed && <div className="s-pulse w-1 h-1 rounded-full bg-red-600" />}</div>
+			<div style={{ transform: 'translate3d(0, -50%, 0)' }} className="absolute right-[8px] top-[50%]">
+				{changed && <div className="s-pulse w-1 h-1 rounded-full bg-red-600" />}
+			</div>
 		</button>
 	);
 };

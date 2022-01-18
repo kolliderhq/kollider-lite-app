@@ -6,8 +6,7 @@ import { abs, gt } from 'utils/Big';
 import { formatNumber, getSatsToDollar } from 'utils/format';
 import { getDollarPrefix } from 'utils/scripts';
 
-export const AccountInfo = () => {
-	const { symbol } = useSymbols();
+export const AccountInfo = ({ symbol }) => {
 	const positions = useAppSelector(state => state.trading.positions);
 	const position = positions[symbol];
 	const hasPosition = position && position.quantity !== '0';

@@ -284,7 +284,7 @@ const SellButton = ({
 				<span className="pr-1" />/<span className="pr-1" />
 				Short
 			</p>
-			<p className="text-sm xs:text-base">{bestBid && <>${formatNumber(applyDp(bestBid, priceDp))}</>}</p>
+			<p className="text-base xs:text-lg">{bestBid && <>${formatNumber(applyDp(bestBid, priceDp))}</>}</p>
 		</button>
 	);
 };
@@ -312,7 +312,7 @@ const BuyButton = ({
 				/<span className="pr-1" />
 				Long
 			</p>
-			<p className="text-sm xs:text-base">{bestAsk && <>${formatNumber(applyDp(bestAsk, priceDp))}</>}</p>
+			<p className="text-base xs:text-lg">{bestAsk && <>${formatNumber(applyDp(bestAsk, priceDp))}</>}</p>
 		</button>
 	);
 };

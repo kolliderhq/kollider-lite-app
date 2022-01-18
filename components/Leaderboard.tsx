@@ -13,6 +13,7 @@ import useSWR from 'swr';
 import Loader, { DefaultLoader } from 'components/Loader';
 import { API_NAMES, GENERAL, SETTINGS, TIME, USER_TYPE } from 'consts';
 import { useAppSelector } from 'hooks';
+import useCountdown from 'hooks/useCountdown';
 import { divide, fixed } from 'utils/Big';
 import { getSWROptions } from 'utils/fetchers';
 import { formatNumber, getSatsToDollar } from 'utils/format';
@@ -21,7 +22,7 @@ import { timestampByInterval } from 'utils/scripts';
 dayjs.extend(utc);
 
 export const Leaderboard = () => {
-	const leaderboardData = useGetLeaderboardData();
+	const [leaderboardData, end] = useGetLeaderboardData();
 
 	const [requestBody, setRequestBody] = React.useState({ uids: null });
 
@@ -64,13 +65,58 @@ export const Leaderboard = () => {
 	}, [myUsername, mergedData]);
 
 	return (
-		<div className="w-full mt-4 pt-4 border-t border-gray-600">
+		<div className="w-full">
+			<div className="flex flex-col justify-center items-center mt-2">
+				<p className="text-sm text-gray-200 text-center sm:float-right leading-loose">Competition end time</p>
+				<div className="flex items-center">
+					<LeaderboardCountdown countdownEnd={end} />
+				</div>
+			</div>
+			<LeaderboardInfo />
 			<div className="grid grid-rows-auto xs:grid-rows-1 grid-cols-1 xs:grid-cols-3 gap-2 w-full h-full">
 				<RankArea rank={myData.rank + 1} volume={myData.volume} />
 				<section className="col-span-2 py-2 px-4">
 					<h5 className="text-center mb-2">Ranking by Volume</h5>
 					<LeaderboardTable data={mergedData} />
 				</section>
+			</div>
+		</div>
+	);
+};
+
+const LeaderboardCountdown = ({ countdownEnd }) => {
+	const countdown = useCountdown(countdownEnd);
+	const time = dayjs.duration(countdown, 'millisecond').format('D-HH-mm-ss');
+	const [day, hour, minute, second] = time.split('-');
+	return (
+		<h4 className="flex items-center font-mono">
+			{day}
+			<span className="text-sm inline-block py-1 px-2 h-full rounded-lg bg-gray-700 mx-1.5">D</span>
+			{hour}
+			<span className="text-sm inline-block py-1 px-2 h-full rounded-lg bg-gray-700 mx-1.5">H</span>
+			{minute}
+			<span className="text-sm inline-block py-1 px-2 h-full rounded-lg bg-gray-700 mx-1.5">M</span>
+			{second}
+			<span className="text-sm inline-block py-1 px-2 h-full rounded-lg bg-gray-700 ml-1.5">s</span>
+		</h4>
+	);
+};
+
+const LeaderboardInfo = () => {
+	return (
+		<div className="w-full flex items-center justify-center py-4">
+			<div className="p-3 border border-gray-200 rounded-xl">
+				<p className="text-xs text-gray-500">
+					Rewards for the top 3 traders with the Highest Volume.
+					<br />
+					🥇 - 100,000 Sats
+					<br />
+					🥈 - 50,000 Sats
+					<br />
+					🥉 - 25,000 Sats
+					<br />
+					Rewards are payed out every week at Monday 00:00 UTC.
+				</p>
 			</div>
 		</div>
 	);
@@ -87,7 +133,7 @@ interface LeaderboardValue {
 
 const LeaderboardTable = ({ data }: { data: LeaderboardValue[] }) => {
 	return (
-		<div className="h-[112px] overflow-y-auto w-full grid grid-rows-auto grid-cols-1 p-2 border rounded-lg border-theme-main s-shadow-theme border-opacity-75">
+		<div className="h-[125px] overflow-y-auto w-full grid grid-rows-auto grid-cols-1 p-2 border rounded-lg border-theme-main s-shadow-theme border-opacity-75">
 			<ul className="w-full">
 				{empty(data) ? <Loader /> : map(data, (v, i) => <LeaderboardRow key={i} data={v} rank={i} />)}
 			</ul>
@@ -155,5 +201,5 @@ const useGetLeaderboardData = () => {
 		timestampByInterval(dayjs().utc().valueOf(), TIME.HOUR * 24) - (weekDay === 0 ? 7 : weekDay) * TIME.HOUR * 24;
 	const end = start + TIME.HOUR * 24 * 7;
 	const { data } = useSWR([API_NAMES.TRADE_LEADERBOARD, null, start, end], getSWROptions(API_NAMES.TRADE_LEADERBOARD));
-	return data;
+	return [data, end];
 };

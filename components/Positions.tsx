@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 
 import cn from 'clsx';
+import map from 'lodash-es/map';
 import Img from 'next/image';
 
 import { AccountInfo } from 'components/AccountInfo';
@@ -12,9 +13,20 @@ import { formatNumber, formatUSD, getSatsToDollar } from 'utils/format';
 import { isNumber } from 'utils/scripts';
 
 export const PositionTable = () => {
-	const { symbol } = useSymbols();
-	const { positions, balances } = useAppSelector(state => state.trading);
-	const position = positions[symbol];
+	const { positions } = useAppSelector(state => state.trading);
+	return (
+		<>
+			{map(positions, position => {
+				if (position && Number(position.quantity) >= 1)
+					return <PositionBox position={position} symbol={position.symbol} />;
+				return undefined;
+			})}
+		</>
+	);
+};
+
+const PositionBox = ({ symbol, position }) => {
+	const { balances } = useAppSelector(state => state.trading);
 
 	const positionMargin = React.useMemo(() => {
 		if (!isNumber(balances?.isolatedMargin?.[symbol])) return '0';
@@ -35,11 +47,11 @@ export const PositionTable = () => {
 		);
 	}, [hasPosition, positionMargin]);
 	return (
-		<section className="grid grid-rows-[fit-content(100%),1fr] xxs:grid-rows-1 grid-cols-1 xxs:grid-cols-3 gap-1">
+		<section className="grid grid-rows-[fit-content(100%),1fr] xxs:grid-rows-1 grid-cols-1 xxs:grid-cols-3 gap-1 first:pt-0 pt-2 pb-2 border-b last:pb-0 last:border-b-0 border-gray-600">
 			<div className="py-2 xxs:py-0 xxs:col-span-1 w-full h-full">
 				<div className="grid grid-cols-2 xxs:flex flex-col items-center justify-center h-full gap-y-2 gap-x-3">
-					<PositionData />
-					<ClosePosition />
+					<PositionData symbol={symbol} />
+					<ClosePosition symbol={symbol} />
 				</div>
 			</div>
 			<div className="col-span-2 grid grid-cols-2 xs:grid-cols-2 grid-rows-3 gap-x-1 xxs:gap-x-2 gap-y-2 w-full xs:px-5 sm:px-0">
@@ -49,16 +61,16 @@ export const PositionTable = () => {
 				<LabelledValue label="Purchase Price" value={hasPosition ? formatUSD(position?.entryPrice) : '-'} />
 				<LabelledValue label="Liquidation Price" value={hasPosition ? formatUSD(position?.liqPrice) : '-'} />
 				<div className="col-span-2">
-					<AccountInfo />
+					<AccountInfo symbol={symbol} />
 				</div>
 			</div>
 		</section>
 	);
 };
 
-const ClosePosition = () => {
-	const { symbol } = useSymbols();
-	const { priceDp, isInversePriced, contractSize } = useSymbolData();
+const ClosePosition = ({ symbol }) => {
+	const { symbolData } = useSymbols();
+	const { priceDp, isInversePriced, contractSize } = symbolData[symbol];
 	const positions = useAppSelector(state => state.trading.positions);
 	const position = positions[symbol];
 	const hasPosition = position?.quantity ? position.quantity !== '0' : false;
@@ -112,8 +124,7 @@ export const LabelledValue = ({
 	);
 };
 
-const PositionData = () => {
-	const { symbol } = useSymbols();
+const PositionData = ({ symbol }) => {
 	const positions = useAppSelector(state => state.trading.positions);
 	const position = positions[symbol];
 

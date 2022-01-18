@@ -30,42 +30,42 @@ if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
 	if (process.env.NEXT_PUBLIC_BACK_ENV === 'production') {
 		back = 'https://api.kollider.xyz/v1';
 		// TODO : remove after you debug the issue
-		return;
-		// remove console messages on prod
-		(() => {
-			let method;
-			const noop = function noop() {};
-			let methods = [
-				'assert',
-				'clear',
-				'count',
-				'debug',
-				'dir',
-				'dirxml',
-				'error',
-				'exception',
-				'group',
-				'groupCollapsed',
-				'groupEnd',
-				'info',
-				'log',
-				'markTimeline',
-				'profile',
-				'profileEnd',
-				'table',
-				'time',
-				'timeEnd',
-				'timeStamp',
-				'trace',
-				'warn',
-			];
-			let length = methods.length;
 
-			while (length--) {
-				method = methods[length];
-				console[method] = noop;
-			}
-		})();
+		// remove console messages on prod
+		// (() => {
+		// 	let method;
+		// 	const noop = function noop() {};
+		// 	let methods = [
+		// 		'assert',
+		// 		'clear',
+		// 		'count',
+		// 		'debug',
+		// 		'dir',
+		// 		'dirxml',
+		// 		'error',
+		// 		'exception',
+		// 		'group',
+		// 		'groupCollapsed',
+		// 		'groupEnd',
+		// 		'info',
+		// 		'log',
+		// 		'markTimeline',
+		// 		'profile',
+		// 		'profileEnd',
+		// 		'table',
+		// 		'time',
+		// 		'timeEnd',
+		// 		'timeStamp',
+		// 		'trace',
+		// 		'warn',
+		// 	];
+		// 	let length = methods.length;
+		//
+		// 	while (length--) {
+		// 		method = methods[length];
+		// 		console[method] = noop;
+		// 	}
+		// })();
 	} else {
 		back = 'http://api-staging-perps.kollider.internal/v1';
 	}

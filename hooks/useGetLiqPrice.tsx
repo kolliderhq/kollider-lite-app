@@ -3,9 +3,10 @@ import { CURRENCY } from 'consts/misc/currency';
 import { Side, askBidSelector, useOrderbookSelector } from 'contexts';
 import { useAppSelector } from 'hooks/redux';
 import { useSymbolData, useSymbols } from 'hooks/useSymbols';
-import { fixed, multiply } from 'utils/Big';
+import { fixed, gt, multiply } from 'utils/Big';
 import { applyDp } from 'utils/format';
 import { calcLiquidationPriceFromMargin } from 'utils/liqPriceCalculate';
+import { isNumber } from 'utils/scripts';
 
 export const useGetLiqPrice = (side: Side) => {
 	const [{ quantity: storeQuantity, leverage }, fundingRates] = useAppSelector(state => [
@@ -25,17 +26,15 @@ export const useGetLiqPrice = (side: Side) => {
 	};
 	const sideBest = side === Side.ASK ? bestBid : bestAsk;
 	const sideOrderValue = getOrderValue(sideBest, leverage, priceDp, quantity, symbol, contractSize);
-	return fixed(
-		calcLiquidationPriceFromMargin(
-			Number(applyDp(sideBest, priceDp)),
-			Number(fixed(sideOrderValue, 0)),
-			contractInfo.isInverse ? Number(multiply(quantity, leverage)) : Number(quantity),
-			side === Side.ASK ? 'ask' : 'bid',
-			contractInfo.isInverse,
-			contractInfo.contractSize,
-			fundingRate,
-			contractInfo.maintenanceRatio
-		),
-		priceDp
+	const liqPrice = calcLiquidationPriceFromMargin(
+		Number(applyDp(sideBest, priceDp)),
+		Number(fixed(sideOrderValue, 0)),
+		contractInfo.isInverse ? Number(multiply(quantity, leverage)) : Number(quantity),
+		side === Side.ASK ? 'ask' : 'bid',
+		contractInfo.isInverse,
+		contractInfo.contractSize,
+		fundingRate,
+		contractInfo.maintenanceRatio
 	);
+	return gt(isNumber(liqPrice) ? liqPrice : 0, 100000000) ? '∞' : fixed(liqPrice, priceDp);
 };

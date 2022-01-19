@@ -7,6 +7,7 @@ import { DialogWrapper } from 'components/dialogs/DIalogs';
 import { MakeOrderDialog } from 'components/dialogs/MakeOrder';
 import { useMarkPrice } from 'components/DisplaySymbol';
 import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
+import Loader, { DefaultLoader } from 'components/Loader';
 import { DIALOGS, SETTINGS, USER_TYPE } from 'consts';
 import { Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
 import { setDialog } from 'contexts/modules/layout';
@@ -15,7 +16,7 @@ import { useGetLiqPrice } from 'hooks/useGetLiqPrice';
 import usePrevious from 'hooks/usePrevious';
 import { divide, multiply } from 'utils/Big';
 import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, optionalDecimal } from 'utils/format';
-import { isPositiveInteger, isPositiveNumber, isWithinStringDecimalLimit } from 'utils/scripts';
+import { isNumber, isPositiveInteger, isPositiveNumber, isWithinStringDecimalLimit } from 'utils/scripts';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
 export const OrderArea = () => {
@@ -289,12 +290,18 @@ const SellButton = ({
 			<div className="flex flex-col items-center xs:mt-2 order-2 xs:order-2 pb-2 xs:pb-0 pl-5 xs:pl-0">
 				<p className="text-[10px] leading-none mb-0.5">Price</p>
 				<p className=" leading-none xs:leading-none text-base xs:text-lg">
-					{bestBid && <>${formatNumber(applyDp(bestBid, priceDp))}</>}
+					{bestBid ? <>${formatNumber(applyDp(bestBid, priceDp))}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
 				</p>
 			</div>
 			<div className="flex flex-col items-center xs:mt-1 order-3 xs:order-3 pb-2 xs:pb-0 pr-5 xs:pr-0">
 				<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
-				<p className="leading-none xs:leading-none text-base xs:text-lg">{bestBid && <>${formatNumber(liqPrice)}</>}</p>
+				<p className="leading-none xs:leading-none text-base xs:text-lg">
+					{bestBid ? (
+						<>${isNumber(liqPrice) ? formatNumber(liqPrice) : liqPrice}</>
+					) : (
+						<DefaultLoader wrapperClass="h-5 pt-2" />
+					)}
+				</p>
 			</div>
 		</button>
 	);
@@ -327,12 +334,14 @@ const BuyButton = ({
 			<div className="flex flex-col items-center xs:mt-2 order-2 xs:order-2 pb-2 xs:pb-0 pl-5 xs:pl-0">
 				<p className="text-[10px] leading-none mb-0.5">Price</p>
 				<p className=" leading-none xs:leading-none text-base xs:text-lg">
-					{bestAsk && <>${formatNumber(applyDp(bestAsk, priceDp))}</>}
+					{bestAsk ? <>${formatNumber(applyDp(bestAsk, priceDp))}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
 				</p>
 			</div>
 			<div className="flex flex-col items-center xs:mt-1 order-3 xs:order-3 pb-2 xs:pb-0 pr-5 xs:pr-0">
 				<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
-				<p className="leading-none xs:leading-none text-base xs:text-lg">{bestAsk && <>${formatNumber(liqPrice)}</>}</p>
+				<p className="leading-none xs:leading-none text-base xs:text-lg">
+					{bestAsk ? <>${formatNumber(liqPrice)}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
+				</p>
 			</div>
 		</button>
 	);

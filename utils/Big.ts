@@ -24,7 +24,7 @@ export const mod = (input1: TBigInput = '0', input2: TBigInput = '0') => {
 	try {
 		return new B(input1).mod(new B(input2)).toFixed(0);
 	} catch (ex) {
-		console.warn('mod error', input1, input2);
+		// console.warn('mod error', input1, input2);
 		return '1';
 	}
 };
@@ -79,7 +79,7 @@ export const multiply = (input1: TBigInput = '0', input2: TBigInput = '0', place
 	try {
 		return new B(input1).times(input2).toFixed(places);
 	} catch (ex) {
-		console.warn(`Big error ${input1} * ${input2}`, (ex as any).message);
+		// console.warn(`Big error ${input1} * ${input2}`, (ex as any).message);
 		return '0';
 	}
 };

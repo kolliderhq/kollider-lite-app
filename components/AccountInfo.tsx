@@ -28,7 +28,7 @@ export const AccountInfo = ({ symbol }) => {
 	return (
 		<div className="flex items-center justify-center">
 			<section className="col-span-1 flex items-center justify-center h-full w-full">
-				<LabelledValue actualValue={position?.upnl} coloured label={'Profit Amount'} value={profit} />
+				<LabelledValue smallLabel="PNL" actualValue={position?.upnl} coloured label={'Profit Amount'} value={profit} />
 			</section>
 		</div>
 	);

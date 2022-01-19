@@ -68,7 +68,9 @@ const PositionsTabButton = () => {
 				)}>
 				Positions
 			</p>
-			<div style={{ transform: 'translate3d(0, -50%, 0)' }} className="absolute right-[8px] top-[50%]">
+			<div
+				style={{ transform: 'translate3d(0, -50%, 0)' }}
+				className="absolute left-[calc(50%+40px)] xs:left-[calc(50%+45px)] top-[50%]">
 				{changed && <div className="s-pulse w-1 h-1 rounded-full bg-red-600" />}
 			</div>
 		</button>

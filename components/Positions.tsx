@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 
 import cn from 'clsx';
+import filter from 'lodash-es/filter';
 import map from 'lodash-es/map';
 import Img from 'next/image';
 
@@ -14,13 +15,19 @@ import { isNumber } from 'utils/scripts';
 
 export const PositionTable = () => {
 	const { positions } = useAppSelector(state => state.trading);
+	const displayablePositions = filter(positions, position => {
+		if (position && Number(position.quantity) >= 1) return true;
+	});
 	return (
 		<>
-			{map(positions, position => {
-				if (position && Number(position.quantity) >= 1)
-					return <PositionBox position={position} symbol={position.symbol} />;
-				return undefined;
-			})}
+			{displayablePositions.length === 0 ? (
+				<div className="w-full h-[200px] flex flex-col items-center justify-center gap-3">
+					<Img width={50} height={50} src={'/assets/common/notFound.svg'} />
+					<p>Not Found</p>
+				</div>
+			) : (
+				map(positions, position => <PositionBox key={position.symbol} position={position} symbol={position.symbol} />)
+			)}
 		</>
 	);
 };
@@ -56,10 +63,18 @@ const PositionBox = ({ symbol, position }) => {
 			</div>
 			<div className="col-span-2 grid grid-cols-2 xs:grid-cols-2 grid-rows-3 gap-x-1 xxs:gap-x-2 gap-y-2 w-full xs:px-5 sm:px-0">
 				<div className="col-span-2">
-					<LabelledValue label="Invested Amount" value={investedAmount} />
+					<LabelledValue smallLabel="Margin" label="Invested Amount" value={investedAmount} />
 				</div>
-				<LabelledValue label="Purchase Price" value={hasPosition ? formatUSD(position?.entryPrice) : '-'} />
-				<LabelledValue label="Liquidation Price" value={hasPosition ? formatUSD(position?.liqPrice) : '-'} />
+				<LabelledValue
+					smallLabel="Entry Price"
+					label="Purchase Price"
+					value={hasPosition ? formatUSD(position?.entryPrice) : '-'}
+				/>
+				<LabelledValue
+					smallLabel="Liquidation Price"
+					label="Liq. Price"
+					value={hasPosition ? formatUSD(position?.liqPrice) : '-'}
+				/>
 				<div className="col-span-2">
 					<AccountInfo symbol={symbol} />
 				</div>
@@ -96,12 +111,14 @@ const ClosePosition = ({ symbol }) => {
 };
 
 export const LabelledValue = ({
+	smallLabel,
 	label,
 	value,
 	className,
 	coloured,
 	actualValue,
 }: {
+	smallLabel?: string;
 	label: string;
 	value: string | ReactNode;
 	className?: string;
@@ -109,14 +126,15 @@ export const LabelledValue = ({
 	actualValue?: string; //	for colouring the value according to the actual value
 }) => {
 	return (
-		<div className={cn('flex flex-col items-center justify-center gap-2 sm:gap-0.5 h-10 xxs:h-14', className)}>
-			<p className="leading-none tracking-tight text-xs sm:text-sm text-gray-400 text-center">{label}</p>
+		<div className={cn('flex flex-col items-center justify-center h-[50px] xxs:h-15', className)}>
+			<p className="text-[8px] leading-none text-gray-600 mb-0.5 sm:mb-0">{smallLabel}</p>
+			<p className="leading-none tracking-tight text-xs sm:text-sm text-gray-400 text-center mb-1 sm:mb-0.5">{label}</p>
 			<p
 				className={cn(
 					coloured &&
 						value !== '-' &&
 						(Number(actualValue ? actualValue : value) < 0 ? 'text-red-400' : 'text-green-400'),
-					'leading-none tracking-normal text-base sm:text-lg text-right'
+					'leading-none tracking-normal text-base sm:leading-none sm:text-lg text-right'
 				)}>
 				{value}
 			</p>

@@ -9,8 +9,9 @@ import { useMarkPrice } from 'components/DisplaySymbol';
 import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
 import { DIALOGS, SETTINGS, USER_TYPE } from 'consts';
 import { Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
-import { setDialog, setEditLeverage } from 'contexts/modules/layout';
+import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
+import { useGetLiqPrice } from 'hooks/useGetLiqPrice';
 import usePrevious from 'hooks/usePrevious';
 import { divide, multiply } from 'utils/Big';
 import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, optionalDecimal } from 'utils/format';
@@ -265,7 +266,7 @@ const DisplayLeverage = ({ leverage }: { leverage: string }) => {
 };
 
 const buttonClass =
-	'h-14 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp flex flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
+	'h-20 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp grid grid-rows-2 grid-cols-2 xs:flex xs:flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
 const SellButton = ({
 	onButtonClick,
 	bestBid,
@@ -277,14 +278,24 @@ const SellButton = ({
 	priceDp: number;
 	className?: string;
 }) => {
+	const liqPrice = useGetLiqPrice(Side.ASK);
 	return (
 		<button onClick={onButtonClick} className={cn(buttonClass, className, 'bg-red-500', { 'opacity-50': !bestBid })}>
-			<p className="text-sm xs:text-base">
+			<p className="text-base order-1 xs:order-1 col-span-2">
 				Sell
 				<span className="pr-1" />/<span className="pr-1" />
 				Short
 			</p>
-			<p className="text-base xs:text-lg">{bestBid && <>${formatNumber(applyDp(bestBid, priceDp))}</>}</p>
+			<div className="flex flex-col items-center xs:mt-2 order-2 xs:order-2 pb-2 xs:pb-0 pl-5 xs:pl-0">
+				<p className="text-[10px] leading-none mb-0.5">Price</p>
+				<p className=" leading-none xs:leading-none text-base xs:text-lg">
+					{bestBid && <>${formatNumber(applyDp(bestBid, priceDp))}</>}
+				</p>
+			</div>
+			<div className="flex flex-col items-center xs:mt-1 order-3 xs:order-3 pb-2 xs:pb-0 pr-5 xs:pr-0">
+				<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
+				<p className="leading-none xs:leading-none text-base xs:text-lg">{bestBid && <>${formatNumber(liqPrice)}</>}</p>
+			</div>
 		</button>
 	);
 };
@@ -300,19 +311,29 @@ const BuyButton = ({
 	priceDp: number;
 	className?: string;
 }) => {
+	const liqPrice = useGetLiqPrice(Side.BID);
 	return (
 		<button
 			onClick={onButtonClick}
 			className={cn(buttonClass, className, 'bg-green-600', {
 				'opacity-50': !bestAsk,
 			})}>
-			<p className="text-sm xs:text-base">
+			<p className="text-base order-1 xs:order-1 col-span-2">
 				Buy
 				<span className="pr-1" />
 				/<span className="pr-1" />
 				Long
 			</p>
-			<p className="text-base xs:text-lg">{bestAsk && <>${formatNumber(applyDp(bestAsk, priceDp))}</>}</p>
+			<div className="flex flex-col items-center xs:mt-2 order-2 xs:order-2 pb-2 xs:pb-0 pl-5 xs:pl-0">
+				<p className="text-[10px] leading-none mb-0.5">Price</p>
+				<p className=" leading-none xs:leading-none text-base xs:text-lg">
+					{bestAsk && <>${formatNumber(applyDp(bestAsk, priceDp))}</>}
+				</p>
+			</div>
+			<div className="flex flex-col items-center xs:mt-1 order-3 xs:order-3 pb-2 xs:pb-0 pr-5 xs:pr-0">
+				<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
+				<p className="leading-none xs:leading-none text-base xs:text-lg">{bestAsk && <>${formatNumber(liqPrice)}</>}</p>
+			</div>
 		</button>
 	);
 };

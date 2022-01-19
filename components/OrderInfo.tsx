@@ -102,7 +102,7 @@ interface SideData {
 	liqPrice: string;
 }
 
-const getOrderValue = (price, leverage, priceDp, quantity, symbol, contractSize) => {
+export const getOrderValue = (price, leverage, priceDp, quantity, symbol, contractSize) => {
 	const actualPrice = applyDp(price ? price : 1, priceDp);
 	if (symbol === 'BTCUSD.PERP') {
 		const margin = getDollarsToSATS(quantity);

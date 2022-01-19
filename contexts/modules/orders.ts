@@ -2,6 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import cloneDeep from 'lodash-es/cloneDeep';
 import toString from 'lodash-es/toString';
 
+import { add, gt } from 'utils/Big';
 import { optionalDecimal } from 'utils/format';
 
 export enum Side {
@@ -50,6 +51,13 @@ export const ordersSlice = createSlice({
 			console.log('reinit order', pojoState, initialState);
 			state.order = { ...initialState.order, leverage: pojoState.order.leverage };
 		},
+		setIncreaseOrderQuantity: (state, action: PayloadAction<number>) => {
+			const newQuantity = optionalDecimal(add(state.order.quantity, action.payload, 2));
+			if (gt(0, newQuantity)) {
+				state.order.quantity = '0';
+			}
+			state.order.quantity = newQuantity;
+		},
 		setOrderQuantity: (state, action: PayloadAction<string>) => {
 			//	only undefined seems to empty it
 			if (action.payload === '') {
@@ -69,6 +77,7 @@ export const ordersSlice = createSlice({
 	},
 });
 
-export const { reinitOrder, setOrderLeverage, setOrderQuantity, setOrderInputError } = ordersSlice.actions;
+export const { reinitOrder, setIncreaseOrderQuantity, setOrderLeverage, setOrderQuantity, setOrderInputError } =
+	ordersSlice.actions;
 
 export default ordersSlice.reducer;

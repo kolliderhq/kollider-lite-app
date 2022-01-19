@@ -1,4 +1,5 @@
 import React, { FormEvent } from 'react';
+import { useSwipeable } from 'react-swipeable';
 
 import cn from 'clsx';
 import toNumber from 'lodash-es/toNumber';
@@ -7,7 +8,7 @@ import { DialogWrapper } from 'components/dialogs/DIalogs';
 import { MakeOrderDialog } from 'components/dialogs/MakeOrder';
 import { useMarkPrice } from 'components/DisplaySymbol';
 import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
-import Loader, { DefaultLoader } from 'components/Loader';
+import { DefaultLoader } from 'components/Loader';
 import { DIALOGS, SETTINGS, USER_TYPE } from 'consts';
 import { Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookSelector } from 'contexts';
 import { setDialog } from 'contexts/modules/layout';
@@ -140,6 +141,7 @@ const OrderInput = () => {
 
 const QuantityInput = () => {
 	const { isInversePriced } = useSymbolData();
+	const [toggleInput, setToggleInput] = React.useState(true);
 	return (
 		<div className="w-full">
 			<label className="text-xs text-gray-300 tracking-wider">Amount</label>
@@ -154,6 +156,11 @@ const ContractsInput = () => {
 	const [quantity, leverage] = useAppSelector(state => [state.orders.order.quantity, state.orders.order.leverage]);
 	const { symbol } = useSymbols();
 	const markPrice = useMarkPrice(symbol);
+	const tapHandler = useSwipeable({
+		onTap: () => {
+			dispatch(setDialog(DIALOGS.QUANTITY_TOUCH_INPUT));
+		},
+	});
 
 	const satsValue = divide(multiply(quantity ? quantity : 0, markPrice, 0), leverage, 0);
 	return (
@@ -169,6 +176,7 @@ const ContractsInput = () => {
 					</button>
 				</div>
 				<input
+					{...tapHandler}
 					autoComplete="off"
 					id={'input-order-quantity-contracts'}
 					min={0}
@@ -212,6 +220,12 @@ const DollarInput = () => {
 		// dispatch(setOrderQuantity(roundDecimal(getSatsToDollar(Number(quantity)), 1)));
 	}, []);
 
+	const tapHandler = useSwipeable({
+		onTap: () => {
+			dispatch(setDialog(DIALOGS.QUANTITY_TOUCH_INPUT));
+		},
+	});
+
 	return (
 		<div>
 			<div className="bg-gray-700 border-transparent rounded-md w-full relative">
@@ -225,6 +239,7 @@ const DollarInput = () => {
 					</button>
 				</div>
 				<input
+					{...tapHandler}
 					autoComplete="off"
 					id={'input-order-quantity-dollar'}
 					min={0}
@@ -279,6 +294,7 @@ const SellButton = ({
 	priceDp: number;
 	className?: string;
 }) => {
+	const quantity = useAppSelector(state => state.orders.order.quantity);
 	const liqPrice = useGetLiqPrice(Side.ASK);
 	return (
 		<button onClick={onButtonClick} className={cn(buttonClass, className, 'bg-red-500', { 'opacity-50': !bestBid })}>
@@ -293,16 +309,18 @@ const SellButton = ({
 					{bestBid ? <>${formatNumber(applyDp(bestBid, priceDp))}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
 				</p>
 			</div>
-			<div className="flex flex-col items-center xs:mt-1 order-3 xs:order-3 pb-2 xs:pb-0 pr-5 xs:pr-0">
-				<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
-				<p className="leading-none xs:leading-none text-base xs:text-lg">
-					{bestBid ? (
-						<>${isNumber(liqPrice) ? formatNumber(liqPrice) : liqPrice}</>
-					) : (
-						<DefaultLoader wrapperClass="h-5 pt-2" />
-					)}
-				</p>
-			</div>
+			{quantity !== '' && (
+				<div className="flex flex-col items-center xs:mt-1 order-3 xs:order-3 pb-2 xs:pb-0 pr-5 xs:pr-0">
+					<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
+					<p className="leading-none xs:leading-none text-base xs:text-lg">
+						{bestBid ? (
+							<>${isNumber(liqPrice) ? formatNumber(liqPrice) : liqPrice}</>
+						) : (
+							<DefaultLoader wrapperClass="h-5 pt-2" />
+						)}
+					</p>
+				</div>
+			)}
 		</button>
 	);
 };
@@ -318,6 +336,7 @@ const BuyButton = ({
 	priceDp: number;
 	className?: string;
 }) => {
+	const quantity = useAppSelector(state => state.orders.order.quantity);
 	const liqPrice = useGetLiqPrice(Side.BID);
 	return (
 		<button
@@ -337,12 +356,14 @@ const BuyButton = ({
 					{bestAsk ? <>${formatNumber(applyDp(bestAsk, priceDp))}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
 				</p>
 			</div>
-			<div className="flex flex-col items-center xs:mt-1 order-3 xs:order-3 pb-2 xs:pb-0 pr-5 xs:pr-0">
-				<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
-				<p className="leading-none xs:leading-none text-base xs:text-lg">
-					{bestAsk ? <>${formatNumber(liqPrice)}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
-				</p>
-			</div>
+			{quantity !== '' && (
+				<div className="flex flex-col items-center xs:mt-1 order-3 xs:order-3 pb-2 xs:pb-0 pr-5 xs:pr-0">
+					<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
+					<p className="leading-none xs:leading-none text-base xs:text-lg">
+						{bestAsk ? <>${formatNumber(liqPrice)}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
+					</p>
+				</div>
+			)}
 		</button>
 	);
 };
@@ -351,7 +372,6 @@ const BuyButton = ({
 const SATSInput = () => {
 	const dispatch = useAppDispatch();
 	const quantity = useAppSelector(state => state.orders.order.quantity);
-
 	return (
 		<div>
 			<div className="bg-gray-700 border-transparent rounded-md w-full h-9 relative">

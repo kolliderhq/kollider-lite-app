@@ -14,7 +14,7 @@ export const TabSelect = () => {
 			<div className="w-full grid grid-cols-3">
 				<TabButton tab={TABS.ORDER} label={'Order'} />
 				<PositionsTabButton />
-				<TabButton tab={TABS.RANKS} label={'Rank'} />
+				<TabButton tab={TABS.RANKS} label={'Competition'} />
 			</div>
 		</div>
 	);

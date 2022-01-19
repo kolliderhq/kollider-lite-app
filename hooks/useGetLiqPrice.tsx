@@ -36,5 +36,5 @@ export const useGetLiqPrice = (side: Side) => {
 		fundingRate,
 		contractInfo.maintenanceRatio
 	);
-	return gt(isNumber(liqPrice) ? liqPrice : 0, 100000000) ? '∞' : fixed(liqPrice, priceDp);
+	return gt(isNumber(liqPrice) ? liqPrice : 0, 1000000) ? '∞' : fixed(liqPrice, priceDp);
 };

@@ -3,6 +3,7 @@ import React, { ReactNode } from 'react';
 import { WrapBaseDialog } from 'components/dialogs/base';
 import { ContractInfoDialog } from 'components/dialogs/ContractInfo';
 import { LoginDialog } from 'components/dialogs/Login';
+import { QuantityTouchInputDialog } from 'components/dialogs/QuantityTouchInput';
 import { SettingsDialog } from 'components/dialogs/Settings';
 import { WithdrawAvailableDialog } from 'components/dialogs/WithdrawAvailable';
 import { DIALOGS } from 'consts';
@@ -27,6 +28,9 @@ export const Dialogs = () => {
 			</WrapBaseDialog>
 			<WrapBaseDialog isOpen={currentDialog === DIALOGS.CONTRACT_INFO} close={close}>
 				<ContractInfoDialog />
+			</WrapBaseDialog>
+			<WrapBaseDialog isOpen={currentDialog === DIALOGS.QUANTITY_TOUCH_INPUT} close={close}>
+				<QuantityTouchInputDialog />
 			</WrapBaseDialog>
 		</>
 	);

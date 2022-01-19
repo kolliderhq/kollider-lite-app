@@ -57,6 +57,7 @@ export enum DIALOGS {
 	SETTINGS,
 	MAKE_ORDER,
 	CONTRACT_INFO,
+	QUANTITY_TOUCH_INPUT,
 }
 
 // stuff that is triggered and suddenly appear

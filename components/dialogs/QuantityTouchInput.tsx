@@ -15,7 +15,8 @@ export const QuantityTouchInputDialog = () => {
 	const quantity = useAppSelector(state => state.orders.order.quantity);
 	const { symbolsAssets, symbolIndex, symbol } = useSymbols();
 	const { tickSize, isInversePriced } = useSymbolData();
-	const minBase = isInversePriced ? 0.01 : 1;
+
+	const minBase = isInversePriced ? 0.01 : 1; //	0.01 for dollar cents, 1 for per contract.
 
 	return (
 		<div className="w-full h-full">

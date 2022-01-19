@@ -55,6 +55,7 @@ export const ordersSlice = createSlice({
 			const newQuantity = optionalDecimal(add(state.order.quantity, action.payload, 2));
 			if (gt(0, newQuantity)) {
 				state.order.quantity = '0';
+				return;
 			}
 			state.order.quantity = newQuantity;
 		},

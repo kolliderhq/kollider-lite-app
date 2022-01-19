@@ -45,7 +45,7 @@ export const QuantityTouchInputDialog = () => {
 				<QuantityTouchInput base={minBase} />
 				<QuantityTouchInput base={minBase * 10} />
 				<QuantityTouchInput base={minBase * 100} />
-				{isInversePriced && <QuantityTouchInput base={minBase * 1000} />}
+				<QuantityTouchInput base={minBase * 1000} />
 			</div>
 		</div>
 	);

@@ -282,7 +282,7 @@ const DisplayLeverage = ({ leverage }: { leverage: string }) => {
 };
 
 const buttonClass =
-	'h-20 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp grid grid-rows-2 grid-cols-2 xs:flex xs:flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
+	'h-20 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp grid grid-rows-2 xs:flex xs:flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
 const SellButton = ({
 	onButtonClick,
 	bestBid,
@@ -297,7 +297,15 @@ const SellButton = ({
 	const quantity = useAppSelector(state => state.orders.order.quantity);
 	const liqPrice = useGetLiqPrice(Side.ASK);
 	return (
-		<button onClick={onButtonClick} className={cn(buttonClass, className, 'bg-red-500', { 'opacity-50': !bestBid })}>
+		<button
+			onClick={onButtonClick}
+			className={cn(
+				buttonClass,
+				className,
+				'bg-red-500',
+				{ 'opacity-50': !bestBid },
+				quantity !== '' ? 'grid-cols-2' : 'grid-cols-1'
+			)}>
 			<p className="text-base order-1 xs:order-1 col-span-2">
 				Sell
 				<span className="pr-1" />/<span className="pr-1" />
@@ -341,9 +349,15 @@ const BuyButton = ({
 	return (
 		<button
 			onClick={onButtonClick}
-			className={cn(buttonClass, className, 'bg-green-600', {
-				'opacity-50': !bestAsk,
-			})}>
+			className={cn(
+				buttonClass,
+				className,
+				'bg-green-600',
+				{
+					'opacity-50': !bestAsk,
+				},
+				quantity !== '' ? 'grid-cols-2' : 'grid-cols-1'
+			)}>
 			<p className="text-base order-1 xs:order-1 col-span-2">
 				Buy
 				<span className="pr-1" />

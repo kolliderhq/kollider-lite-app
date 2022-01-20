@@ -6,6 +6,7 @@ import Img from 'next/image';
 import { QuantityTouchInput } from 'components/TouchInput';
 import { SETTINGS } from 'consts';
 import { Side, setOrderQuantity } from 'contexts';
+import { setDialogClose } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { formatNumber } from 'utils/format';
 import { isPositiveInteger } from 'utils/scripts';
@@ -14,7 +15,7 @@ export const QuantityTouchInputDialog = () => {
 	const dispatch = useAppDispatch();
 	const quantity = useAppSelector(state => state.orders.order.quantity);
 	const { symbolsAssets, symbolIndex, symbol } = useSymbols();
-	const { tickSize, isInversePriced } = useSymbolData();
+	const { isInversePriced } = useSymbolData();
 
 	const minBase = isInversePriced ? 0.01 : 1; //	0.01 for dollar cents, 1 for per contract.
 
@@ -39,7 +40,7 @@ export const QuantityTouchInputDialog = () => {
 						if (Number(value) > SETTINGS.LIMITS.NUMBER) return;
 						dispatch(setOrderQuantity(value));
 					}}
-					className="input-default border border-gray-300 border-opacity-75 bg-gray-700 rounded-lg"
+					className="input-default bg-gray-700 rounded-lg"
 				/>
 			</div>
 			<div className={cn('w-full flex items-center justify-between')}>
@@ -47,6 +48,13 @@ export const QuantityTouchInputDialog = () => {
 				<QuantityTouchInput base={minBase * 10} />
 				<QuantityTouchInput base={minBase * 100} />
 				<QuantityTouchInput base={minBase * 1000} />
+			</div>
+			<div className="mt-8 flex items-center justify-center">
+				<button
+					onClick={() => dispatch(setDialogClose())}
+					className="w-3/4 px-5 py-2 flex items-center justify-center rounded-lg border border-theme-main border-opacity-75">
+					<p>Close</p>
+				</button>
 			</div>
 		</div>
 	);

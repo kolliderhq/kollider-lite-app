@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import cn from 'clsx';
 import dayjs from 'dayjs';
@@ -8,16 +8,18 @@ import empty from 'is-empty';
 import find from 'lodash/find';
 import map from 'lodash/map';
 import toNumber from 'lodash/toNumber';
+import Img from 'next/image';
 import useSWR from 'swr';
 
 import Loader, { DefaultLoader } from 'components/Loader';
 import { API_NAMES, GENERAL, SETTINGS, TIME, USER_TYPE } from 'consts';
 import { useAppSelector } from 'hooks';
 import useCountdown from 'hooks/useCountdown';
-import { divide, fixed } from 'utils/Big';
+import { divide, fixed, minus } from 'utils/Big';
 import { getSWROptions } from 'utils/fetchers';
 import { formatNumber, getSatsToDollar } from 'utils/format';
 import { timestampByInterval } from 'utils/scripts';
+import { FixedLengthArray } from 'utils/types/utils';
 
 dayjs.extend(utc);
 
@@ -52,8 +54,7 @@ export const Leaderboard = () => {
 		return fastSort(merged).desc(user => user?.totalVolume);
 	}, [userData, leaderboardData]);
 
-	//	0 -> not init, -1 -> not found, the rest is found
-	const [myData, setMyData] = React.useState({ rank: -1, volume: '-1' });
+	const [myData, setMyData] = React.useState({ rank: -1, volume: '0' });
 
 	const myUserData = getMyUserData();
 	const myUsername = myUserData?.username;
@@ -73,11 +74,9 @@ export const Leaderboard = () => {
 				</div>
 			</div>
 			<LeaderboardInfo />
-			<div className="grid grid-rows-auto xs:grid-rows-1 grid-cols-1 xs:grid-cols-3 gap-2 w-full h-full">
-				<section>
-					<RankArea rank={myData.rank + 1} volume={myData.volume} />
-				</section>
-				<section className="col-span-2 py-2 px-4">
+			<div className="grid grid-rows-auto xs:grid-rows-1 grid-cols-1 xs:grid-cols-2 gap-2 w-full h-full">
+				<RankArea rank={myData.rank + 1} volume={myData.volume} data={mergedData} />
+				<section className="py-2">
 					<h5 className="text-center mb-2">Ranking by Volume</h5>
 					<LeaderboardTable data={mergedData} />
 				</section>
@@ -111,13 +110,13 @@ const LeaderboardInfo = () => {
 				<p className="text-xs text-gray-400 leading-tighter">
 					Rewards for the <span className="text-theme-main">top 3</span> traders with the Highest Volume.
 					<br />
-					🥇 - <span className="text-gray-200">100,000 Sats</span>
+					🥇 - <span className="text-gray-200">100,000 SATS</span>
 					<br />
-					🥈 - <span className="text-gray-300">50,000 Sats</span>
+					🥈 - <span className="text-gray-300">50,000 SATS</span>
 					<br />
-					🥉 - <span className="text-gray-400">25,000 Sats</span>
+					🥉 - <span className="text-gray-400">25,000 SATS</span>
 					<br />
-					Rewards are paid out every week at Monday 00:00 UTC.
+					Rewards are paid out every week at <span className="text-gray-200 whitespace-nowrap">Monday 00:00 UTC</span>.
 				</p>
 			</div>
 		</div>
@@ -161,22 +160,98 @@ const LeaderboardRow = ({ data, rank }: { data: LeaderboardValue; rank: number }
 	);
 };
 
-const RankArea = ({ rank, volume }: { rank: number; volume: string }) => {
+const RankArea = ({ rank, volume, data }: { rank: number; volume: string; data: LeaderboardValue[] }) => {
 	const rankDisplay = rank <= 0 ? '-' : `${rank}`;
 	return (
-		<aside className="h-full flex flex-col items-center justify-center">
-			<div className="p-3 m-2 border rounded-lg border-theme-main s-shadow-theme border-opacity-75">
-				<p className="text-center mb-1">
-					Rank<span className="pl-1.5">{getRankMedal(rankDisplay)}</span>
-				</p>
-				<p className="text-xs text-center leading-tight text-gray-400">
-					{formatNumber(volume)}
-					<span className="text-[10px]">SATS</span>
-					<br />
-					≈${Number(volume) >= 1 ? getSatsToDollar(Number(volume)) : '-'}
-				</p>
+		<div className="h-full flex flex-col items-center justify-center">
+			<div className="px-8 xs:px-3 py-3 border rounded-lg border-theme-main s-shadow-theme border-opacity-75 flex flex-col items-center gap-2">
+				<RankDiff rank={rank} volume={volume} data={data}>
+					<div>
+						<p className="text-xl text-center mb-1">
+							Rank
+							<span className="pl-1.5">
+								{getRankMedal(rankDisplay)}
+								{Number(rankDisplay) > 3 && <span className="text-[10px] align-top inline leading-[1.5]">th</span>}
+							</span>
+						</p>
+						<p className="text-sm text-center leading-tight text-gray-400">
+							{formatNumber(volume)}
+							<span className="text-xs pl-1">SATS</span>
+							<br />
+							≈${Number(volume) >= 1 ? getSatsToDollar(Number(volume)) : '-'}
+						</p>
+					</div>
+				</RankDiff>
 			</div>
-		</aside>
+		</div>
+	);
+};
+
+interface RankUser {
+	rank: number;
+	diff: string;
+}
+const abs = (value: string) => fixed(Math.abs(Number(value)), 0);
+const RankDiff = ({
+	rank,
+	volume,
+	data,
+	children,
+}: {
+	rank: number;
+	volume: string;
+	data: LeaderboardValue[];
+	children: ReactNode;
+}) => {
+	const [above, below] = React.useMemo(() => {
+		if (rank === 0) return [null, null];
+		let above, below;
+		if (rank === 1) {
+			above = { rank: 0, diff: '0' };
+			below = { rank: 2, diff: abs(minus(data[1]?.totalVolume, volume)) };
+		} else if (rank === data.length) {
+			above = { rank: data.length - 1, diff: abs(minus(data[data.length - 2]?.totalVolume, volume)) };
+			below = { rank: 0, diff: volume };
+		} else {
+			above = { rank: rank - 1, diff: abs(minus(data[rank - 2]?.totalVolume, volume)) };
+			below = { rank: rank + 1, diff: abs(minus(data[rank]?.totalVolume, volume)) };
+		}
+		return [above, below];
+	}, [rank, data, volume]) as FixedLengthArray<[RankUser, RankUser]>;
+
+	if (!below) return <>{children}</>;
+	return (
+		<>
+			{above?.rank ? (
+				<div className="flex items-center gap-3 justify-between">
+					<div className="flex items-center">
+						<Img className="s-filter-green-400" width={16} height={16} src="/assets/common/rank-arrow.svg" />
+						<p className="text-base leading-none w-2 text-center">{above?.rank} </p>
+					</div>
+					<p className="text-xs leading-none">
+						{formatNumber(above.diff)}
+						<span className="text-[10px] p-1">SATS</span>
+					</p>
+				</div>
+			) : (
+				''
+			)}
+			{children}
+			{below?.rank ? (
+				<div className="flex items-center gap-3 justify-between">
+					<div className="flex items-center">
+						<Img className="s-filter-red-400 s-flip" width={16} height={16} src="/assets/common/rank-arrow.svg" />
+						<p className="text-base leading-none w-2 text-center">{below?.rank}</p>
+					</div>
+					<p className="text-xs leading-none">
+						{formatNumber(below.diff)}
+						<span className="text-[10px] p-1">SATS</span>
+					</p>
+				</div>
+			) : (
+				''
+			)}
+		</>
 	);
 };
 
@@ -188,10 +263,10 @@ const getRankMedal = (rank: string) => {
 };
 
 const getMyUserData = () => {
-	const [userType, hasToken] = useAppSelector(state => [state.user.data.type, state.connection.apiKey]);
+	const [userType, apiKey] = useAppSelector(state => [state.user.data.type, state.connection.apiKey]);
 	//	get username
 	const { data: myUserData } = useSWR(
-		userType !== USER_TYPE.LIGHT ? [API_NAMES.USER_ACCOUNT, hasToken] : undefined,
+		userType !== USER_TYPE.LIGHT ? [API_NAMES.USER_ACCOUNT, apiKey] : undefined,
 		getSWROptions(API_NAMES.USER_ACCOUNT)
 	);
 	return myUserData;

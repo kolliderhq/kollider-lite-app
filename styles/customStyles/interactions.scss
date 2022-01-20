@@ -45,6 +45,10 @@
 	}
 }
 
+.s-flip {
+	transform: rotate(180deg);
+}
+
 .s-filter-gray-300 {
 	filter: brightness(0%) invert(48%) sepia(9%) saturate(442%) hue-rotate(167deg) brightness(92%) contrast(87%);
 }

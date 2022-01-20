@@ -146,7 +146,7 @@ export interface IOHLC {
 	volume: Nullable<number>;
 }
 
-const BOT_UIDS = ['1', '7', '12', '13', '14', '406', '1163'];
+const BOT_UIDS = ['1', '7', '12', '13', '14', '406', '1163' /* '19', '928'*/];
 
 type TTradeLeaderboard = {
 	mean_leverage: number;

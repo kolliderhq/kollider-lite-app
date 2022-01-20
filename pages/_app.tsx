@@ -19,15 +19,14 @@ import { googleTranslateException } from 'utils/misc';
 function MyApp({ Component, pageProps }: AppProps) {
 	const init = React.useMemo(() => <DataInit />, []);
 	return (
-		<PlausibleProvider domain={'light.kollider.xyz'}>
+		<PlausibleProvider domain={'lite.kollider.xyz'}>
 			<Provider store={reduxStore}>
 				<SWRConfig
 					value={{
 						refreshInterval: 0,
 						fetcher: fetcher,
 						onErrorRetry: defaultOnErrorRetry,
-					}}
-				>
+					}}>
 					<DefaultSeo
 						title="Kollider Light"
 						description="Instant Derivative Trading. Access any asset with Bitcoin simply and fast."

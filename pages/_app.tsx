@@ -19,7 +19,7 @@ import { googleTranslateException } from 'utils/misc';
 function MyApp({ Component, pageProps }: AppProps) {
 	const init = React.useMemo(() => <DataInit />, []);
 	return (
-		<PlausibleProvider domain={'light.kollider.xyz'}>
+		<PlausibleProvider domain={'lite.kollider.xyz'}>
 			<Provider store={reduxStore}>
 				<SWRConfig
 					value={{

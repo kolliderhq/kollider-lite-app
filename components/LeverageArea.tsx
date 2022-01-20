@@ -66,7 +66,7 @@ export const LeverageArea = ({ hasPositionLeverage }) => {
 							onFocus={() => dispatch(setTab(TABS.ORDER))}
 							min={1}
 							max={maxLeverage}
-							className="input-default inline-block w-full rounded-md border border-transparent focus:border-gray-300 hover:border-gray-300"
+							className="input-default bg-gray-700 inline-block w-full rounded-md border border-transparent focus:border-gray-300 hover:border-gray-300"
 							type="number"
 							placeholder="Leverage"
 							value={value}

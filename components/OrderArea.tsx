@@ -311,7 +311,10 @@ const SellButton = ({
 				<span className="pr-1" />/<span className="pr-1" />
 				Short
 			</p>
-			<div className="flex flex-col items-center xs:mt-2 order-2 xs:order-2 pb-2 xs:pb-0 pl-5 xs:pl-0">
+			<div
+				className={cn('flex flex-col items-center xs:mt-2 order-2 xs:order-2 pb-2 xs:pb-0', {
+					'pl-5 xs:pl-0': quantity !== '',
+				})}>
 				<p className="text-[10px] leading-none mb-0.5">Price</p>
 				<p className=" leading-none xs:leading-none text-base xs:text-lg">
 					{bestBid ? <>${formatNumber(applyDp(bestBid, priceDp))}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
@@ -322,7 +325,7 @@ const SellButton = ({
 					<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
 					<p className="leading-none xs:leading-none text-base xs:text-lg">
 						{bestBid ? (
-							<>${isNumber(liqPrice) ? formatNumber(liqPrice) : liqPrice}</>
+							<>${Number(liqPrice) > 0 || isNaN(Number(liqPrice)) ? formatNumber(liqPrice) : '-'}</>
 						) : (
 							<DefaultLoader wrapperClass="h-5 pt-2" />
 						)}
@@ -364,7 +367,10 @@ const BuyButton = ({
 				/<span className="pr-1" />
 				Long
 			</p>
-			<div className="flex flex-col items-center xs:mt-2 order-2 xs:order-2 pb-2 xs:pb-0 pl-5 xs:pl-0">
+			<div
+				className={cn('flex flex-col items-center xs:mt-2 order-2 xs:order-2 pb-2 xs:pb-0', {
+					'pl-5 xs:pl-0': quantity !== '',
+				})}>
 				<p className="text-[10px] leading-none mb-0.5">Price</p>
 				<p className=" leading-none xs:leading-none text-base xs:text-lg">
 					{bestAsk ? <>${formatNumber(applyDp(bestAsk, priceDp))}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
@@ -374,7 +380,11 @@ const BuyButton = ({
 				<div className="flex flex-col items-center xs:mt-1 order-3 xs:order-3 pb-2 xs:pb-0 pr-5 xs:pr-0">
 					<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
 					<p className="leading-none xs:leading-none text-base xs:text-lg">
-						{bestAsk ? <>${formatNumber(liqPrice)}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
+						{bestAsk ? (
+							<>${Number(liqPrice) > 0 ? formatNumber(liqPrice) : '-'}</>
+						) : (
+							<DefaultLoader wrapperClass="h-5 pt-2" />
+						)}
 					</p>
 				</div>
 			)}

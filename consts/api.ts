@@ -34,15 +34,16 @@ if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
 		(() => {
 			let method;
 			const noop = function noop() {};
+			// TODO : uncomment methods when out of beta
 			let methods = [
 				'assert',
 				'clear',
 				'count',
-				'debug',
+				// 'debug',
 				'dir',
 				'dirxml',
-				'error',
-				'exception',
+				// 'error',
+				// 'exception',
 				'group',
 				'groupCollapsed',
 				'groupEnd',
@@ -55,7 +56,7 @@ if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
 				'time',
 				'timeEnd',
 				'timeStamp',
-				'trace',
+				// 'trace',
 				'warn',
 			];
 			let length = methods.length;

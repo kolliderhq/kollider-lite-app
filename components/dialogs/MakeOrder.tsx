@@ -33,7 +33,7 @@ export const MakeOrderDialog = ({ order, side }: { order: Order; side: Side }) =
 						dispatch(setDialogClose());
 						processOrder(order, side, priceDp, symbol, isInversePriced);
 					}}>
-					<p>Confirm {side === Side.ASK ? 'Sell' : 'Buy'}</p>
+					<p>Confirm Order</p>
 				</button>
 			</div>
 		</div>

@@ -18,6 +18,7 @@ export const PositionTable = () => {
 	const displayablePositions = filter(positions, position => {
 		if (position && Number(position.quantity) >= 1) return true;
 	});
+	console.log(displayablePositions);
 	return (
 		<>
 			{displayablePositions.length === 0 ? (
@@ -26,7 +27,9 @@ export const PositionTable = () => {
 					<p>Not Found</p>
 				</div>
 			) : (
-				map(positions, position => <PositionBox key={position.symbol} position={position} symbol={position.symbol} />)
+				map(displayablePositions, position => (
+					<PositionBox key={position.symbol} position={position} symbol={position.symbol} />
+				))
 			)}
 		</>
 	);
@@ -84,7 +87,7 @@ const PositionBox = ({ symbol, position }) => {
 };
 
 const ClosePosition = ({ symbol }) => {
-	const { symbolData } = useSymbols();
+	const symbolData = useAppSelector(state => state.symbols.symbolData);
 	const { priceDp, isInversePriced, contractSize } = symbolData[symbol];
 	const positions = useAppSelector(state => state.trading.positions);
 	const position = positions[symbol];
@@ -148,7 +151,8 @@ const PositionData = ({ symbol }) => {
 
 	const hasPosition = position?.quantity ? position.quantity !== '0' : false;
 	const largeAsset = React.useMemo(() => {
-		return `/assets/coin-logo-large/${symbol.substring(0, 3)}.png`;
+		if (symbol) return `/assets/coin-logo-large/${symbol.substring(0, 3)}.png`;
+		else return `/assets/coin-logo-large/BTC.png`;
 	}, [symbol]);
 	return (
 		<div

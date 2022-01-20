@@ -28,7 +28,8 @@ export const BalanceInfo = () => {
 					className={cn(
 						Number(cash) > 0 ? 'hover:opacity-80 cursor-pointer' : 'opacity-50 cursor-not-allowed',
 						'py-2 px-4 border border-theme-main rounded-lg'
-					)}>
+					)}
+				>
 					<p className="text-xs">Withdraw</p>
 				</button>
 			</div>

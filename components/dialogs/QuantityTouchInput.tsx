@@ -52,7 +52,8 @@ export const QuantityTouchInputDialog = () => {
 			<div className="mt-8 flex items-center justify-center">
 				<button
 					onClick={() => dispatch(setDialogClose())}
-					className="w-3/4 px-5 py-2 flex items-center justify-center rounded-lg border border-theme-main border-opacity-75">
+					className="w-3/4 px-5 py-2 flex items-center justify-center rounded-lg border border-theme-main border-opacity-75"
+				>
 					<p>Close</p>
 				</button>
 			</div>

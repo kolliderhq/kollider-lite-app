@@ -35,7 +35,8 @@ export default function Home() {
 					<div className="h-[150px] w-full">
 						<Loader />
 					</div>
-				}>
+				}
+			>
 				{selectedTab === TABS.ORDER && (
 					<div className="w-full relative z-5 mb-2">
 						<IndexPriceSparkLine />

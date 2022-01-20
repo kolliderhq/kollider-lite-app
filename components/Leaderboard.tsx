@@ -74,7 +74,9 @@ export const Leaderboard = () => {
 			</div>
 			<LeaderboardInfo />
 			<div className="grid grid-rows-auto xs:grid-rows-1 grid-cols-1 xs:grid-cols-3 gap-2 w-full h-full">
-				<RankArea rank={myData.rank + 1} volume={myData.volume} />
+				<section>
+					<RankArea rank={myData.rank + 1} volume={myData.volume} />
+				</section>
 				<section className="col-span-2 py-2 px-4">
 					<h5 className="text-center mb-2">Ranking by Volume</h5>
 					<LeaderboardTable data={mergedData} />
@@ -106,16 +108,16 @@ const LeaderboardInfo = () => {
 	return (
 		<div className="w-full flex items-center justify-center py-4">
 			<div className="p-3 border border-gray-200 rounded-xl">
-				<p className="text-xs text-gray-500">
-					Rewards for the top 3 traders with the Highest Volume.
+				<p className="text-xs text-gray-400 leading-tighter">
+					Rewards for the <span className="text-theme-main">top 3</span> traders with the Highest Volume.
 					<br />
-					🥇 - 100,000 Sats
+					🥇 - <span className="text-gray-200">100,000 Sats</span>
 					<br />
-					🥈 - 50,000 Sats
+					🥈 - <span className="text-gray-300">50,000 Sats</span>
 					<br />
-					🥉 - 25,000 Sats
+					🥉 - <span className="text-gray-400">25,000 Sats</span>
 					<br />
-					Rewards are payed out every week at Monday 00:00 UTC.
+					Rewards are paid out every week at Monday 00:00 UTC.
 				</p>
 			</div>
 		</div>

@@ -20,12 +20,14 @@ export const QuantityTouchInput = ({ base }: { base: number }) => {
 			<div className="h-full grid grid-rows-2 gap-4 mx-auto">
 				<button
 					{...incHandlers}
-					className="w-full h-full flex items-center justify-center py-4 px-4 border-theme-main border rounded-lg">
+					className="w-full h-full flex items-center justify-center py-4 px-4 border-theme-main border rounded-lg"
+				>
 					<p className="text-xs tracking-tightest leading-none">+{base}</p>
 				</button>
 				<button
 					{...decHandlers}
-					className="w-full h-full flex items-center justify-center py-4 px-4 border-theme-main border rounded-lg">
+					className="w-full h-full flex items-center justify-center py-4 px-4 border-theme-main border rounded-lg"
+				>
 					<p className="text-xs tracking-tighter leading-none">-{base}</p>
 				</button>
 			</div>

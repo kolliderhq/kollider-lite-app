@@ -32,7 +32,8 @@ export const MakeOrderDialog = ({ order, side }: { order: Order; side: Side }) =
 					onClick={() => {
 						dispatch(setDialogClose());
 						processOrder(order, side, priceDp, symbol, isInversePriced);
-					}}>
+					}}
+				>
 					<p>Confirm Order</p>
 				</button>
 			</div>

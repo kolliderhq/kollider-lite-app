@@ -100,7 +100,8 @@ export const ChangeLeverageButton = () => {
 		<div className="w-full flex items-center justify-end">
 			<button
 				onClick={() => dispatch(setEditLeverage(true))}
-				className="hover:opacity-80 mt-2 px-4 py-2 border-theme-main border rounded-lg flex items-center justify-center w-fit">
+				className="hover:opacity-80 mt-2 px-4 py-2 border-theme-main border rounded-lg flex items-center justify-center w-fit"
+			>
 				<p className="text-xs">Change Leverage</p>
 			</button>
 		</div>
@@ -119,7 +120,8 @@ const LeverageSliderTicks = ({ maxLeverage }: { maxLeverage: number }) => {
 							<span
 								key={index}
 								className="absolute text-[10px] text-gray-"
-								style={{ left: `${(index * 100) / tickDiv}%`, transform: 'translate(-50%, -5px)' }}>
+								style={{ left: `${(index * 100) / tickDiv}%`, transform: 'translate(-50%, -5px)' }}
+							>
 								{value}
 							</span>
 						);

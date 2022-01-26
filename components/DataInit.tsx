@@ -3,7 +3,6 @@ import React from 'react';
 import empty from 'is-empty';
 import { useRouter } from 'next/router';
 
-import { USER_TYPE } from 'consts/user';
 import useAutoLogout from 'hooks/init/useAutoLogout';
 import { useCheckIpLocation } from 'hooks/init/useCheckIpLocation';
 import useGetMiscData from 'hooks/init/useGetMiscData';
@@ -13,6 +12,7 @@ import { useProFixes } from 'hooks/init/useProFixes';
 import useQuerySideEffects from 'hooks/init/useQuerySideEffects';
 import { useSocketData } from 'hooks/init/useSocketData';
 import { useTradingListener } from 'hooks/init/useTradingListener';
+import { useUmbrel } from 'hooks/init/useUmbrel';
 import { useWebln } from 'hooks/init/useWebln';
 import { useAppSelector } from 'hooks/redux';
 import { useStatusChecker } from 'hooks/useStatusChecker';
@@ -70,6 +70,14 @@ const RunOnSymbolLoad = () => {
 	useTradingListener();
 	useAutoLogout();
 	useGetOrderbookData(); //	init socket data
+	return <>{process.env.NEXT_PUBLIC_UMBREL === '1' ? <Umbrel /> : <Webln />}</>;
+};
+
+const Webln = () => {
 	useWebln();
+	return <></>;
+};
+const Umbrel = () => {
+	useUmbrel();
 	return <></>;
 };

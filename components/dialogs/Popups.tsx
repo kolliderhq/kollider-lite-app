@@ -10,9 +10,9 @@ import { useAppDispatch, useAppSelector } from 'hooks';
 
 export const Popups = () => {
 	const dispatch = useAppDispatch();
-	const [currentPopup, { onlyWeblnIfEnabled }, invoiceViewing, isWeblnConnected] = useAppSelector(state => [
+	const [currentPopup, onlyWeblnIfEnabled, invoiceViewing, isWeblnConnected] = useAppSelector(state => [
 		state.layout.popup,
-		state.settings,
+		state.settings.onlyWeblnIfEnabled || process.env.NEXT_PUBLIC_UMBREL === '1',
 		state.invoices.viewing,
 		state.connection.isWeblnConnected,
 	]);
@@ -25,7 +25,7 @@ export const Popups = () => {
 
 	//	open invoice popup
 	React.useEffect(() => {
-		if (onlyWeblnIfEnabled && isWeblnConnected) return;
+		if ((onlyWeblnIfEnabled && isWeblnConnected) || process.env.NEXT_PUBLIC_UMBREL === '1') return;
 		if (invoiceViewing) {
 			dispatch(setPopup(POPUPS.INVOICE));
 		} else {

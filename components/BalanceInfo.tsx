@@ -1,11 +1,13 @@
 import cn from 'clsx';
 
+import { baseSocketClient } from 'classes/SocketClient';
 import { WithdrawLimitLine } from 'components/WithdrawLimit';
-import { DIALOGS } from 'consts';
+import { DIALOGS, MESSAGE_TYPES } from 'consts';
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { fixed } from 'utils/Big';
+import { fixed, minus } from 'utils/Big';
 import { formatNumber } from 'utils/format';
+import { umbrelWithdraw } from 'utils/umbrel';
 
 export const BalanceInfo = () => {
 	const dispatch = useAppDispatch();
@@ -23,13 +25,26 @@ export const BalanceInfo = () => {
 				</div>
 				<button
 					onClick={() => {
-						if (Number(cash) > 0) dispatch(setDialog(DIALOGS.SETTLE_INVOICE));
+						if (Number(cash) < 1) return;
+						if (process.env.NEXT_PUBLIC_UMBREL === '1') {
+							umbrelWithdraw(Number(cash), res => {
+								console.log('created withdraw request');
+								try {
+									const body = { amount: Number(cash), invoice: res.data?.paymentRequest };
+									baseSocketClient.socketSend(MESSAGE_TYPES.WITHDRAWAL_REQUEST, body);
+								} catch (ex) {
+									console.error(ex);
+									console.log('An error occurred while trying to withraw funds');
+								}
+							});
+						} else {
+							dispatch(setDialog(DIALOGS.SETTLE_INVOICE));
+						}
 					}}
 					className={cn(
 						Number(cash) > 0 ? 'hover:opacity-80 cursor-pointer' : 'opacity-50 cursor-not-allowed',
 						'py-2 px-4 border border-theme-main rounded-lg'
-					)}
-				>
+					)}>
 					<p className="text-xs">Withdraw</p>
 				</button>
 			</div>

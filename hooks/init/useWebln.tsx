@@ -19,26 +19,6 @@ export const weblnConnectAttempt = (hideToast?: boolean) => {
 			return;
 		}
 		console.log('webln >>', res);
-		// // sendPayment is not active - wallet is locked in extension
-		// const keys = Object.keys(res);
-		// console.log('res', keys);
-		// if (!keys.includes('sendPayment')) {
-		// 	storeDispatch(setWeblnConnected(false));
-		// 	displayToast(
-		// 		<p className="text-sm">
-		// 			Please unlock your Webln wallet
-		// 			<br />
-		// 			and try to connect again
-		// 		</p>,
-		// 		{
-		// 			type: 'warning',
-		// 			level: TOAST_LEVEL.CRITICAL,
-		// 			toastId: 'webln-disabled',
-		// 		}
-		// 	);
-		// 	return;
-		// } else {
-		// 	//	sendPayment is active - webln on mobile or desktop extension
 		storeDispatch(setWeblnConnected(true));
 		displayToast(<p>Webln detected</p>, {
 			type: 'info',
@@ -64,8 +44,9 @@ export const useWebln = () => {
 
 	useProcessAutoWithdrawWebln();
 
+	// TODO : same code in useUmbrel using umbrel - package this part into a single class in the future
 	const [onlyWeblnIfEnabled, currentDialog, invoiceStore, isWeblnConnected, balances] = useAppSelector(state => [
-		state.settings.onlyWeblnIfEnabled,
+		state.settings.onlyWeblnIfEnabled || process.env.NEXT_PUBLIC_UMBREL === '1',
 		state.layout.dialog,
 		state.invoices,
 		state.connection.isWeblnConnected,

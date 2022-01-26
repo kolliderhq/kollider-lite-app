@@ -8,7 +8,7 @@ import { OrderInfo } from 'components/OrderInfo';
 import { Order, Side } from 'contexts';
 import { setDialogClose } from 'contexts/modules/layout';
 import { useAppDispatch, useSymbolData, useSymbols } from 'hooks';
-import { multiply } from 'utils/Big';
+import { fixed, multiply } from 'utils/Big';
 
 export const MakeOrderDialog = ({ order, side }: { order: Order; side: Side }) => {
 	const dispatch = useAppDispatch();
@@ -32,8 +32,7 @@ export const MakeOrderDialog = ({ order, side }: { order: Order; side: Side }) =
 					onClick={() => {
 						dispatch(setDialogClose());
 						processOrder(order, side, priceDp, symbol, isInversePriced);
-					}}
-				>
+					}}>
 					<p>Confirm Order</p>
 				</button>
 			</div>
@@ -58,7 +57,7 @@ export const processOrder = (order: Order, side: Side, priceDp: number, symbol: 
 
 export const pureCloseOrder = (order: Order, quantity: string, side: Side, priceDp: number, symbol: string) => {
 	const obj = {
-		leverage: Number(order.leverage),
+		leverage: Number(fixed(order.leverage, 1)),
 		quantity: quantity,
 		orderType: 'market',
 		price: '1',

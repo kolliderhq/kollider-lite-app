@@ -223,12 +223,12 @@ const RankDiff = ({
 	return (
 		<>
 			{above?.rank ? (
-				<div className="flex items-center gap-3 justify-between">
+				<div className="flex items-center justify-between">
 					<div className="flex items-center">
 						<Img className="s-filter-green-400" width={16} height={16} src="/assets/common/rank-arrow.svg" />
 						<p className="text-base leading-none w-2 text-center">{above?.rank} </p>
 					</div>
-					<p className="text-xs leading-none">
+					<p className="pl-3 text-xs leading-none">
 						{formatNumber(above.diff)}
 						<span className="text-[10px] p-1">SATS</span>
 					</p>
@@ -238,12 +238,12 @@ const RankDiff = ({
 			)}
 			{children}
 			{below?.rank ? (
-				<div className="flex items-center gap-3 justify-between">
+				<div className="flex items-center justify-between">
 					<div className="flex items-center">
 						<Img className="s-filter-red-400 s-flip" width={16} height={16} src="/assets/common/rank-arrow.svg" />
 						<p className="text-base leading-none w-2 text-center">{below?.rank}</p>
 					</div>
-					<p className="text-xs leading-none">
+					<p className="pl-3 text-xs leading-none">
 						{formatNumber(below.diff)}
 						<span className="text-[10px] p-1">SATS</span>
 					</p>

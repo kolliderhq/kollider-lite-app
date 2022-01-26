@@ -13,11 +13,10 @@ export const Footer = () => {
 			<div className="w-full flex items-center z-80">
 				<TabSelect />
 			</div>
-
 			<div className="w-full flex items-center bg-gray-800 h-8 border-t border-gray-600 z-80">
 				<div className="max-w-sm min-w-xxxs mx-auto w-full flex items-center gap-5 sm:gap-10 px-5 sm:px-8">
 					<SocketStatus />
-					<WeblnStatus />
+					{process.env.NEXT_PUBLIC_UMBREL === '1' ? <UmbrelStatus /> : <WeblnStatus />}
 				</div>
 			</div>
 		</footer>
@@ -76,6 +75,16 @@ const WeblnStatus = () => {
 		<div className="h-full flex items-center">
 			<div className={cn('h-2 w-2 rounded-full mr-1', status)} />
 			<p className="text-xs leading-none">Webln</p>
+		</div>
+	);
+};
+
+const UmbrelStatus = () => {
+	const isUmbrelConnected = useAppSelector(state => state.connection.isUmbrelConnected);
+	return (
+		<div className="h-full flex items-center">
+			<div className={cn('h-2 w-2 rounded-full mr-1', isUmbrelConnected ? 'bg-green-500' : 'bg-red-500')} />
+			<p className="text-xs leading-none">Umbrel</p>
 		</div>
 	);
 };

@@ -2,7 +2,6 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { Nullable } from 'utils/types/utils';
-import type { WebLNProvider } from 'utils/vendor/webln';
 
 interface ConnectionState {
 	apiKey: string;
@@ -13,6 +12,8 @@ interface ConnectionState {
 	};
 	isWsConnected: boolean;
 	isWsAuthenticated: boolean;
+
+	isUmbrelConnected: boolean;
 
 	isWeblnConnected: Nullable<boolean>;
 }
@@ -28,8 +29,10 @@ const initialState: ConnectionState = {
 	isWsConnected: false,
 	isWsAuthenticated: false,
 
+	isUmbrelConnected: false,
+
 	isWeblnConnected: null,
-	// webln is removed - instead it is re-requested each time it is used.z
+	// webln is removed - instead it is re-requested each time it is used
 };
 
 export const connectionSlice = createSlice({
@@ -58,10 +61,20 @@ export const connectionSlice = createSlice({
 		setServiceStatus: (state, action: PayloadAction<{ status: string; msg: string }>) => {
 			state.serviceStatus = action.payload;
 		},
+		setIsUmbrelConnected: (state, action: PayloadAction<boolean>) => {
+			state.isUmbrelConnected = action.payload;
+		},
 	},
 });
 
-export const { setIsOnline, setApiKey, setIsWsConnected, setIsWsAuthenticated, setWeblnConnected, setServiceStatus } =
-	connectionSlice.actions;
+export const {
+	setIsOnline,
+	setIsUmbrelConnected,
+	setApiKey,
+	setIsWsConnected,
+	setIsWsAuthenticated,
+	setWeblnConnected,
+	setServiceStatus,
+} = connectionSlice.actions;
 
 export default connectionSlice.reducer;

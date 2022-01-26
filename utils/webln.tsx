@@ -1,10 +1,8 @@
 import { setWeblnConnected, storeDispatch } from 'contexts';
 import { TBigInput } from 'utils/Big';
-import { waitms } from 'utils/scripts';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 import { RequestInvoiceResponse, WebLNProvider, requestProvider } from 'utils/vendor/webln';
 
-let tried = false;
 export const weblnInit = async (hideToast?: boolean): Promise<WebLNProvider | null> => {
 	try {
 		return await requestProvider();

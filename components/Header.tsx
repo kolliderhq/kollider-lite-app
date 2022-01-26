@@ -24,6 +24,7 @@ export const Header = () => {
 	return (
 		<div className="flex items-center justify-between w-full h-16 pb-4 mb-2">
 			<figure className="w-full flex items-center justify-start relative">
+				<p className="text-[10px] xs:text-xs absolute left-[108px] xs:left-[145px] top-[-10px] xs:top-[-4px]">Lite</p>
 				<img className="w-30 h-[30px] xs:w-40 xs:h-10" src="/assets/logos/kollider_logo_white.png" />
 			</figure>
 			<div className="col-span-2 w-full flex items-center justify-end gap-3 xxs:gap-4">
@@ -64,9 +65,12 @@ export const Header = () => {
 };
 
 const WeblnButton = () => {
-	const isWeblnConnected = useAppSelector(state => state.connection.isWeblnConnected);
+	const [isWeblnConnected, isUmbrelConnected] = useAppSelector(state => [
+		state.connection.isWeblnConnected,
+		state.connection.isUmbrelConnected,
+	]);
 
-	return !isWeblnConnected ? (
+	return !isWeblnConnected && !isUmbrelConnected ? (
 		<button
 			onClick={() => weblnConnectAttempt()}
 			className="py-1 px-2 border border-gray-100 shadow-elevation-24dp hover:border-theme-main rounded-md group hover:opacity-80">

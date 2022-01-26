@@ -3,7 +3,9 @@
 	"private": true,
 	"scripts": {
 		"dev": "cross-env NEXT_PUBLIC_BACK_ENV=dev NEXT_PUBLIC_DEBUG_MODE=1 PORT=3000 next dev",
+		"dev:umbrel": "cross-env NEXT_PUBLIC_BACK_ENV=dev NEXT_PUBLIC_UMBREL=1 NEXT_PUBLIC_DEBUG_MODE=1 PORT=3000 next dev",
 		"build": "cross-env NEXT_PUBLIC_BACK_ENV=production next build",
+		"build:umbrel": "cross-env NEXT_PUBLIC_BACK_ENV=production NEXT_PUBLIC_UMBREL=1 next build",
 		"build:dev": "cross-env NEXT_PUBLIC_BACK_ENV=dev next build",
 		"prettify": "prettier --write './**/*.{js,jsx,ts,tsx,scss,md,json}' --config ./.prettierrc",
 		"lint": "next lint",
@@ -18,7 +20,7 @@
 		"chalk": "^5.0.0",
 		"clsx": "^1.1.1",
 		"dayjs": "^1.10.7",
-		"events": "^3.3.0",
+		"eventemitter2": "^6.4.5",
 		"fast-sort": "^3.1.1",
 		"highcharts": "^9.3.2",
 		"highcharts-react-official": "^3.1.0",

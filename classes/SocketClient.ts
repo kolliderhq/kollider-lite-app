@@ -20,7 +20,7 @@ import { reduxStore, storeDispatch } from '../contexts/store';
 import { bodyParamsValidation } from '../utils/api';
 import { wsDataRefiner } from '../utils/refiners/sockets';
 
-const defaultOptions = Object.freeze({
+export const socketDefaultOptions = Object.freeze({
 	maxReconnectionDelay: 1000,
 	minReconnectionDelay: 1000,
 	reconnectionDelayGrowFactor: 1.3,
@@ -54,7 +54,7 @@ class SocketClient extends EventEmitter {
 		this.setMaxListeners(Infinity);
 		this._clientOptions = clientOptions;
 
-		this._connectionOptions = { ...defaultOptions, ...clientOptions.customOptions };
+		this._connectionOptions = { ...socketDefaultOptions, ...clientOptions.customOptions };
 
 		this.connect = this.connect.bind(this);
 	}

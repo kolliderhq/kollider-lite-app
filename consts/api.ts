@@ -20,55 +20,47 @@ export const API_TIME: Record<string, DeepReadonly<number>> = {
 };
 
 let back;
-if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
-	back = 'http://127.0.0.1:8443';
-} else if (process.env.NEXT_PUBLIC_LOCAL_DEV === '2') {
-	back = 'http://api.test.kollider.internal/v1';
-} else if (process.env.NEXT_PUBLIC_LOCAL_DEV === '3') {
-	back = 'http://api.test.kollider.internal/v1';
+if (process.env.NEXT_PUBLIC_BACK_ENV === 'production') {
+	back = 'https://api.kollider.xyz/v1';
+	// TODO : remove after you debug the issue
+
+	(() => {
+		let method;
+		const noop = function noop() {};
+		// TODO : uncomment methods when out of beta
+		let methods = [
+			'assert',
+			'clear',
+			'count',
+			// 'debug',
+			'dir',
+			'dirxml',
+			// 'error',
+			// 'exception',
+			'group',
+			'groupCollapsed',
+			'groupEnd',
+			'info',
+			'log',
+			'markTimeline',
+			'profile',
+			'profileEnd',
+			'table',
+			'time',
+			'timeEnd',
+			'timeStamp',
+			// 'trace',
+			'warn',
+		];
+		let length = methods.length;
+
+		while (length--) {
+			method = methods[length];
+			console[method] = noop;
+		}
+	})();
 } else {
-	if (process.env.NEXT_PUBLIC_BACK_ENV === 'production') {
-		back = 'https://api.kollider.xyz/v1';
-		// TODO : remove after you debug the issue
-
-		(() => {
-			let method;
-			const noop = function noop() {};
-			// TODO : uncomment methods when out of beta
-			let methods = [
-				'assert',
-				'clear',
-				'count',
-				// 'debug',
-				'dir',
-				'dirxml',
-				// 'error',
-				// 'exception',
-				'group',
-				'groupCollapsed',
-				'groupEnd',
-				'info',
-				'log',
-				'markTimeline',
-				'profile',
-				'profileEnd',
-				'table',
-				'time',
-				'timeEnd',
-				'timeStamp',
-				// 'trace',
-				'warn',
-			];
-			let length = methods.length;
-
-			while (length--) {
-				method = methods[length];
-				console[method] = noop;
-			}
-		})();
-	} else {
-		back = 'http://api-staging-perps.kollider.internal/v1';
-	}
+	back = 'http://api-staging-perps.kollider.internal/v1';
 }
 
 const END_POINTS: Record<string, string> = Object.freeze({

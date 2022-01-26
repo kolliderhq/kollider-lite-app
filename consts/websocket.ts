@@ -22,6 +22,39 @@ if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
 
 export const SOCKET_END_POINTS = Object.freeze({ BACK: back });
 
+export const WS_UMBREL = {
+	BASE: 'ws://localhost:8080',
+	MESSAGES: {
+		CREATE_INVOICE: {
+			type: 'createInvoice',
+			returnType: 'paymentRequest',
+		},
+		SEND_PAYMENT: {
+			type: 'sendPayment',
+			returnType: 'receivedPayment',
+			createBody: (params: any) => ({ ...params }),
+		},
+		GET_NODE_INFO: {
+			type: 'getNodeInfo',
+			returnType: 'nodeInfo',
+		},
+		GET_WALLET_BALANCE: {
+			type: 'getWalletBalance',
+			returnType: 'walletBalances',
+		},
+	},
+};
+const getUmbrelMessageTypes = () => {
+	const types = {};
+	each(WS_UMBREL.MESSAGES, (value, key) => {
+		types[key] = value.type;
+	});
+	return types;
+};
+const UMBREL_MESSAGE_TYPES = {} as Record<string, any>;
+each(keys(WS_UMBREL.MESSAGES), v => (UMBREL_MESSAGE_TYPES[v] = v));
+export { UMBREL_MESSAGE_TYPES };
+
 export const CHANNEL_OPTIONS = {
 	ORDERBOOK_LEVEL2: {
 		customType: 'level2state',

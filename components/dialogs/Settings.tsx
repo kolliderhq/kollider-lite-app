@@ -14,15 +14,17 @@ export const SettingsDialog = () => {
 			<h2 className="text-center text-2xl xs:text-3xl">Settings</h2>
 			<section className="container-spacious container-children-bottom-border mt-5">
 				<SettingsSwitch
-					label="Auto withdraw 100+ SATS with Webln"
+					label={`Auto withdraw 100+ SATS with ${process.env.NEXT_PUBLIC_UMBREL === '1' ? 'Umbrel' : 'Webln'}`}
 					value={!!weblnAutoWithdraw}
 					onClick={() => dispatch(setWeblnAutoWithdraw(weblnAutoWithdraw === 0 ? 100 : 0))}
 				/>
-				<SettingsSwitch
-					label="Hide invoice if Webln is enabled"
-					value={onlyWeblnIfEnabled}
-					onClick={() => dispatch(setOnlyWeblnIfEnabled(!onlyWeblnIfEnabled))}
-				/>
+				{process.env.NEXT_PUBLIC_UMBREL !== '1' && (
+					<SettingsSwitch
+						label={`Hide invoice if ${process.env.NEXT_PUBLIC_UMBREL === '1' ? 'Umbrel' : 'Webln'} is enabled`}
+						value={onlyWeblnIfEnabled}
+						onClick={() => dispatch(setOnlyWeblnIfEnabled(!onlyWeblnIfEnabled))}
+					/>
+				)}
 			</section>
 		</div>
 	);
@@ -48,14 +50,12 @@ const Switch = ({ value, onClick }: { value: boolean; onClick: () => void }) => 
 			className={cn(
 				!!value ? 'bg-green-400' : 'bg-gray-600',
 				'relative w-11 h-6 rounded-full border border-gray-400 flex items-center justify-between cursor-pointer s-transition-all'
-			)}
-		>
+			)}>
 			<div
 				style={{ width: '24px', height: '24px', left: !!value ? '19px' : '-1px', top: '-1px' }}
 				className={cn(
 					's-transition-all absolute rounded-full flex items-center justify-center bg-white border-gray-400 border'
-				)}
-			>
+				)}>
 				<div className="text-xs mr-0.25 px-2" />
 			</div>
 		</div>

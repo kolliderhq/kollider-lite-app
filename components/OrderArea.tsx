@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks
 import { useGetLiqPrice } from 'hooks/useGetLiqPrice';
 import usePrevious from 'hooks/usePrevious';
 import { divide, multiply } from 'utils/Big';
-import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, optionalDecimal } from 'utils/format';
+import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, limitNumber, optionalDecimal } from 'utils/format';
 import { isNumber, isPositiveInteger, isPositiveNumber, isWithinStringDecimalLimit } from 'utils/scripts';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
@@ -168,12 +168,10 @@ const ContractsInput = () => {
 			<div className="bg-gray-700 border-transparent rounded-md w-full relative">
 				<div
 					style={{ transform: 'translate3d(0,-50%,0)' }}
-					className="absolute top-[50%] right-[8px] pl-2 border-l border-gray-600"
-				>
+					className="absolute top-[50%] right-[8px] pl-2 border-l border-gray-600">
 					<button
 						onClick={() => dispatch(setDialog(DIALOGS.CONTRACT_INFO))}
-						className="border border-theme-main rounded-lg px-2 py-1 flex items-center justify-center hover:opacity-80"
-					>
+						className="border border-theme-main rounded-lg px-2 py-1 flex items-center justify-center hover:opacity-80">
 						<p className="text-xs">QTY</p>
 					</button>
 				</div>
@@ -233,12 +231,10 @@ const DollarInput = () => {
 			<div className="bg-gray-700 border-transparent rounded-md w-full relative">
 				<div
 					style={{ transform: 'translate3d(0,-50%,0)' }}
-					className="absolute top-[50%] right-[8px] pl-2 border-l border-gray-600"
-				>
+					className="absolute top-[50%] right-[8px] pl-2 border-l border-gray-600">
 					<button
 						onClick={() => dispatch(setDialog(DIALOGS.CONTRACT_INFO))}
-						className="border border-theme-main rounded-lg px-2 py-1 flex items-center justify-center hover:opacity-80"
-					>
+						className="border border-theme-main rounded-lg px-2 py-1 flex items-center justify-center hover:opacity-80">
 						<p className="text-xs">USD</p>
 					</button>
 				</div>
@@ -309,8 +305,7 @@ const SellButton = ({
 				'bg-red-500',
 				{ 'opacity-50': !bestBid },
 				quantity !== '' ? 'grid-cols-2' : 'grid-cols-1'
-			)}
-		>
+			)}>
 			<p className="text-base order-1 xs:order-1 col-span-2">
 				Sell
 				<span className="pr-1" />/<span className="pr-1" />
@@ -319,8 +314,7 @@ const SellButton = ({
 			<div
 				className={cn('flex flex-col items-center xs:mt-2 order-2 xs:order-2 pb-2 xs:pb-0', {
 					'pl-5 xs:pl-0': quantity !== '',
-				})}
-			>
+				})}>
 				<p className="text-[10px] leading-none mb-0.5">Price</p>
 				<p className=" leading-none xs:leading-none text-base xs:text-lg">
 					{bestBid ? <>${formatNumber(applyDp(bestBid, priceDp))}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
@@ -331,7 +325,7 @@ const SellButton = ({
 					<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
 					<p className="leading-none xs:leading-none text-base xs:text-lg">
 						{bestBid ? (
-							<>${Number(liqPrice) > 0 || isNaN(Number(liqPrice)) ? formatNumber(liqPrice) : '-'}</>
+							<>${Number(liqPrice) > 0 || isNaN(Number(liqPrice)) ? formatNumber(limitNumber(liqPrice)) : '-'}</>
 						) : (
 							<DefaultLoader wrapperClass="h-5 pt-2" />
 						)}
@@ -366,8 +360,7 @@ const BuyButton = ({
 					'opacity-50': !bestAsk,
 				},
 				quantity !== '' ? 'grid-cols-2' : 'grid-cols-1'
-			)}
-		>
+			)}>
 			<p className="text-base order-1 xs:order-1 col-span-2">
 				Buy
 				<span className="pr-1" />
@@ -377,8 +370,7 @@ const BuyButton = ({
 			<div
 				className={cn('flex flex-col items-center xs:mt-2 order-2 xs:order-2 pb-2 xs:pb-0', {
 					'pl-5 xs:pl-0': quantity !== '',
-				})}
-			>
+				})}>
 				<p className="text-[10px] leading-none mb-0.5">Price</p>
 				<p className=" leading-none xs:leading-none text-base xs:text-lg">
 					{bestAsk ? <>${formatNumber(applyDp(bestAsk, priceDp))}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
@@ -389,7 +381,7 @@ const BuyButton = ({
 					<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
 					<p className="leading-none xs:leading-none text-base xs:text-lg">
 						{bestAsk ? (
-							<>${Number(liqPrice) > 0 ? formatNumber(liqPrice) : '-'}</>
+							<>${Number(liqPrice) > 0 ? formatNumber(limitNumber(liqPrice)) : '-'}</>
 						) : (
 							<DefaultLoader wrapperClass="h-5 pt-2" />
 						)}

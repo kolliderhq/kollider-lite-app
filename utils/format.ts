@@ -12,9 +12,9 @@ import map from 'lodash-es/map';
 import reduce from 'lodash-es/reduce';
 import toString from 'lodash-es/toString';
 
-import { UI } from 'consts';
+import { GENERAL, SETTINGS, UI } from 'consts';
 import { reduxStore } from 'contexts';
-import { TBigInput, divide, fixed, multiply } from 'utils/Big';
+import { TBigInput, divide, fixed, gt, multiply } from 'utils/Big';
 
 import { parseTime } from './time';
 
@@ -101,6 +101,11 @@ export const formatNumber = (v: TBigInput = 0, size: number = 3): string => {
 	let str = toString(v);
 	if (empty(str)) return 'NaN';
 	return formatNum(str);
+};
+
+export const limitNumber = (v: string): string => {
+	if (gt(v, SETTINGS.LIMITS.NUMBER)) return '∞';
+	return v;
 };
 
 export const formatUSD = (v: string): string => {

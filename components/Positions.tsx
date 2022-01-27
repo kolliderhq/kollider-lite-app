@@ -11,7 +11,7 @@ import { useMarkPrice } from 'components/DisplaySymbol';
 import { Order, Side, askBidSelector, useOrderbookSelector } from 'contexts';
 import { useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { fixed } from 'utils/Big';
-import { formatNumber, formatUSD, getSatsToDollar, optionalDecimal } from 'utils/format';
+import { formatNumber, formatUSD, getSatsToDollar, limitNumber, optionalDecimal } from 'utils/format';
 import { isNumber } from 'utils/scripts';
 
 export const PositionTable = () => {
@@ -84,7 +84,7 @@ const PositionBox = ({ symbol, position }) => {
 				<LabelledValue
 					smallLabel="Liquidation Price"
 					label="Liq. Price"
-					value={hasPosition ? formatUSD(position?.liqPrice) : '-'}
+					value={hasPosition ? formatUSD(limitNumber(position?.liqPrice)) : '-'}
 				/>
 				<div className="col-span-2">
 					<AccountInfo symbol={symbol} />

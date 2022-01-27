@@ -8,7 +8,7 @@ import { CURRENCY } from 'consts/misc/currency';
 import { Side, askBidSelector, useOrderbookSelector } from 'contexts';
 import { useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { divide, fixed, minus, mod, multiply } from 'utils/Big';
-import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar } from 'utils/format';
+import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, limitNumber } from 'utils/format';
 import { calcLiquidationPriceFromMargin } from 'utils/liqPriceCalculate';
 
 export function OrderInfo({ side }: { side: Side }) {
@@ -143,14 +143,8 @@ const DisplayOrderData = ({
 						</div>
 						<div className="text-right">
 							<LabelledValue childClass="text-base" label={'Liq. Price'} innacurate={data.isInaccurate}>
-								{Number(data.liqPrice) > SETTINGS.LIMITS.NUMBER ? (
-									'∞'
-								) : (
-									<>
-										<span className="pr-0.5 text-sm break-normal">$</span>
-										{formatNumber(data.liqPrice)}
-									</>
-								)}
+								<span className="pr-0.5 text-sm break-normal">$</span>
+								{formatNumber(limitNumber(data.liqPrice))}
 							</LabelledValue>
 						</div>
 					</li>

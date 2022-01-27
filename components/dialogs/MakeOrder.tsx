@@ -52,12 +52,12 @@ export const processOrder = (order: Order, side: Side, priceDp: number, symbol: 
 		contractQuantity = 1;
 	}
 	console.log('processOrder', order, contractQuantity, side, priceDp, symbol);
-	pureCloseOrder(order, contractQuantity, side, priceDp, symbol);
+	pureCreateOrder(order, contractQuantity, side, priceDp, symbol);
 };
 
-export const pureCloseOrder = (order: Order, quantity: string, side: Side, priceDp: number, symbol: string) => {
+export const pureCreateOrder = (order: Order, quantity: string, side: Side, priceDp: number, symbol: string) => {
 	const obj = {
-		leverage: Number(fixed(order.leverage, 1)),
+		leverage: Math.round(Number(fixed(order.leverage, 1))),
 		quantity: quantity,
 		orderType: 'market',
 		price: '1',

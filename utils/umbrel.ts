@@ -2,7 +2,7 @@ import { baseUmbrelSocketClient } from 'classes/UmbrelSocketClient';
 import { UMBREL_MESSAGE_TYPES } from 'consts';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
-export const umbrelCheck = async (): Promise<boolean> => {
+export const umbrelCheck = (): Promise<boolean> => {
 	return new Promise((resolve, reject) => {
 		baseUmbrelSocketClient.socketSend(UMBREL_MESSAGE_TYPES.GET_NODE_INFO, null, data => {
 			if (!data.data) {

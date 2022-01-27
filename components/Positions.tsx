@@ -6,11 +6,12 @@ import map from 'lodash-es/map';
 import Img from 'next/image';
 
 import { AccountInfo } from 'components/AccountInfo';
-import { processOrder, pureCloseOrder } from 'components/dialogs/MakeOrder';
+import { pureCreateOrder } from 'components/dialogs/MakeOrder';
+import { useMarkPrice } from 'components/DisplaySymbol';
 import { Order, Side, askBidSelector, useOrderbookSelector } from 'contexts';
 import { useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { fixed } from 'utils/Big';
-import { formatNumber, formatUSD, getSatsToDollar } from 'utils/format';
+import { formatNumber, formatUSD, getSatsToDollar, optionalDecimal } from 'utils/format';
 import { isNumber } from 'utils/scripts';
 
 export const PositionTable = () => {
@@ -59,9 +60,16 @@ const PositionBox = ({ symbol, position }) => {
 	return (
 		<section className="grid grid-rows-[fit-content(100%),1fr] xxs:grid-rows-1 grid-cols-1 xxs:grid-cols-3 gap-1 first:pt-0 pt-2 pb-2 border-b last:pb-0 last:border-b-0 border-gray-600">
 			<div className="py-2 xxs:py-0 xxs:col-span-1 w-full h-full">
-				<div className="grid grid-cols-2 xxs:flex flex-col items-center justify-center h-full gap-y-2 gap-x-3">
-					<PositionData symbol={symbol} />
-					<ClosePosition symbol={symbol} />
+				<div className="grid grid-cols-2 grid-rows-2 grid-flow-col xxs:flex flex-col items-center justify-center h-full xxs:gap-y-2 gap-x-3">
+					<div className="order-2 xxs:order-1 pb-1 xxs:pb-0">
+						<MarkPriceDisplay symbol={symbol} />
+					</div>
+					<div className="order-1 xxs:order-2 row-span-2">
+						<PositionData symbol={symbol} />
+					</div>
+					<div className="order-3 xxs:order-3 w-full flex items-center justify-center">
+						<ClosePosition symbol={symbol} />
+					</div>
 				</div>
 			</div>
 			<div className="col-span-2 grid grid-cols-2 xs:grid-cols-2 grid-rows-3 gap-x-1 xxs:gap-x-2 gap-y-2 w-full xs:px-5 sm:px-0">
@@ -86,6 +94,19 @@ const PositionBox = ({ symbol, position }) => {
 	);
 };
 
+const MarkPriceDisplay = ({ symbol }) => {
+	const markPrice = useMarkPrice(symbol);
+
+	return (
+		<div className="w-full flex items-center justify-center">
+			<p className="text-lg">
+				<span className="text-xs pr-0.5">$</span>
+				{formatNumber(optionalDecimal(markPrice))}
+			</p>
+		</div>
+	);
+};
+
 const ClosePosition = ({ symbol }) => {
 	const symbolData = useAppSelector(state => state.symbols.symbolData);
 	const { priceDp, isInversePriced, contractSize } = symbolData[symbol];
@@ -99,7 +120,7 @@ const ClosePosition = ({ symbol }) => {
 			leverage: Number(position.leverage),
 			isInstant: true,
 		} as Order;
-		pureCloseOrder(order, order.quantity, position.side === 'Ask' ? Side.BID : Side.ASK, priceDp, symbol);
+		pureCreateOrder(order, order.quantity, position.side === 'Ask' ? Side.BID : Side.ASK, priceDp, symbol);
 	}, [hasPosition, position, priceDp, symbol]);
 	return (
 		<button
@@ -107,8 +128,7 @@ const ClosePosition = ({ symbol }) => {
 			className={cn(
 				hasPosition ? 'hover:opacity-80 cursor-pointer' : 'opacity-50 cursor-not-allowed',
 				'flex items-center justify-center border border-theme-main rounded-md py-1 px-1.5'
-			)}
-		>
+			)}>
 			<p className="text-[10px]">Close Position</p>
 		</button>
 	);
@@ -139,8 +159,7 @@ export const LabelledValue = ({
 						value !== '-' &&
 						(Number(actualValue ? actualValue : value) < 0 ? 'text-red-400' : 'text-green-400'),
 					'leading-none tracking-normal text-base sm:leading-none sm:text-lg text-right'
-				)}
-			>
+				)}>
 				{value}
 			</p>
 		</div>
@@ -165,8 +184,7 @@ const PositionData = ({ symbol }) => {
 			}}
 			className={cn(
 				'bg-gray-700 rounded-lg flex flex-col items-center justify-center px-2 py-2 xxs:py-3 min-w-[100px] xs:h-20'
-			)}
-		>
+			)}>
 			<div className="flex flex-col items-center gap-0.5">
 				<div className="flex items-center gap-1 mb-0.5">
 					<Img width={18} height={18} className="rounded-full" src={largeAsset} />
@@ -175,8 +193,7 @@ const PositionData = ({ symbol }) => {
 						className={cn(
 							'text-base',
 							hasPosition ? (position.side === 'Bid' ? 'text-green-400' : 'text-red-400') : 'text-gray-100'
-						)}
-					>
+						)}>
 						{hasPosition ? (position.side === 'Bid' ? ' Long' : ' Short') : '  '}
 					</p>
 				</div>

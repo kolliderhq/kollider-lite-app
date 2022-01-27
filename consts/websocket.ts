@@ -27,30 +27,29 @@ export const WS_UMBREL = {
 	MESSAGES: {
 		CREATE_INVOICE: {
 			type: 'createInvoice',
-			returnType: 'paymentRequest',
+			returnType: 'createInvoice',
+			createBody: (params: any) => ({ ...params }),
 		},
 		SEND_PAYMENT: {
 			type: 'sendPayment',
-			returnType: 'receivedPayment',
+			returnType: 'sendPayment',
 			createBody: (params: any) => ({ ...params }),
 		},
 		GET_NODE_INFO: {
 			type: 'getNodeInfo',
-			returnType: 'nodeInfo',
+			returnType: 'getNodeInfo',
 		},
 		GET_WALLET_BALANCE: {
-			type: 'getWalletBalance',
-			returnType: 'walletBalances',
+			type: 'getWalletBalances',
+			returnType: 'getWalletBalances',
+		},
+		AUTH_LNURL: {
+			type: 'lnurlAuth',
+			returnType: 'lnurlAuth',
 		},
 	},
 };
-const getUmbrelMessageTypes = () => {
-	const types = {};
-	each(WS_UMBREL.MESSAGES, (value, key) => {
-		types[key] = value.type;
-	});
-	return types;
-};
+
 const UMBREL_MESSAGE_TYPES = {} as Record<string, any>;
 each(keys(WS_UMBREL.MESSAGES), v => (UMBREL_MESSAGE_TYPES[v] = v));
 export { UMBREL_MESSAGE_TYPES };

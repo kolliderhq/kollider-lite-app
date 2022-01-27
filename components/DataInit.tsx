@@ -3,6 +3,7 @@ import React from 'react';
 import empty from 'is-empty';
 import { useRouter } from 'next/router';
 
+import { WrapHasLightClient } from 'components/wrappers/LightClientWrapper';
 import useAutoLogout from 'hooks/init/useAutoLogout';
 import { useCheckIpLocation } from 'hooks/init/useCheckIpLocation';
 import useGetMiscData from 'hooks/init/useGetMiscData';
@@ -79,5 +80,9 @@ const Webln = () => {
 };
 const Umbrel = () => {
 	useUmbrel();
-	return <></>;
+	return (
+		<WrapHasLightClient loaderElement={<></>}>
+			<></>
+		</WrapHasLightClient>
+	);
 };

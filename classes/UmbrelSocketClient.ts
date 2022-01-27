@@ -6,7 +6,7 @@ import WebSocket, { Options as WebSocketOptions } from 'reconnecting-websocket';
 
 import { socketDefaultOptions } from 'classes/SocketClient';
 import { WS_UMBREL } from 'consts';
-import { LOG, LOG2, LOG4 } from 'utils/debug';
+import { LOG, LOG2, LOG3, LOG4 } from 'utils/debug';
 
 class UmbrelSocketClient extends EventEmitter {
 	private _socket: WebSocket | undefined;
@@ -48,6 +48,7 @@ class UmbrelSocketClient extends EventEmitter {
 				...body,
 			})
 		);
+		LOG3({ type: sendType, ...body }, 'Umbrel Socket Send');
 		if (isFunction(cb)) {
 			const checkType = options?.type ? options.type : WS_UMBREL.MESSAGES[type].returnType;
 			const callback = (data: any) => {
@@ -106,6 +107,8 @@ const dataRefiner = (type: string, data: any) => {
 		case WS_UMBREL.MESSAGES.GET_NODE_INFO.returnType:
 			return data;
 		case WS_UMBREL.MESSAGES.GET_WALLET_BALANCE.returnType:
+			return data;
+		case WS_UMBREL.MESSAGES.AUTH_LNURL.returnType:
 			return data;
 		default: {
 			console.error('unknown type', type);

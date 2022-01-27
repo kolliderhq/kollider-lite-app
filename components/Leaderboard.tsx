@@ -164,7 +164,7 @@ const RankArea = ({ rank, volume, data }: { rank: number; volume: string; data: 
 	const rankDisplay = rank <= 0 ? '-' : `${rank}`;
 	return (
 		<div className="h-full flex flex-col items-center justify-center">
-			<div className="px-8 xs:px-3 py-3 border rounded-lg border-theme-main s-shadow-theme border-opacity-75 flex flex-col items-center gap-2">
+			<div className="px-5 xs:px-3 py-3 border rounded-lg border-theme-main s-shadow-theme border-opacity-75 flex flex-col items-center gap-2">
 				<RankDiff rank={rank} volume={volume} data={data}>
 					<div>
 						<p className="text-xl text-center mb-1">
@@ -223,12 +223,12 @@ const RankDiff = ({
 	return (
 		<>
 			{above?.rank ? (
-				<div className="flex items-center justify-between">
+				<div className="flex items-center justify-between gap-4">
 					<div className="flex items-center">
 						<Img className="s-filter-green-400" width={16} height={16} src="/assets/common/rank-arrow.svg" />
 						<p className="text-base leading-none w-2 text-center">{above?.rank} </p>
 					</div>
-					<p className="pl-3 text-xs leading-none">
+					<p className="text-xs leading-none">
 						{formatNumber(above.diff)}
 						<span className="text-[10px] p-1">SATS</span>
 					</p>
@@ -238,12 +238,12 @@ const RankDiff = ({
 			)}
 			{children}
 			{below?.rank ? (
-				<div className="flex items-center justify-between">
+				<div className="flex items-center justify-between gap-4">
 					<div className="flex items-center">
 						<Img className="s-filter-red-400 s-flip" width={16} height={16} src="/assets/common/rank-arrow.svg" />
 						<p className="text-base leading-none w-2 text-center">{below?.rank}</p>
 					</div>
-					<p className="pl-3 text-xs leading-none">
+					<p className="text-xs leading-none">
 						{formatNumber(below.diff)}
 						<span className="text-[10px] p-1">SATS</span>
 					</p>

@@ -325,7 +325,7 @@ const SellButton = ({
 					<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
 					<p className="leading-none xs:leading-none text-base xs:text-lg">
 						{bestBid ? (
-							<>${Number(liqPrice) > 0 || isNaN(Number(liqPrice)) ? formatNumber(limitNumber(liqPrice)) : '-'}</>
+							<>${Number(liqPrice) > 0 || !isNaN(Number(liqPrice)) ? formatNumber(limitNumber(liqPrice)) : '-'}</>
 						) : (
 							<DefaultLoader wrapperClass="h-5 pt-2" />
 						)}

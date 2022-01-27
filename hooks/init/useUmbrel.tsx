@@ -2,8 +2,10 @@ import React from 'react';
 
 import useSWR from 'swr';
 
+import { auth } from 'classes/Auth';
+import { baseSocketClient } from 'classes/SocketClient';
 import { baseUmbrelSocketClient } from 'classes/UmbrelSocketClient';
-import { API_NAMES, DIALOGS, UMBREL_MESSAGE_TYPES, USER_TYPE } from 'consts';
+import { API_NAMES, DIALOGS, UMBREL_MESSAGE_TYPES, USER_TYPE, WS_CUSTOM_TYPES } from 'consts';
 import { setIsUmbrelConnected, setViewing } from 'contexts';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { fixed } from 'utils/Big';
@@ -74,6 +76,9 @@ const useUmbrelAutoLogin = () => {
 
 const umbrelLogin = (lnurl: string) => {
 	console.log('umbrelLogin attempt', lnurl);
+	baseSocketClient.listenOnce(WS_CUSTOM_TYPES.LNURL_AUTH_CREDENTIALS, data => {
+		auth.proUserLogin(data);
+	});
 	baseUmbrelSocketClient.socketSend(UMBREL_MESSAGE_TYPES.AUTH_LNURL, { lnurl }, data => {
 		LOG3(data, 'umbrelLogin');
 		displayToast('Logged In with Umbrel', {

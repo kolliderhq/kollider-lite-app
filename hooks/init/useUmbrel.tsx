@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import { auth } from 'classes/Auth';
 import { baseSocketClient } from 'classes/SocketClient';
 import { baseUmbrelSocketClient } from 'classes/UmbrelSocketClient';
-import { API_NAMES, DIALOGS, SETTINGS, UMBREL_MESSAGE_TYPES, USER_TYPE, WS_CUSTOM_TYPES } from 'consts';
+import { API_NAMES, DIALOGS, MESSAGE_TYPES, SETTINGS, UMBREL_MESSAGE_TYPES, USER_TYPE, WS_CUSTOM_TYPES } from "consts";
 import { setIsUmbrelAuthenticated, setIsUmbrelConnected, setViewing } from 'contexts';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { fixed } from 'utils/Big';
@@ -54,13 +54,13 @@ export function useUmbrel() {
 }
 
 const useUmbrelAutoLogin = () => {
-	const [loggedIn, apiKey, isUmbrelConnected] = useAppSelector(state => [
+	const [loggedIn, apiKey, isUmbrelUsable] = useAppSelector(state => [
 		state.user.data.type === USER_TYPE.PRO,
 		state.connection.apiKey,
-		state.connection.isUmbrelConnected,
+		state.connection.isUmbrelConnected && state.connection.isUmbrelAuthenticated,
 	]);
 	const { data } = useSWR(
-		apiKey && isUmbrelConnected ? [API_NAMES.AUTH_LNURL, apiKey] : undefined,
+		apiKey && isUmbrelUsable ? [API_NAMES.AUTH_LNURL, apiKey] : undefined,
 		getSWROptions(API_NAMES.AUTH_LNURL)
 	);
 
@@ -121,28 +121,39 @@ const useUmbrelToProcessPayments = () => {
 };
 
 const useProcessAutoWithdrawUmbrel = () => {
-	const [isUmbrelConnected, balances, weblnAutoWithdraw] = useAppSelector(state => [
-		state.connection.isUmbrelConnected,
+	const [isUmbrelUsable, balances, weblnAutoWithdraw] = useAppSelector(state => [
+		state.connection.isUmbrelConnected && state.connection.isUmbrelAuthenticated,
 		state.trading.balances,
 		state.settings.weblnAutoWithdraw,
 	]) as FixedLengthArray<[boolean, Balances, number]>;
-	const cash = balances?.cash;
+	const cash = Number(fixed(balances?.cash ? balances.cash : 0, 0));
 	const ref = React.useRef<{ timestamp: number; timeout: ReturnType<typeof setTimeout> }>({
 		timestamp: 0,
 		timeout: null,
 	});
 	React.useEffect(() => {
-		if (!isUmbrelConnected || weblnAutoWithdraw === 0) return;
+		if (!isUmbrelUsable || weblnAutoWithdraw === 0) return;
 		if (Number(cash) >= Number(weblnAutoWithdraw)) {
 			ref.current.timestamp = Date.now();
 			const current = ref.current.timestamp;
 			ref.current.timeout = setTimeout(() => {
 				if (current !== ref.current.timestamp) return;
-				umbrelWithdraw(Number(fixed(cash, 0)));
+				console.log('Umbrel Auto Withdraw attempt', cash);
+				umbrelWithdraw(cash, res => {
+					if(!res.data?.paymentRequest) {
+						displayToast("Error requesting invoice from Umbrel", {
+							type: 'error',
+							level: TOAST_LEVEL.CRITICAL,
+						})
+						return;
+					}
+					const body = { amount: cash, invoice: res.data.paymentRequest };
+					baseSocketClient.socketSend(MESSAGE_TYPES.WITHDRAWAL_REQUEST, body);
+				});
 			}, SETTINGS.LIMITS.WEBLN_WITHDRAW_TIMEOUT_MS);
 		} else {
 			//	cash was below the limit when requested
 			if (ref.current.timeout) clearTimeout(ref.current.timeout);
 		}
-	}, [isUmbrelConnected, cash, weblnAutoWithdraw]);
+	}, [isUmbrelUsable, cash, weblnAutoWithdraw]);
 };

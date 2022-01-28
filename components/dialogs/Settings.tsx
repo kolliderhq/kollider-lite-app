@@ -50,12 +50,14 @@ const Switch = ({ value, onClick }: { value: boolean; onClick: () => void }) => 
 			className={cn(
 				!!value ? 'bg-green-400' : 'bg-gray-600',
 				'relative w-11 h-6 rounded-full border border-gray-400 flex items-center justify-between cursor-pointer s-transition-all'
-			)}>
+			)}
+		>
 			<div
 				style={{ width: '24px', height: '24px', left: !!value ? '19px' : '-1px', top: '-1px' }}
 				className={cn(
 					's-transition-all absolute rounded-full flex items-center justify-center bg-white border-gray-400 border'
-				)}>
+				)}
+			>
 				<div className="text-xs mr-0.25 px-2" />
 			</div>
 		</div>

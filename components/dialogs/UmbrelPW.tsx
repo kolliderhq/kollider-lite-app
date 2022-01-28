@@ -60,7 +60,8 @@ export const UmbrelPWPopup = () => {
 					<div className="w-full flex items-center justify-center mt-3">
 						<button
 							onClick={onConfirm}
-							className="border-theme-main hover:opacity-80 cursor-pointer border rounded-lg px-5 py-2">
+							className="border-theme-main hover:opacity-80 cursor-pointer border rounded-lg px-5 py-2"
+						>
 							<p>Confirm</p>
 						</button>
 					</div>

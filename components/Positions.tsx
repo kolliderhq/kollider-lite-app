@@ -128,7 +128,8 @@ const ClosePosition = ({ symbol }) => {
 			className={cn(
 				hasPosition ? 'hover:opacity-80 cursor-pointer' : 'opacity-50 cursor-not-allowed',
 				'flex items-center justify-center border border-theme-main rounded-md py-1 px-1.5'
-			)}>
+			)}
+		>
 			<p className="text-[10px]">Close Position</p>
 		</button>
 	);
@@ -159,7 +160,8 @@ export const LabelledValue = ({
 						value !== '-' &&
 						(Number(actualValue ? actualValue : value) < 0 ? 'text-red-400' : 'text-green-400'),
 					'leading-none tracking-normal text-base sm:leading-none sm:text-lg text-right'
-				)}>
+				)}
+			>
 				{value}
 			</p>
 		</div>
@@ -184,7 +186,8 @@ const PositionData = ({ symbol }) => {
 			}}
 			className={cn(
 				'bg-gray-700 rounded-lg flex flex-col items-center justify-center px-2 py-2 xxs:py-3 min-w-[100px] xs:h-20'
-			)}>
+			)}
+		>
 			<div className="flex flex-col items-center gap-0.5">
 				<div className="flex items-center gap-1 mb-0.5">
 					<Img width={18} height={18} className="rounded-full" src={largeAsset} />
@@ -193,7 +196,8 @@ const PositionData = ({ symbol }) => {
 						className={cn(
 							'text-base',
 							hasPosition ? (position.side === 'Bid' ? 'text-green-400' : 'text-red-400') : 'text-gray-100'
-						)}>
+						)}
+					>
 						{hasPosition ? (position.side === 'Bid' ? ' Long' : ' Short') : '  '}
 					</p>
 				</div>

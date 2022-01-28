@@ -2,10 +2,7 @@ import React, { ReactNode } from 'react';
 import { Theme, ToastOptions as ToastifyOptions, TypeOptions, toast } from 'react-toastify';
 
 import cn from 'clsx';
-import isNil from 'lodash-es/isNil';
 import isString from 'lodash-es/isString';
-
-import { Nullable } from 'utils/types/utils';
 
 export enum TOAST_LEVEL {
 	VERBOSE = 'verbose', //	text input errors

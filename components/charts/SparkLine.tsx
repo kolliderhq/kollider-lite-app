@@ -4,11 +4,10 @@ import * as Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import cloneDeep from 'lodash-es/cloneDeep';
 
-import { GENERAL, TIME, UI } from 'consts';
+import { GENERAL, UI } from 'consts';
 import { reduxStore } from 'contexts';
 import { multiply } from 'utils/Big';
 import { formatNumber, getTime } from 'utils/format';
-import { formatDay, formatHour } from 'utils/time';
 import { FixedLengthArray } from 'utils/types/utils';
 
 interface SparkChartOptions {

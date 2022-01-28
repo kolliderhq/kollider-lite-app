@@ -3,7 +3,7 @@ import React from 'react';
 import includes from 'lodash-es/includes';
 
 import { baseSocketClient } from 'classes/SocketClient';
-import { DIALOGS, MESSAGE_TYPES, TABS, TRADING_TYPES } from 'consts';
+import { DIALOGS, MESSAGE_TYPES, TRADING_TYPES } from 'consts';
 import {
 	mergeInstantOrder,
 	reduxStore,
@@ -14,10 +14,10 @@ import {
 	setUserWithdrawlLimits,
 	storeDispatch,
 } from 'contexts';
-import { setDialog, setPopup, setPopupClose, setTab } from 'contexts/modules/layout';
+import { setDialog, setPopupClose } from 'contexts/modules/layout';
 import { useAppSelector } from 'hooks/redux';
 import { LOG5 } from 'utils/debug';
-import { applyDp, formatNumber, toNormalCase } from 'utils/format';
+import { applyDp, formatNumber } from 'utils/format';
 import { ReceivedOrder } from 'utils/refiners/sockets';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 

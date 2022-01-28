@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 
-import cn from 'clsx';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { sort as fastSort } from 'fast-sort';
@@ -11,11 +10,11 @@ import toNumber from 'lodash/toNumber';
 import Img from 'next/image';
 import useSWR from 'swr';
 
-import Loader, { DefaultLoader } from 'components/Loader';
-import { API_NAMES, GENERAL, SETTINGS, TIME, USER_TYPE } from 'consts';
+import Loader from 'components/Loader';
+import { API_NAMES, GENERAL, TIME, USER_TYPE } from 'consts';
 import { useAppSelector } from 'hooks';
 import useCountdown from 'hooks/useCountdown';
-import { divide, fixed, minus } from 'utils/Big';
+import { fixed, minus } from 'utils/Big';
 import { getSWROptions } from 'utils/fetchers';
 import { formatNumber, getSatsToDollar } from 'utils/format';
 import { timestampByInterval } from 'utils/scripts';

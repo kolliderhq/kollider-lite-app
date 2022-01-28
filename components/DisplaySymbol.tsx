@@ -9,8 +9,9 @@ import useSWR from 'swr';
 
 import { DefaultLoader } from 'components/Loader';
 import { API_NAMES, TIME } from 'consts';
-import { useAppSelector, useSymbols } from 'hooks';
-import { divide, fixed, minus } from 'utils/Big';
+import { useSymbols } from 'hooks';
+import { useMarkPrice } from 'hooks/useMarkPrice';
+import { divide, minus } from 'utils/Big';
 import { getSWROptions } from 'utils/fetchers';
 import { formatNumber, getNumberColour } from 'utils/format';
 import { dispSymbol, timestampByInterval } from 'utils/scripts';
@@ -63,16 +64,6 @@ export const DisplaySymbol = ({ asset, value, symbol }) => {
 			</div>
 		</div>
 	);
-};
-
-export const useMarkPrice = symbol => {
-	const { symbolData } = useSymbols();
-	const priceDp = symbolData[symbol]?.priceDp;
-	const markPriceObj = useAppSelector(state => state.prices.markPrices);
-	return React.useMemo(() => {
-		if (markPriceObj[symbol] === '' || !priceDp) return null;
-		return fixed(markPriceObj[symbol], priceDp);
-	}, [markPriceObj, symbol, priceDp]);
 };
 
 const getClosestOpen = arr => {

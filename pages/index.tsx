@@ -1,19 +1,15 @@
 import React from 'react';
 
-import { AccountInfo } from 'components/AccountInfo';
 import { BalanceInfo } from 'components/BalanceInfo';
 import { Dialogs } from 'components/dialogs/DIalogs';
 import { Popups } from 'components/dialogs/Popups';
-import { DisplayMarkPrice } from 'components/DisplayMarkPrice';
 import { SymbolSelectDropdown } from 'components/Dropdown';
-import { Header } from 'components/Header';
-import { IndexPriceSparkLine } from 'components/IndexPriceSparkLine';
+import { IndexPriceSparkLine } from 'components/graphs/IndexPriceSparkLine';
+import { Header } from 'components/layout/Header';
 import { Leaderboard } from 'components/Leaderboard';
 import Loader from 'components/Loader';
 import { OrderArea } from 'components/OrderArea';
-import { OrderInfo } from 'components/OrderInfo';
-import { PositionTable } from 'components/Positions';
-import { TabSelect } from 'components/TabSelect';
+import { PositionTable } from 'components/positions/Positions';
 import { SymbolsLoadedWrapper } from 'components/wrappers/SymbolsLoadedWrapper';
 import { TABS } from 'consts';
 import { useAppSelector } from 'hooks';

@@ -8,7 +8,7 @@ import { WithdrawLimitLine } from 'components/WithdrawLimit';
 import { DIALOGS, MESSAGE_TYPES } from 'consts';
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { fixed, minus } from 'utils/Big';
+import { fixed } from 'utils/Big';
 import { formatNumber } from 'utils/format';
 import { umbrelWithdraw } from 'utils/umbrel';
 

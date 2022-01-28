@@ -3,7 +3,6 @@ import React, { ReactNode } from 'react';
 import cn from 'clsx';
 
 import Loader from 'components/Loader';
-import { SETTINGS } from 'consts';
 import { CURRENCY } from 'consts/misc/currency';
 import { Side, askBidSelector, useOrderbookSelector } from 'contexts';
 import { useAppSelector, useSymbolData, useSymbols } from 'hooks';

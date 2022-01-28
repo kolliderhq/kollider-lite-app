@@ -6,7 +6,6 @@ import toNumber from 'lodash-es/toNumber';
 
 import { DialogWrapper } from 'components/dialogs/DIalogs';
 import { MakeOrderDialog } from 'components/dialogs/MakeOrder';
-import { useMarkPrice } from 'components/DisplaySymbol';
 import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
 import { DefaultLoader } from 'components/Loader';
 import { DIALOGS, SETTINGS, USER_TYPE } from 'consts';
@@ -14,10 +13,11 @@ import { Side, askBidSelector, setOrderLeverage, setOrderQuantity, useOrderbookS
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { useGetLiqPrice } from 'hooks/useGetLiqPrice';
+import { useMarkPrice } from 'hooks/useMarkPrice';
 import usePrevious from 'hooks/usePrevious';
 import { divide, multiply } from 'utils/Big';
 import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, limitNumber, optionalDecimal } from 'utils/format';
-import { isNumber, isPositiveInteger, isPositiveNumber, isWithinStringDecimalLimit } from 'utils/scripts';
+import { isPositiveInteger, isPositiveNumber, isWithinStringDecimalLimit } from 'utils/scripts';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
 export const OrderArea = () => {

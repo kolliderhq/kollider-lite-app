@@ -18,7 +18,7 @@ import { LOG, LOG2, LOG4 } from 'utils/debug';
 
 import { CustomError } from '../error';
 import { camelCaseAllKeys } from '../format';
-import { deepFreeze, mapKeyValues } from '../scripts';
+import { mapKeyValues } from '../scripts';
 import { parseTime } from '../time';
 import { KeysToCamelCase, Nullable } from '../types/utils';
 

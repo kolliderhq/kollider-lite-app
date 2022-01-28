@@ -1,8 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import each from 'lodash-es/each';
 
-import { Balances, IndexValues, PositionState } from 'utils/refiners/sockets';
-
 interface InitState {
 	indexes: Record<string, number>;
 	markPrices: Record<string, string>;

@@ -1,19 +1,9 @@
 import React from 'react';
 
 import { auth } from 'classes/Auth';
-import { baseSocketClient } from 'classes/SocketClient';
 import { CONTEXTS, SETTINGS, USER_TYPE } from 'consts';
-import {
-	defaultLocalStore,
-	setApiKey,
-	setInitNotifications,
-	setInitTrading,
-	setIsWsAuthenticated,
-	setUserLogout,
-	storeDispatch,
-} from 'contexts';
+import { defaultLocalStore } from 'contexts';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { TOAST_LEVEL, displayToast } from 'utils/toast';
 
 let logoutTimeout;
 export default function useAutoLogout() {

@@ -12,7 +12,7 @@ import map from 'lodash-es/map';
 import reduce from 'lodash-es/reduce';
 import toString from 'lodash-es/toString';
 
-import { GENERAL, SETTINGS, UI } from 'consts';
+import { SETTINGS, UI } from 'consts';
 import { reduxStore } from 'contexts';
 import { TBigInput, divide, fixed, gt, multiply } from 'utils/Big';
 

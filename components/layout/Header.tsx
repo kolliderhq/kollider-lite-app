@@ -8,7 +8,6 @@ import { DIALOGS, USER_TYPE } from 'consts';
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { weblnConnectAttempt } from 'hooks/init/useWebln';
-import { weblnInit } from 'utils/webln';
 
 export const Header = () => {
 	const dispatch = useAppDispatch();

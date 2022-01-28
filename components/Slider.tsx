@@ -1,5 +1,5 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import InputSlider, { InputSliderProps } from 'react-input-slider';
+import React from 'react';
+import InputSlider from 'react-input-slider';
 
 import { SLIDER } from 'consts/misc/slider';
 

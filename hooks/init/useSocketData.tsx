@@ -15,7 +15,7 @@ import {
 	storeDispatch,
 } from 'contexts';
 import { setIndexes } from 'contexts/modules/prices';
-import { useAppDispatch, useAppSelector } from 'hooks/redux';
+import { useAppSelector } from 'hooks/redux';
 import useIsWindowVisible from 'hooks/useIsWindowVisible';
 
 const WATCH_TYPES = [

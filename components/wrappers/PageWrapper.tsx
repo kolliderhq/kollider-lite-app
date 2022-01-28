@@ -2,8 +2,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import React, { ReactNode } from 'react';
 
-import { Footer } from 'components/Footer';
-import { ToastContainer } from 'components/ToastContainer';
+import { Footer } from 'components/layout/Footer';
+import { ToastContainer } from 'components/layout/ToastContainer';
 import { useSwipeActions } from 'hooks/useSwipeActions';
 
 export const PageWrapper = ({ children }: { children: ReactNode }) => {

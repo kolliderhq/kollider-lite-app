@@ -1,7 +1,5 @@
 import Img from 'next/image';
 
-import Loader from 'components/Loader';
-
 export function MissingData({ text, dims }: { text?: string; dims?: number[] }) {
 	return (
 		<div className="w-full h-full flex flex-col items-center justify-center">

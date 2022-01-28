@@ -1,12 +1,11 @@
 import React, { FunctionComponent } from 'react';
 
-import { Dialog } from '@headlessui/react';
 import dynamic from 'next/dynamic';
 
 import useElementDimensions from 'hooks/useElementDimentions';
 import useWindowSize from 'hooks/useWindowSize';
 
-const Portal = dynamic(import('components/Portal'), { ssr: false });
+const Portal = dynamic(import('components/wrappers/Portal'), { ssr: false });
 
 export interface BaseDialogProps {
 	dialogStyle?: Record<string, string>;

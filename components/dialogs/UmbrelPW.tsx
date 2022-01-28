@@ -2,7 +2,7 @@ import React, { FormEvent } from 'react';
 
 import { baseUmbrelSocketClient } from 'classes/UmbrelSocketClient';
 import { setIsUmbrelAuthenticated } from 'contexts';
-import { setPopup, setPopupClose } from 'contexts/modules/layout';
+import { setPopupClose } from 'contexts/modules/layout';
 import { useAppDispatch } from 'hooks';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 

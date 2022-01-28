@@ -9,7 +9,7 @@ import { TBigInput } from 'utils/Big';
 import { Balances } from 'utils/refiners/sockets';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 import { FixedLengthArray } from 'utils/types/utils';
-import { RequestInvoiceResponse, WebLNProvider } from 'utils/vendor/webln';
+import { RequestInvoiceResponse } from 'utils/vendor/webln';
 import { weblnInit, weblnSendPayment, weblnWithdraw } from 'utils/webln';
 
 export const weblnConnectAttempt = (hideToast?: boolean) => {

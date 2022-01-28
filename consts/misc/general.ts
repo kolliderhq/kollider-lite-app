@@ -1,5 +1,3 @@
-import { deepFreeze } from 'utils/scripts';
-
 export const GENERAL = Object.freeze({
 	DEFAULT: {
 		OBJ: {},

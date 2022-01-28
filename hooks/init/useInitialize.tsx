@@ -3,9 +3,9 @@ import React from 'react';
 import empty from 'is-empty';
 
 import { auth } from 'classes/Auth';
-import { DIALOGS, POPUPS } from 'consts';
+import { POPUPS } from 'consts';
 import { defaultLocalStore, storeDispatch } from 'contexts';
-import { setDialog, setPopup } from 'contexts/modules/layout';
+import { setPopup } from 'contexts/modules/layout';
 import { setFirstLoad, setPersistSettings } from 'contexts/modules/settings';
 
 export function useInitialize() {

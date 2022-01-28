@@ -5,10 +5,9 @@ import Img from 'next/image';
 
 import { QuantityTouchInput } from 'components/TouchInput';
 import { SETTINGS } from 'consts';
-import { Side, setOrderQuantity } from 'contexts';
+import { setOrderQuantity } from 'contexts';
 import { setDialogClose } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
-import { formatNumber } from 'utils/format';
 import { isPositiveInteger } from 'utils/scripts';
 
 export const QuantityTouchInputDialog = () => {

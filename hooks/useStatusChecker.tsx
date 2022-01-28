@@ -7,7 +7,7 @@ import { defaultLocalStore, setIsOnline, setServiceStatus } from 'contexts';
 import { useAppDispatch } from 'hooks/redux';
 import { LOG5 } from 'utils/debug';
 import { getSWROptions, simpleFetch } from 'utils/fetchers';
-import { formatExactDate, getMsFromNow } from 'utils/time';
+import { getMsFromNow } from 'utils/time';
 
 export function useStatusChecker() {
 	const dispatch = useAppDispatch();

@@ -14,7 +14,7 @@ import { getSWROptions } from 'utils/fetchers';
 import { Balances } from 'utils/refiners/sockets';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 import { FixedLengthArray } from 'utils/types/utils';
-import { umbrelCheck, umbrelSendPayment, umbrelWithdraw } from 'utils/umbrel';
+import { umbrelSendPayment, umbrelWithdraw } from 'utils/umbrel';
 
 /**
  * Umbrel uses a work or error approach where if umbrel is unavailable it just throws an error toast

@@ -1,5 +1,4 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import cloneDeep from 'lodash-es/cloneDeep';
 
 export interface Toast {
 	a: boolean;

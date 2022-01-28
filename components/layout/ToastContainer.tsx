@@ -1,4 +1,4 @@
-import { Flip, ToastContainer as ToastifyContainer, cssTransition } from 'react-toastify';
+import { ToastContainer as ToastifyContainer, cssTransition } from 'react-toastify';
 
 const transition = cssTransition({
 	enter: 'kollider__animate Toastify__flip-enter',

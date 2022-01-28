@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 
 import cn from 'clsx';
 
-import { useSymbolData, useSymbols } from 'hooks';
+import { useSymbolData } from 'hooks';
 
 export const ContractInfoDialog = () => {
 	const { symbol, contractSize, isInversePriced, tickSize, maintenanceMargin, maxLeverage } = useSymbolData();

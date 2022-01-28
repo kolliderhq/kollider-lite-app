@@ -1,4 +1,3 @@
-import capitalize from 'lodash-es/capitalize';
 import { v4 as uuidv4 } from 'uuid';
 
 import { multiply } from 'utils/Big';

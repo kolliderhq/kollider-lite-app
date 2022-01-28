@@ -2,7 +2,7 @@ import React from 'react';
 import { SwipeableProps, useSwipeable } from 'react-swipeable';
 
 import { TABS } from 'consts';
-import { RootState, reduxStore, storeDispatch } from 'contexts';
+import { reduxStore, storeDispatch } from 'contexts';
 import { setTab } from 'contexts/modules/layout';
 
 const swipeConfig = {

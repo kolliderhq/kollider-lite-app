@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { useMarkPrice } from 'components/DisplaySymbol';
 import { DefaultLoader } from 'components/Loader';
 import { useSymbols } from 'hooks';
+import { useMarkPrice } from 'hooks/useMarkPrice';
 
 export const DisplayMarkPrice = () => {
 	const { symbol } = useSymbols();

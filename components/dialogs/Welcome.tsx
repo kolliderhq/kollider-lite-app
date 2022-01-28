@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { QrCode } from 'components/QrCode';
-
 export const WelcomePopup = () => {
 	return (
 		<div className="w-full h-full my-auto">

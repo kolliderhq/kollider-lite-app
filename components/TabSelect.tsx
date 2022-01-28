@@ -2,7 +2,6 @@ import React from 'react';
 
 import cn from 'clsx';
 import empty from 'is-empty';
-import { Position } from 'postcss';
 
 import { TABS } from 'consts';
 import { setTab } from 'contexts/modules/layout';

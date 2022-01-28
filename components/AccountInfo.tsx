@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { LabelledValue } from 'components/Positions';
-import { useAppSelector, useSymbols } from 'hooks';
+import { LabelledValue } from 'components/LabelledValue';
+import { useAppSelector } from 'hooks';
 import { abs, gt } from 'utils/Big';
 import { formatNumber, getSatsToDollar } from 'utils/format';
 import { getDollarPrefix } from 'utils/scripts';

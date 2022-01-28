@@ -1,11 +1,9 @@
 import React from 'react';
 
 import empty from 'is-empty';
-import capitalize from 'lodash-es/capitalize';
 import each from 'lodash-es/each';
 import isFunction from 'lodash-es/isFunction';
 import keys from 'lodash-es/keys';
-import lowerCase from 'lodash-es/lowerCase';
 import map from 'lodash-es/map';
 
 import {

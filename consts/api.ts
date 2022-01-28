@@ -1,10 +1,9 @@
 import { DeepReadonly } from 'ts-essentials';
 
 import { TIME } from 'consts/time';
-import { applyOptionalParams } from 'utils/scripts';
-import { deepFreeze } from 'utils/scripts';
+import { applyOptionalParams, deepFreeze } from 'utils/scripts';
 
-import { API_ROLE, I_API } from './types/api';
+import { I_API } from './types/api';
 
 const multiplier = 1;
 

@@ -4,6 +4,9 @@ import empty from 'is-empty';
 import { useRouter } from 'next/router';
 
 import { WrapHasLightClient } from 'components/wrappers/LightClientWrapper';
+import { POPUPS } from 'consts';
+import { storeDispatch } from 'contexts';
+import { setPopup } from 'contexts/modules/layout';
 import useAutoLogout from 'hooks/init/useAutoLogout';
 import { useCheckIpLocation } from 'hooks/init/useCheckIpLocation';
 import useGetMiscData from 'hooks/init/useGetMiscData';
@@ -80,6 +83,9 @@ const Webln = () => {
 };
 const Umbrel = () => {
 	useUmbrel();
+	React.useEffect(() => {
+		storeDispatch(setPopup(POPUPS.UMBREL_PW));
+	}, []);
 	return (
 		<WrapHasLightClient loaderElement={<></>}>
 			<></>

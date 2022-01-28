@@ -22,8 +22,13 @@ if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
 
 export const SOCKET_END_POINTS = Object.freeze({ BACK: back });
 
+const UMBREL_URL = {
+	DEV: 'ws://localhost:8080',
+	PROD: 'ws://umbrel.local:4244',
+};
+
 export const WS_UMBREL = {
-	BASE: 'ws://localhost:8080',
+	BASE: process.env.NEXT_PUBLIC_BACK_ENV === 'production' ? UMBREL_URL.PROD : UMBREL_URL.DEV,
 	MESSAGES: {
 		CREATE_INVOICE: {
 			type: 'createInvoice',
@@ -33,6 +38,11 @@ export const WS_UMBREL = {
 		SEND_PAYMENT: {
 			type: 'sendPayment',
 			returnType: 'sendPayment',
+			createBody: (params: any) => ({ ...params }),
+		},
+		AUTHENTICATION: {
+			type: 'authentication',
+			returnType: 'authentication',
 			createBody: (params: any) => ({ ...params }),
 		},
 		GET_NODE_INFO: {

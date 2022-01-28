@@ -1,7 +1,10 @@
 import React from 'react';
 
+import noop from 'lodash-es/noop';
+
 import { WrapBasePopup } from 'components/dialogs/base';
 import { InvoicePopup } from 'components/dialogs/Invoice';
+import { UmbrelPWPopup } from 'components/dialogs/UmbrelPW';
 import { WelcomePopup } from 'components/dialogs/Welcome';
 import { DIALOGS, POPUPS } from 'consts';
 import { setViewing } from 'contexts';
@@ -51,6 +54,9 @@ export const Popups = () => {
 			</WrapBasePopup>
 			<WrapBasePopup isOpen={currentPopup === POPUPS.WELCOME} close={close}>
 				<WelcomePopup />
+			</WrapBasePopup>
+			<WrapBasePopup isOpen={currentPopup === POPUPS.UMBREL_PW} close={noop} isHideCloseButton>
+				<UmbrelPWPopup />
 			</WrapBasePopup>
 		</>
 	);

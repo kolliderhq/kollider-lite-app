@@ -65,4 +65,5 @@ export enum POPUPS {
 	NONE,
 	INVOICE,
 	WELCOME,
+	UMBREL_PW,
 }

@@ -110,6 +110,11 @@ const dataRefiner = (type: string, data: any) => {
 			return data;
 		case WS_UMBREL.MESSAGES.AUTH_LNURL.returnType:
 			return data;
+		case WS_UMBREL.MESSAGES.AUTHENTICATION.returnType:
+			return data;
+		case 'error':
+			console.log(data);
+			return data;
 		default: {
 			console.error('unknown type', type);
 			console.log(data);

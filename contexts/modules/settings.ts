@@ -1,4 +1,3 @@
-import { Payload } from '@hapi/boom';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import toPlainObject from 'lodash-es/toPlainObject';
 

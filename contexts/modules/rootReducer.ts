@@ -10,6 +10,7 @@ import pricesReducers from './prices';
 import settingsReducers from './settings';
 import symbolsReducers from './symbols';
 import tradingReducers from './trading';
+import umbrelReducers from './umbrel';
 import userReducers from './user';
 
 const rootReducer = combineReducers({
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
 	settings: settingsReducers,
 	layout: layoutReducers,
 	trading: tradingReducers,
+	umbrel: umbrelReducers,
 });
 
 export default rootReducer;

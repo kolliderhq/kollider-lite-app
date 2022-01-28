@@ -101,7 +101,7 @@ const MarkPriceDisplay = ({ symbol }) => {
 		<div className="w-full flex items-center justify-center">
 			<p className="text-lg">
 				<span className="text-xs pr-0.5">$</span>
-				{formatNumber(optionalDecimal(markPrice))}
+				{formatNumber(markPrice)}
 			</p>
 		</div>
 	);

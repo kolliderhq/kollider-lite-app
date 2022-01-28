@@ -197,7 +197,7 @@ const tradingListener = (msg: any) => {
 				</p>,
 				{
 					type: 'dark',
-					level: TOAST_LEVEL.CRITICAL,
+					level: TOAST_LEVEL.IMPORTANT,
 					toastOptions: {
 						position: 'bottom-center',
 					},

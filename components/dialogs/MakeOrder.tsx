@@ -1,6 +1,7 @@
 import React from 'react';
 
 import cn from 'clsx';
+import toNumber from 'lodash-es/toNumber';
 import Img from 'next/image';
 
 import { baseSocketClient } from 'classes/SocketClient';
@@ -57,7 +58,7 @@ export const processOrder = (order: Order, side: Side, priceDp: number, symbol: 
 
 export const pureCreateOrder = (order: Order, quantity: string, side: Side, priceDp: number, symbol: string) => {
 	const obj = {
-		leverage: Math.round(Number(fixed(order.leverage, 1))),
+		leverage: toNumber(`${fixed(order.leverage, 1)}`),
 		quantity: quantity,
 		orderType: 'market',
 		price: '1',

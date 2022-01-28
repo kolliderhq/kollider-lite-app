@@ -22,7 +22,7 @@ export const weblnConnectAttempt = (hideToast?: boolean) => {
 		storeDispatch(setWeblnConnected(true));
 		displayToast(<p>Webln detected</p>, {
 			type: 'info',
-			level: TOAST_LEVEL.INFO,
+			level: TOAST_LEVEL.VERBOSE,
 			toastId: 'webln-found',
 		});
 		// }

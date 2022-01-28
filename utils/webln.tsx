@@ -30,6 +30,12 @@ export const weblnWithdraw = async (inputState: {
 	const webln = await weblnInit();
 	if (webln) {
 		try {
+			displayToast('Requested Withdraw via Webln', {
+				type: 'dark',
+				level: TOAST_LEVEL.VERBOSE,
+				toastId: 'webln-withdraw',
+				toastOptions: { position: 'bottom-center' },
+			});
 			const result = await webln.makeInvoice({
 				amount: inputState.amount,
 				defaultAmount: inputState.amount,
@@ -50,6 +56,12 @@ export const weblnSendPayment = async (invoice: string, finallyCallback?: () => 
 	try {
 		const webln = await weblnInit();
 		if (webln) {
+			displayToast('Requested Payment via Webln', {
+				type: 'dark',
+				level: TOAST_LEVEL.VERBOSE,
+				toastId: 'webln-payment',
+				toastOptions: { position: 'bottom-center' },
+			});
 			webln
 				.sendPayment(invoice)
 				.then(res => {

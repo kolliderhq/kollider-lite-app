@@ -19,10 +19,12 @@ export const BalanceInfo = () => {
 	const isUmbrel = process.env.NEXT_PUBLIC_UMBREL === '1';
 	return (
 		<div className="mt-3 pb-10 gap-x-5 flex flex-wrap xs:flex-nowrap items-center justify-between">
-			<div className="flex items-center justify-start gap-6">
+			<div className="flex items-center justify-start gap-4">
 				<div className="flex flex-col gap-2">
 					<div>
-						<p className="text-xs tracking-tightest leading-none text-gray-400">Available</p>
+						<p className="text-xs tracking-tightest leading-none text-gray-400 whitespace-nowrap">
+							{isUmbrel ? 'Kollider Balance' : 'Available'}
+						</p>
 						<p className="text-sm tracking-tighter leading-none pt-0.5">
 							{formatNumber(cash)}
 							<span className="pl-1 text-xs">SATS</span>
@@ -53,8 +55,7 @@ export const BalanceInfo = () => {
 						Number(cash) > 0 ? 'hover:opacity-80 cursor-pointer' : 'opacity-50 cursor-not-allowed',
 						isUmbrel ? 'py-6' : 'py-2',
 						'px-4 border border-theme-main rounded-lg'
-					)}
-				>
+					)}>
 					<p className="text-xs">Withdraw</p>
 				</button>
 			</div>

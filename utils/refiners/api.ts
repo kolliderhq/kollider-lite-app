@@ -164,7 +164,7 @@ refiner.set(API_NAMES.TRADE_LEADERBOARD, (data: TTradeLeaderboard) => {
 	);
 });
 
-interface IUserAccount {
+export interface IUserAccount {
 	created_at: {
 		nanos_since_epoch: number;
 		secs_since_epoch: number;

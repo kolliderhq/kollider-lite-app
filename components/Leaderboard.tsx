@@ -20,6 +20,8 @@ import { formatNumber, getSatsToDollar } from 'utils/format';
 import { timestampByInterval } from 'utils/scripts';
 import { FixedLengthArray } from 'utils/types/utils';
 
+import { IUserAccount } from '../utils/refiners/api';
+
 dayjs.extend(utc);
 
 export const Leaderboard = () => {
@@ -55,7 +57,7 @@ export const Leaderboard = () => {
 
 	const [myData, setMyData] = React.useState({ rank: -1, volume: '0' });
 
-	const myUserData = getMyUserData();
+	const myUserData = useGetMyUserData();
 	const myUsername = myUserData?.username;
 	React.useEffect(() => {
 		if (!myUserData || empty(mergedData)) return;
@@ -261,14 +263,14 @@ const getRankMedal = (rank: string) => {
 	return `${rank}`;
 };
 
-const getMyUserData = () => {
+export const useGetMyUserData = () => {
 	const [userType, apiKey] = useAppSelector(state => [state.user.data.type, state.connection.apiKey]);
 	//	get username
-	const { data: myUserData } = useSWR(
+	const { data } = useSWR(
 		userType !== USER_TYPE.LIGHT ? [API_NAMES.USER_ACCOUNT, apiKey] : undefined,
 		getSWROptions(API_NAMES.USER_ACCOUNT)
 	);
-	return myUserData;
+	return data as IUserAccount;
 };
 
 const useGetLeaderboardData = () => {

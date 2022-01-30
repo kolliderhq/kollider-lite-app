@@ -14,6 +14,8 @@ import { SymbolsLoadedWrapper } from 'components/wrappers/SymbolsLoadedWrapper';
 import { TABS } from 'consts';
 import { useAppSelector } from 'hooks';
 
+import { UserInfo } from '../components/UserInfo';
+
 export default function Home() {
 	const selectedTab = useAppSelector(state => state.layout.selectedTab);
 	return (
@@ -31,8 +33,7 @@ export default function Home() {
 					<div className="h-[150px] w-full">
 						<Loader />
 					</div>
-				}
-			>
+				}>
 				{selectedTab === TABS.ORDER && (
 					<div className="w-full relative z-5 mb-2">
 						<IndexPriceSparkLine />
@@ -44,7 +45,10 @@ export default function Home() {
 				{selectedTab === TABS.ORDER && <OrderArea />}
 				{selectedTab === TABS.RANKS && <Leaderboard />}
 			</section>
-			<BalanceInfo />
+			<div className="pb-10">
+				<BalanceInfo />
+				<UserInfo />
+			</div>
 		</div>
 	);
 }

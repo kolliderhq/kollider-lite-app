@@ -18,7 +18,7 @@ export const PositionTable = () => {
 			{displayablePositions.length === 0 ? (
 				<div className="w-full h-[200px] flex flex-col items-center justify-center gap-3">
 					<Img width={50} height={50} src={'/assets/common/notFound.svg'} />
-					<p>Not Found</p>
+					<p>No Open Positions</p>
 				</div>
 			) : (
 				map(displayablePositions, position => (

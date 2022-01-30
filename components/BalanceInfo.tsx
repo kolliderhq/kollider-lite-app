@@ -18,7 +18,7 @@ export const BalanceInfo = () => {
 	const cash = fixed(balances.cash, 0);
 	const isUmbrel = process.env.NEXT_PUBLIC_UMBREL === '1';
 	return (
-		<div className="mt-3 pb-10 gap-x-5 flex flex-wrap xs:flex-nowrap items-center justify-between">
+		<div className="mt-3 gap-x-5 flex flex-wrap xs:flex-nowrap items-center justify-between">
 			<div className="flex items-center justify-start gap-4">
 				<div className="flex flex-col gap-2">
 					<div>

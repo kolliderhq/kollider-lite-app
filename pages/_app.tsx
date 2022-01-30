@@ -5,7 +5,6 @@ import 'styles/styles.scss';
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import PlausibleProvider from 'next-plausible';
 import { DefaultSeo } from 'next-seo';
 import type { AppProps } from 'next/app';
 import { SWRConfig } from 'swr';
@@ -19,7 +18,6 @@ import { googleTranslateException } from 'utils/misc';
 function MyApp({ Component, pageProps }: AppProps) {
 	const init = React.useMemo(() => <DataInit />, []);
 	return (
-		<PlausibleProvider domain={'lite.kollider.xyz'}>
 			<Provider store={reduxStore}>
 				<SWRConfig
 					value={{
@@ -44,7 +42,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 					</PageWrapper>
 				</SWRConfig>
 			</Provider>
-		</PlausibleProvider>
 	);
 }
 

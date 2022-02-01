@@ -49,6 +49,10 @@ export const WS_UMBREL = {
 			type: 'getNodeInfo',
 			returnType: 'getNodeInfo',
 		},
+		GET_CHANNEL_BALANCE: {
+			type: 'getChannelBalances',
+			returnType: 'getChannelBalances',
+		},
 		GET_WALLET_BALANCE: {
 			type: 'getWalletBalances',
 			returnType: 'getWalletBalances',

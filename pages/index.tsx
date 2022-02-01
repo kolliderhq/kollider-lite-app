@@ -23,7 +23,7 @@ export default function Home() {
 		state.payments.paymentInTransit,
 	]);
 	return (
-		<div className="w-full px-2 sm:px-4 pt-4 relative pb-10 min-h-screen">
+		<div className="w-full px-2 sm:px-4 pt-3 relative pb-10 min-h-screen">
 			<Dialogs />
 			<Popups />
 

@@ -72,26 +72,35 @@ interface GetWalletBalanceResponse {
 	};
 }
 
+interface GetChannelBalanceResponse {
+	type: string;
+	data: {
+		local: string;
+		remote: string;
+	};
+}
+
 const UmbrelBalance = () => {
-	const isUmbrelUsable = useAppSelector(
-		state => state.connection.isUmbrelAuthenticated && state.connection.isUmbrelConnected
+	const [isUmbrelUsable, localBalance] = useAppSelector(
+		state => [state.connection.isUmbrelAuthenticated && state.connection.isUmbrelConnected, state.umbrel.localBalance]
 	);
 	const [cash, setCash] = React.useState<string>();
 
 	React.useEffect(() => {
 		if (!isUmbrelUsable) return;
-		baseUmbrelSocketClient.socketSend('GET_WALLET_BALANCE', null, (res: GetWalletBalanceResponse) => {
-			console.log('getWalletBalance', res);
-			const balance = res.data.confirmed_balance;
-			setCash(balance);
-		});
+		baseUmbrelSocketClient.socketSend('GET_CHANNEL_BALANCE')
 	}, [isUmbrelUsable]);
+
+	React.useEffect(() => {
+		if (!isUmbrelUsable) return;
+		setCash(formatNumber(localBalance))
+	}, [localBalance]);
 
 	return (
 		<div>
 			<p className="text-xs tracking-tightest leading-none text-gray-400 whitespace-nowrap">Node Balance</p>
 			<p className="text-sm tracking-tighter leading-none pt-0.5">
-				{cash ? formatNumber(cash) : '-'}
+				{cash ? formatNumber(localBalance) : '-'}
 				<span className="pl-1 text-xs">SATS</span>
 			</p>
 		</div>

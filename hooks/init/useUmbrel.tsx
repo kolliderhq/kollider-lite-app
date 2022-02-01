@@ -13,6 +13,7 @@ import {
 	setViewing,
 	storeDispatch,
 } from 'contexts';
+import { setChannelBalances } from 'contexts/modules/umbrel';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { fixed } from 'utils/Big';
 import { LOG3 } from 'utils/debug';
@@ -27,9 +28,7 @@ import { umbrelSendPayment, umbrelWithdraw } from 'utils/umbrel';
  */
 export function useUmbrel() {
 	const dispatch = useAppDispatch();
-	const isUmbrelAuthenticated = useAppSelector(state =>
-		state.connection.isUmbrelAuthenticated,
-	);
+	const isUmbrelAuthenticated = useAppSelector(state => state.connection.isUmbrelAuthenticated);
 
 	useUmbrelAutoLogin();
 
@@ -60,7 +59,6 @@ export function useUmbrel() {
 	}, []);
 
 	useUmbrelToProcessPayments();
-
 }
 
 const useUmbrelAutoLogin = () => {
@@ -97,10 +95,19 @@ const umbrelLogin = (lnurl: string) => {
 
 const processUmbrelMsg = (type: any, msg: any) => {
 	if (type === 'sendPayment') {
-
 		if (msg.data.status === 'success') {
 			storeDispatch(setPaymentInTransit(false));
 		}
+	} else if (type === 'getChannelBalances') {
+		storeDispatch(
+			setChannelBalances({
+				localBalance: msg.data.local,
+				remoteBalance: msg.data.remote,
+			})
+		);
+	} else if (type == 'receivedPayment') {
+		// In theory this should work but the lnd client seems to slow to update balances just after an invoice is settled
+		baseUmbrelSocketClient.socketSend(UMBREL_MESSAGE_TYPES.GET_CHANNEL_BALANCE);
 	}
 	console.log('Umbrel Event', msg);
 };

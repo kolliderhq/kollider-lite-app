@@ -108,6 +108,8 @@ const dataRefiner = (type: string, data: any) => {
 			return data;
 		case WS_UMBREL.MESSAGES.GET_WALLET_BALANCE.returnType:
 			return data;
+		case WS_UMBREL.MESSAGES.GET_CHANNEL_BALANCE.returnType:
+			return data;
 		case WS_UMBREL.MESSAGES.AUTH_LNURL.returnType:
 			return data;
 		case WS_UMBREL.MESSAGES.AUTHENTICATION.returnType:

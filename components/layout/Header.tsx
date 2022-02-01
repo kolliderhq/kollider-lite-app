@@ -23,8 +23,8 @@ export const Header = () => {
 	return (
 		<div className="flex items-center justify-between w-full h-16 pb-4">
 			<figure className="w-full flex items-center justify-start relative">
-				<p className="text-[10px] xs:text-xs absolute left-[108px] xs:left-[145px] top-[-10px] xs:top-[-8px]">Lite</p>
-				<img className="w-30 h-[50px] xs:w-30 xs:h-8" src="/assets/logos/kollider_logo_white_2.png" />
+				<p className="text-[10px] xs:text-xs absolute left-[135px] xs:left-[145px] top-[-12px] xs:top-[-8px]">Lite</p>
+				<img className="w-30 h-[30px] xs:w-30 xs:h-8" src="/assets/logos/kollider_logo_white_2.png" />
 			</figure>
 			<div className="col-span-2 w-full flex items-center justify-end gap-3 xxs:gap-4">
 				<WeblnButton />

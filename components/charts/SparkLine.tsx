@@ -110,7 +110,7 @@ const defaultOptions = {
 		borderWidth: 0,
 		type: 'area',
 		margin: [2, 0, 2, 0],
-		height: 120,
+		height: 200,
 		style: {
 			overflow: 'allow',
 		},

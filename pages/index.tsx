@@ -10,6 +10,7 @@ import { Leaderboard } from 'components/Leaderboard';
 import Loader from 'components/Loader';
 import { OrderArea } from 'components/OrderArea';
 import { PositionTable } from 'components/positions/Positions';
+import { TransactionProcessingInfo } from 'components/TransactionProcessInfo';
 import { SymbolsLoadedWrapper } from 'components/wrappers/SymbolsLoadedWrapper';
 import { TABS } from 'consts';
 import { useAppSelector } from 'hooks';
@@ -17,11 +18,15 @@ import { useAppSelector } from 'hooks';
 import { UserInfo } from '../components/UserInfo';
 
 export default function Home() {
-	const selectedTab = useAppSelector(state => state.layout.selectedTab);
+	const [selectedTab, paymentInTransit] = useAppSelector(state => [
+		state.layout.selectedTab,
+		state.payments.paymentInTransit,
+	]);
 	return (
 		<div className="w-full px-2 sm:px-4 pt-4 relative pb-10 min-h-screen">
 			<Dialogs />
 			<Popups />
+
 			<Header />
 			{selectedTab === TABS.ORDER && (
 				<div className="my-1">
@@ -49,6 +54,7 @@ export default function Home() {
 				<BalanceInfo />
 				<UserInfo />
 			</div>
+			<div className="">{paymentInTransit && <TransactionProcessingInfo />}</div>
 		</div>
 	);
 }

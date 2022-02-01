@@ -10,3 +10,4 @@ export * from './rootReducer';
 export * from './trading';
 export * from './prices';
 export * from './settings';
+export * from './payments';

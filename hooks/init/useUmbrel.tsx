@@ -5,8 +5,14 @@ import useSWR from 'swr';
 import { auth } from 'classes/Auth';
 import { baseSocketClient } from 'classes/SocketClient';
 import { baseUmbrelSocketClient } from 'classes/UmbrelSocketClient';
-import { API_NAMES, DIALOGS, MESSAGE_TYPES, SETTINGS, UMBREL_MESSAGE_TYPES, USER_TYPE, WS_CUSTOM_TYPES } from "consts";
-import { setIsUmbrelAuthenticated, setIsUmbrelConnected, setViewing } from 'contexts';
+import { API_NAMES, DIALOGS, MESSAGE_TYPES, SETTINGS, UMBREL_MESSAGE_TYPES, USER_TYPE, WS_CUSTOM_TYPES } from 'consts';
+import {
+	setIsUmbrelAuthenticated,
+	setIsUmbrelConnected,
+	setPaymentInTransit,
+	setViewing,
+	storeDispatch,
+} from 'contexts';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
 import { fixed } from 'utils/Big';
 import { LOG3 } from 'utils/debug';
@@ -21,7 +27,9 @@ import { umbrelSendPayment, umbrelWithdraw } from 'utils/umbrel';
  */
 export function useUmbrel() {
 	const dispatch = useAppDispatch();
-	const isUmbrelAuthenticated = useAppSelector(state => state.connection.isUmbrelAuthenticated);
+	const isUmbrelAuthenticated = useAppSelector(state =>
+		state.connection.isUmbrelAuthenticated,
+	);
 
 	useUmbrelAutoLogin();
 
@@ -36,6 +44,7 @@ export function useUmbrel() {
 		baseUmbrelSocketClient.connect(
 			async () => {
 				dispatch(setIsUmbrelConnected(true));
+				baseUmbrelSocketClient.addAnyEventListener(processUmbrelMsg);
 			},
 			() => {
 				dispatch(setIsUmbrelConnected(false));
@@ -51,6 +60,7 @@ export function useUmbrel() {
 	}, []);
 
 	useUmbrelToProcessPayments();
+
 }
 
 const useUmbrelAutoLogin = () => {
@@ -85,8 +95,14 @@ const umbrelLogin = (lnurl: string) => {
 	});
 };
 
-const processUmbrelMsg = (data: any) => {
-	console.log('Umbrel Event', data);
+const processUmbrelMsg = (type: any, msg: any) => {
+	if (type === 'sendPayment') {
+
+		if (msg.data.status === 'success') {
+			storeDispatch(setPaymentInTransit(false));
+		}
+	}
+	console.log('Umbrel Event', msg);
 };
 
 const useUmbrelToProcessPayments = () => {
@@ -126,6 +142,7 @@ const useProcessAutoWithdrawUmbrel = () => {
 		state.trading.balances,
 		state.settings.weblnAutoWithdraw,
 	]) as FixedLengthArray<[boolean, Balances, number]>;
+
 	const cash = Number(fixed(balances?.cash ? balances.cash : 0, 0));
 	const ref = React.useRef<{ timestamp: number; timeout: ReturnType<typeof setTimeout> }>({
 		timestamp: 0,
@@ -140,11 +157,11 @@ const useProcessAutoWithdrawUmbrel = () => {
 				if (current !== ref.current.timestamp) return;
 				console.log('Umbrel Auto Withdraw attempt', cash);
 				umbrelWithdraw(cash, res => {
-					if(!res.data?.paymentRequest) {
-						displayToast("Error requesting invoice from Umbrel", {
+					if (!res.data?.paymentRequest) {
+						displayToast('Error requesting invoice from Umbrel', {
 							type: 'error',
 							level: TOAST_LEVEL.CRITICAL,
-						})
+						});
 						return;
 					}
 					const body = { amount: cash, invoice: res.data.paymentRequest };

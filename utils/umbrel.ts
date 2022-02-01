@@ -1,6 +1,7 @@
 import { baseUmbrelSocketClient } from 'classes/UmbrelSocketClient';
 import { UMBREL_MESSAGE_TYPES } from 'consts';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
+import { storeDispatch, setPaymentInTransit } from 'contexts';
 
 export const umbrelCheck = (): Promise<boolean> => {
 	return new Promise((resolve, reject) => {
@@ -34,6 +35,7 @@ export const umbrelSendPayment = async (invoice: string, finallyCallback?: (data
 		// 	return;
 		// }
 		baseUmbrelSocketClient.socketSend(UMBREL_MESSAGE_TYPES.SEND_PAYMENT, { paymentRequest: invoice }, finallyCallback);
+		storeDispatch(setPaymentInTransit(true))
 	} catch (ex) {
 		console.error('Umbrel payment error', ex);
 		displayToast('Umbrel Payment Error - try again', {

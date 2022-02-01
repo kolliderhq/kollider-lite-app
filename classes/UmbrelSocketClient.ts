@@ -74,7 +74,7 @@ class UmbrelSocketClient extends EventEmitter {
 				LOG2((ex as any)?.message, 'ws threw while refining');
 				refinedData = data;
 			}
-			this.emit(data?.type, refinedData);
+			this.emit(data.type, data);
 		} catch (ex) {
 			console.error(ex);
 		}

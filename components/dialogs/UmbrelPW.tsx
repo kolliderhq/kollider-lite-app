@@ -17,6 +17,7 @@ export const UmbrelPWPopup = () => {
 		baseUmbrelSocketClient.socketSend('AUTHENTICATION', { password: pw }, data => {
 			socketState.current.fetching = false;
 			if (data?.data?.status === 'success') {
+				socketState.current.fetching = false;
 				displayToast('Umbrel Auth Successful', {
 					type: 'success',
 					level: TOAST_LEVEL.INFO,

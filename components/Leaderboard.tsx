@@ -111,13 +111,14 @@ const LeaderboardInfo = () => {
 				<p className="text-xs text-gray-400 leading-tighter">
 					Rewards for the <span className="text-theme-main">top 3</span> traders with the Highest Volume.
 					<br />
-					🥇 - <span className="text-gray-200">100,000 SATS</span>
+					🥇 - <span className="text-gray-200">2,500,000 SATS</span>
 					<br />
-					🥈 - <span className="text-gray-300">50,000 SATS</span>
+					🥈 - <span className="text-gray-300">1,500,000 SATS</span>
 					<br />
-					🥉 - <span className="text-gray-400">25,000 SATS</span>
+					🥉 - <span className="text-gray-400">1,000,000 SATS</span>
 					<br />
-					Rewards are paid out every week at <span className="text-gray-200 whitespace-nowrap">Monday 00:00 UTC</span>.
+					Rewards are paid out at{' '}
+					<span className="text-gray-200 whitespace-nowrap">the 1st of every month at 00:00 UTC</span>.
 				</p>
 			</div>
 		</div>
@@ -275,9 +276,8 @@ export const useGetMyUserData = () => {
 
 const useGetLeaderboardData = () => {
 	const weekDay = dayjs().utc().day();
-	const start =
-		timestampByInterval(dayjs().utc().valueOf(), TIME.HOUR * 24) - (weekDay === 0 ? 7 : weekDay) * TIME.HOUR * 24;
-	const end = start + TIME.HOUR * 24 * 7;
+	const start = dayjs().utc().startOf('month').valueOf();
+	const end = dayjs().utc().endOf('month').valueOf();
 	const { data } = useSWR([API_NAMES.TRADE_LEADERBOARD, null, start, end], getSWROptions(API_NAMES.TRADE_LEADERBOARD));
 	return [data, end];
 };

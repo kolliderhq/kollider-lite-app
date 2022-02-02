@@ -5,7 +5,7 @@ import cn from 'clsx';
 import { baseSocketClient } from 'classes/SocketClient';
 import { baseUmbrelSocketClient } from 'classes/UmbrelSocketClient';
 import { WithdrawLimitLine } from 'components/WithdrawLimit';
-import { DIALOGS, MESSAGE_TYPES } from 'consts';
+import { DIALOGS, MESSAGE_TYPES, UMBREL_MESSAGE_TYPES } from 'consts';
 import { setDialog } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { fixed } from 'utils/Big';
@@ -81,19 +81,20 @@ interface GetChannelBalanceResponse {
 }
 
 const UmbrelBalance = () => {
-	const [isUmbrelUsable, localBalance] = useAppSelector(
-		state => [state.connection.isUmbrelAuthenticated && state.connection.isUmbrelConnected, state.umbrel.localBalance]
-	);
+	const [isUmbrelUsable, localBalance] = useAppSelector(state => [
+		state.connection.isUmbrelAuthenticated && state.connection.isUmbrelConnected,
+		state.umbrel.localBalance,
+	]);
 	const [cash, setCash] = React.useState<string>();
 
 	React.useEffect(() => {
 		if (!isUmbrelUsable) return;
-		baseUmbrelSocketClient.socketSend('GET_CHANNEL_BALANCE')
+		baseUmbrelSocketClient.socketSend(UMBREL_MESSAGE_TYPES.GET_CHANNEL_BALANCE);
 	}, [isUmbrelUsable]);
 
 	React.useEffect(() => {
 		if (!isUmbrelUsable) return;
-		setCash(formatNumber(localBalance))
+		setCash(formatNumber(localBalance));
 	}, [localBalance]);
 
 	return (

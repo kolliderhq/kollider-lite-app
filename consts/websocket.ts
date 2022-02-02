@@ -15,8 +15,9 @@ if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
 		back = 'ws://10.0.2.213/v1/ws/';
 	} else if (process.env.NEXT_PUBLIC_BACK_ENV === 'production') {
 		back = 'wss://api.kollider.xyz/v1/ws/';
+		// back = 'ws://api.staging.kollider.internal/v1/ws/';
 	} else {
-		back = 'ws://api-staging-perps.kollider.internal/v1/ws/';
+		back = 'ws://api.staging.kollider.internal/v1/ws/';
 	}
 }
 
@@ -24,6 +25,7 @@ export const SOCKET_END_POINTS = Object.freeze({ BACK: back });
 
 const UMBREL_URL = {
 	DEV: 'ws://localhost:8080',
+	// PROD: 'ws://localhost:8080',
 	PROD: 'ws://umbrel.local:4244',
 };
 

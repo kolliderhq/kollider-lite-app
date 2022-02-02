@@ -21,6 +21,7 @@ export const API_TIME: Record<string, DeepReadonly<number>> = {
 let back;
 if (process.env.NEXT_PUBLIC_BACK_ENV === 'production') {
 	back = 'https://api.kollider.xyz/v1';
+	// back = 'http://api.staging.kollider.internal/v1';
 	// TODO : remove after you debug the issue
 
 	(() => {
@@ -59,7 +60,7 @@ if (process.env.NEXT_PUBLIC_BACK_ENV === 'production') {
 		}
 	})();
 } else {
-	back = 'http://api-staging-perps.kollider.internal/v1';
+	back = 'http://api.staging.kollider.internal/v1';
 }
 
 const END_POINTS: Record<string, string> = Object.freeze({

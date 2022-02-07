@@ -46,6 +46,12 @@ export enum TABS {
 	__LENGTH,
 }
 
+export enum TABLE_TABS {
+	POSITIONS,
+	TRADES,
+	__LENGTH,
+}
+
 // dependant on UI actions
 export enum DIALOGS {
 	NONE,
@@ -58,6 +64,7 @@ export enum DIALOGS {
 	MAKE_ORDER,
 	CONTRACT_INFO,
 	QUANTITY_TOUCH_INPUT,
+	EDIT_TPSL,
 }
 
 // stuff that is triggered and suddenly appear

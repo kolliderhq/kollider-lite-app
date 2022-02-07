@@ -23,6 +23,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 					value={{
 						refreshInterval: 0,
 						fetcher: fetcher,
+						// shouldRetryOnError: false,
+						// onErrorRetry: false,
 						onErrorRetry: defaultOnErrorRetry,
 					}}
 				>

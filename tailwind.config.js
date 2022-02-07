@@ -3,6 +3,9 @@ const widths = {
 	xxs: '380px',
 	xs: '480px',
 	sm: '600px',
+	md: '768px',
+	lg: '1024px',
+	xl: '1250px',
 };
 
 module.exports = {

@@ -562,6 +562,12 @@ refiner.set(WS.MESSAGES.ADVANCED_ORDERS.refineType, v => {
 	return { ...v, data: data };
 });
 
+refiner.set(TRADING_TYPES.ADVANCED_ORDER_OPEN, v => {
+	LOG3(v, 'ADVANCED_ORDER_OPEN');
+	const data = camelCaseAllKeys(v.data);
+	return { ...v, data: data };
+});
+
 //  messages
 refiner.set(WS.MESSAGES[MESSAGE_TYPES.SUBSCRIBE].type, v => {
 	return v;

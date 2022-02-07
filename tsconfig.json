@@ -19,6 +19,6 @@
 		},
 		"incremental": true
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/positions/TableTabs.js", "components/dialogs/EditTpsl.js"],
 	"exclude": ["node_modules"]
 }

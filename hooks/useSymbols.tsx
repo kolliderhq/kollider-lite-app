@@ -15,9 +15,17 @@ export function useSymbols() {
 		[symbolsDisplay]
 	);
 
+	const symbolsAssetsMap = React.useMemo(() => {
+		let m = {};
+		symbols.map(sym => {
+			m[sym] = UI.RESOURCES.getSymbol(sym.substring(0, 3))
+		})
+		return m
+	}, [symbols]);
+
 	return React.useMemo(
-		() => ({ symbols, symbolData, symbol: symbols[symbolIndex], symbolsDisplay, symbolsAssets, symbolIndex }),
-		[symbols, symbolData, symbolsDisplay, symbolsAssets, symbolIndex]
+		() => ({ symbols, symbolData, symbol: symbols[symbolIndex], symbolsDisplay, symbolsAssets, symbolIndex, symbolsAssetsMap }),
+		[symbols, symbolData, symbolsDisplay, symbolsAssets, symbolIndex, symbolsAssetsMap]
 	) as {
 		symbols: string[];
 		symbolData: TSymbolData;
@@ -25,6 +33,7 @@ export function useSymbols() {
 		symbolsDisplay: string[];
 		symbolsAssets: string[];
 		symbolIndex: number;
+		symbolsAssetsMap: Map<string, string>;
 	};
 }
 

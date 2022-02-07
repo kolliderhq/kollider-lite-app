@@ -9,7 +9,7 @@ import { useSymbols } from 'hooks';
 import { getSWROptions } from 'utils/fetchers';
 import { timestampByInterval } from 'utils/scripts';
 
-export const IndexPriceSparkLine = () => {
+export const IndexPriceSparkLine = ({height}) => {
 	const { symbol } = useSymbols();
 	const dayAgo = [
 		timestampByInterval(Date.now() - TIME.HOUR * 24 * 7, TIME.HOUR),
@@ -32,7 +32,7 @@ export const IndexPriceSparkLine = () => {
 		console.log('IndexPriceSparkLine', data);
 	}, [data]);
 
-	return <SparkLine series={series} yAxis={yAxis} />;
+	return <SparkLine series={series} yAxis={yAxis} options={{width: 100, height: 1000, margin: [0, 0, 0, 0]}}/>;
 };
 
 function generateSeries(data) {

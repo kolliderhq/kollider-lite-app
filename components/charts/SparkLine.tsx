@@ -29,7 +29,7 @@ export const SparkLine = ({
 }) => {
 	const [chartOptions, setChartOptions] = React.useState(cloneDeep(defaultOptions));
 	React.useEffect(() => {
-		console.log('setChartOptions >>> ', series);
+		// console.log('setChartOptions >>> ', series);
 		// @ts-ignore
 		setChartOptions(prevValue => {
 			return cloneDeep({
@@ -110,7 +110,7 @@ const defaultOptions = {
 		borderWidth: 0,
 		type: 'area',
 		margin: [2, 0, 2, 0],
-		height: 200,
+		height: 400,
 		style: {
 			overflow: 'allow',
 		},

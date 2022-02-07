@@ -7,12 +7,11 @@ import Img from 'next/image';
 import { PositionBox } from 'components/positions/PositionBox';
 import { useAppSelector } from 'hooks';
 
-export const PositionTable = () => {
+export const PositionOverview = () => {
 	const { positions } = useAppSelector(state => state.trading);
 	const displayablePositions = filter(positions, position => {
 		if (position && Number(position.quantity) >= 1) return true;
 	});
-	console.log(displayablePositions);
 	return (
 		<>
 			{displayablePositions.length === 0 ? (

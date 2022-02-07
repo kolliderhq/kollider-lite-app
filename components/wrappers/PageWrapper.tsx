@@ -9,7 +9,7 @@ import { useSwipeActions } from 'hooks/useSwipeActions';
 export const PageWrapper = ({ children }: { children: ReactNode }) => {
 	const swipeHandlers = useSwipeActions();
 	return (
-		<div {...swipeHandlers} className="max-w-sm min-w-xxxs mx-auto min-h-screen">
+		<div {...swipeHandlers} className="w-sm sm:w-full min-w-xxxs mx-auto min-h-screen">
 			<div className="w-full min-h-screen">{children}</div>
 			<Footer />
 			<ToastContainer />

@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector, useSymbols } from 'hooks';
 
 export const TabSelect = () => {
 	return (
-		<div className="w-full">
+		<div className="w-full sm:hidden">
 			<div className="w-full grid grid-cols-3">
 				<TabButton tab={TABS.ORDER} label={'Order'} />
 				<PositionsTabButton />

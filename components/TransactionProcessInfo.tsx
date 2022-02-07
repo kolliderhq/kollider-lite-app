@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { setIsUmbrelAuthenticated, setPaymentInTransit, storeDispatch } from 'contexts';
+import { setPaymentInTransit, storeDispatch } from 'contexts';
 import { useAppSelector } from 'hooks/redux';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 

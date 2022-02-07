@@ -2,7 +2,7 @@ import React from 'react';
 
 import useSWR from 'swr';
 
-import { API_NAMES, CONTEXTS } from 'consts';
+import { API_NAMES, CONTEXTS, GENERAL } from 'consts';
 import { defaultLocalStore, setIsOnline, setServiceStatus } from 'contexts';
 import { useAppDispatch } from 'hooks/redux';
 import { LOG5 } from 'utils/debug';
@@ -15,6 +15,13 @@ export function useStatusChecker() {
 	const [nextMaintenance, status, msg] = [data?.nextMaintenance, data?.status, data?.msg];
 
 	const { data: versionData } = useSWR([API_NAMES.CHECK_VERSION], simpleFetch, getSWROptions(API_NAMES.CHECK_VERSION));
+
+	React.useEffect(() => {
+		if (!versionData) return;
+		if (versionData.version === GENERAL.FRONT_VER) return;
+		window.alert('New version detected - page will refresh');
+		window.location.reload();
+	}, [versionData]);
 
 	React.useEffect(() => {
 		if (!nextMaintenance || !status || status === 'Maintenance') return;

@@ -70,18 +70,18 @@ const TradesTable = () => {
 		<table className="table-fixed w-full z-0">
 			<thead className="sticky top-0 bg-gray-900">
 				<tr className="w-full">
-					<th className="w-12">Symbol</th>
-					<th className="">Side</th>
-					<th className="w">Quantity</th>
-					<th className="">
-						Price <span className="text-xs"></span>
+					<th className="w-12 font-thin">Symbol</th>
+					<th className="font-thin">Side</th>
+					<th className="font-thin">Quantity</th>
+					<th className="font-thin">
+						Price <span className="text-xs font-thin"></span>
 					</th>
-					<th className="">Leverage</th>
-					<th className="">Order Type</th>
-					<th className="">
-						RPNL <span className="text-xs">(Sats)</span>
+					<th className="font-thin">Leverage</th>
+					<th className="font-thin">Order Type</th>
+					<th className="font-thin">
+						RPNL <span className="text-xs font-thin">(Sats)</span>
 					</th>
-					<th className="">
+					<th className="font-thin">
 						Fees <span className="text-xs">(Sats)</span>
 					</th>
 				</tr>
@@ -144,15 +144,15 @@ const PositionsTable = () => {
 			<table className="table-fixed w-full">
 				<thead>
 					<tr className="border-b border-gray-600 w-full">
-						<th className="w-20 text-left">Symbol</th>
-						<th className="w-12">Side</th>
-						<th className="w">Qty</th>
-						<th className="">Entry Price</th>
-						<th className="">TP/SL</th>
-						<th className="">Liq. Price</th>
-						<th className="">Leverage</th>
-						<th className="">PnL</th>
-						<th className="">Action</th>
+						<th className="w-20 text-left font-thin">Symbol</th>
+						<th className="w-12 font-thin">Side</th>
+						<th className="font-thin">Qty</th>
+						<th className="font-thin">Entry Price</th>
+						<th className="font-thin">TP/SL</th>
+						<th className="font-thin">Liq. Price</th>
+						<th className="font-thin">Leverage</th>
+						<th className="font-thin">PnL</th>
+						<th className="font-thin">Action</th>
 					</tr>
 				</thead>
 				<tbody className="">

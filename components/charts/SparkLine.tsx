@@ -35,6 +35,17 @@ export const SparkLine = ({
 			return cloneDeep({
 				...prevValue,
 				...options,
+				chart: {
+					backgroundColor: null,
+					borderWidth: 0,
+					type: 'area',
+					margin: [2, 0, 2, 0],
+					height: options.height,
+					style: {
+						overflow: 'allow',
+					},
+					skipClone: true,
+				},
 				series: series,
 				yAxis: [
 					{

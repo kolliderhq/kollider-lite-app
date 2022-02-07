@@ -15,11 +15,12 @@ import { formatNumber, roundDecimal } from 'utils/format';
 import { getNumberColour } from 'utils/format';
 import { timestampByInterval } from 'utils/scripts';
 
-export function MainPriceGauge() {
-	const markPrice = useMarkPrice('BTCUSD.PERP');
-	let symbol = 'BTCUSD.PERP';
+import Loader from './Loader';
 
-	const { symbolData } = useSymbols();
+export function MainPriceGauge() {
+	const { symbolData, symbol } = useSymbols();
+
+	const markPrice = useMarkPrice(symbol);
 	const priceDp = symbolData?.[symbol]?.priceDp;
 	const [dayAgoPrice, setDayAgoPrice] = React.useState(null);
 	const dayAgo = [
@@ -44,15 +45,21 @@ export function MainPriceGauge() {
 
 	return (
 		<div className="w-full flex flex-col gap-2">
-			<div className="flex">
-				<div className="font-mono">$</div>
-				<div className="text-6xl font-mono ml-2">{formatNumber(markPrice)}</div>
-			</div>
-			<div>
-				<span className={cn('text-2xl font-mono tracking-tighter mt-3', getNumberColour(priceInc))}>
-					{priceInc < 0? "- " : "+ "  + roundDecimal(priceInc, 2)} % (24h)
-				</span>
-			</div>
+			{markPrice ? (
+				<>
+					<div className="flex">
+						<div className="font-mono">$</div>
+						<div className="text-6xl font-mono ml-2">{formatNumber(markPrice)}</div>
+					</div>
+					<div>
+						<span className={cn('text-2xl font-mono tracking-tighter mt-3', getNumberColour(priceInc))}>
+							{priceInc < 0 ? '- ' : '+ ' + roundDecimal(priceInc, 2)} % (24h)
+						</span>
+					</div>
+				</>
+			) : (
+				<Loader />
+			)}
 		</div>
 	);
 }

@@ -3,7 +3,7 @@ export const GENERAL = Object.freeze({
 		OBJ: {},
 		ARR: [],
 	},
-	FRONT_VER: '1.0.3', //  increment to force-reload users that are staring at the website when updated
+	FRONT_VER: '1.0.4', //  increment to force-reload users that are staring at the website when updated
 	URL_PROD: 'pro.kollider.xyz',
 	URL_DOCS: 'https://docs.kollider.xyz/docs/',
 	LN_EMAIL: '-lnurl-auth@kollider.xyz',

@@ -128,7 +128,6 @@ export interface TRADES {
 }
 
 refiner.set(API_NAMES.HISTORICAL_TRADES, (data: ITRADES) => {
-	console.log('trades	 >>>>>', data);
 	const dataArr = sort(data).desc(v => v.timestamp);
 	const trades = [];
 	// console.log('products data Array >>>>>', dataArr);

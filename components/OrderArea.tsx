@@ -44,7 +44,6 @@ export const OrderArea = () => {
 				});
 				return;
 			}
-			console.log(side)
 			setClickedSide(side);
 			if (!allowedIp) {
 				displayToast(<p className="text-sm">Not Allowed due to IP address from restricted country</p>, {

@@ -29,7 +29,6 @@ export function OrderInfo({ side }: { side: Side }) {
 	const askOrderValue = getOrderValue(bestBid, leverage, priceDp, quantity, symbol, contractSize);
 	const [askData, setAskData] = React.useState<SideData>({} as SideData);
 	React.useEffect(() => {
-		console.log(askOrderValue, bestBid, quantity, leverage);
 		setAskData({
 			margin: fixed(askOrderValue, 0),
 			orderValue: fixed(askOrderValue, 0),

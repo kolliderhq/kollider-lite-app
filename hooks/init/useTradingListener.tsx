@@ -239,7 +239,6 @@ const tradingListener = (msg: any) => {
 			}
 		);
 	} else if (msg.type === TRADING_TYPES.ADVANCED_ORDER_DONE) {
-		console.log("-------------------ADL DONE ---------------------")
 		let orderId = msg.data.order_id
 		storeDispatch(deleteAdvancedOrder({orderId: orderId}));
 		displayToast(
@@ -255,15 +254,12 @@ const tradingListener = (msg: any) => {
 			}
 		);
 	} else if (msg.type === TRADING_TYPES.USER_ADVANCED_ORDERS) {
-		console.log("------------------- Advanced orders ---------------")
-		console.log(msg)
 		Object.entries(msg.data.orders).map((k, i) => {
 			let order = k[1]
 			storeDispatch(setAdvancedOrder({data: order}));
 		})
 	} else {
 		console.warn('unprocessed msg type', msg?.type);
-		console.log(msg);
 		// if (!includes(TRADING_KEYS, msg?.type)) return;
 		// updateTradingStore({ [msg.type]: msg.data });
 	}

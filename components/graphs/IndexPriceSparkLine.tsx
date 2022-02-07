@@ -29,7 +29,6 @@ export const IndexPriceSparkLine = ({width, height}) => {
 		setSeries(generateSeries(data.data));
 		const [min, max] = getMinMax(data.data);
 		setYAxis({ min, max });
-		console.log('IndexPriceSparkLine', data);
 	}, [data]);
 
 	return <SparkLine series={series} yAxis={yAxis} options={{width, height}}/>;

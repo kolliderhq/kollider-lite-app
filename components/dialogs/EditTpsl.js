@@ -84,11 +84,9 @@ export const EditTpslDialog = ({ position, isOpen }) => {
 						'mt-5 border rounded-lg border-transparent w-full px-4 py-3 flex items-center justify-center bg-theme-main'
 					)}
 					onClick={() => {
-						console.log(tpp)
-						console.log(slp)
 						// dispatch(setDialogClose());
 						if (tpp) {
-							if ((existingTp && tpp !== existingTp.price) || !existingTp) {
+							if ((existingTp && tpp !== applyDp(existingTp.price, priceDp)) || !existingTp) {
 								let side = position.side === 'Bid' ? 'Ask' : 'Bid';
 								pureCreateTPSLOrder(
 									tpp,
@@ -109,7 +107,7 @@ export const EditTpslDialog = ({ position, isOpen }) => {
 							isOpen(false);
 						}
 						if (slp) {
-							if ((existingSl && tpp !== existingSl.price) || !existingSl) {
+							if ((existingSl && tpp !== applyDp(existingSl.price, priceDp)) || !existingSl) {
 								let side = position.side === 'Bid' ? 'Ask' : 'Bid';
 								pureCreateTPSLOrder(
 									slp,
@@ -190,8 +188,6 @@ const findRelevantAO = (advancedOrders, symbol) => {
 	let sl = null;
 	Object.entries(advancedOrders).map(([key, i]) => {
 		let order = advancedOrders[key];
-		console.log(order)
-		console.log(symbol)
 		if (order.symbol === symbol) {
 			if (order.advancedOrderType === 'TakeProfit') {
 				tp = order;

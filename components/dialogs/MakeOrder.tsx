@@ -13,7 +13,6 @@ import { fixed, multiply } from 'utils/Big';
 import { isNumber } from 'highcharts';
 
 export const MakeOrderDialog = ({ order, side, setIsOpen }: { order: Order; side: Side, setIsOpen: any }) => {
-	console.log(side === Side.ASK)
 	const dispatch = useAppDispatch();
 	const { symbolsAssets, symbolIndex, symbol } = useSymbols();
 	const { priceDp, isInversePriced } = useSymbolData();
@@ -69,6 +68,5 @@ export const pureCreateOrder = (order: Order, quantity: string, side: Side, pric
 		priceDp,
 		localSave: 'instantOrders',
 	};
-	console.log(obj)
 	baseSocketClient.sendOrder(obj);
 };

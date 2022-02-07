@@ -48,7 +48,6 @@ export const makeOrder = (obj: OrderTemplate) => {
 };
 
 export const makeAdvancedOrder = (obj: AdvancedOrderTemplate) => {
-	console.log(obj)
 	return {
 		quantity: Number(obj?.quantity),
 		leverage: obj?.leverage * 100,

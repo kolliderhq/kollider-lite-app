@@ -9,6 +9,7 @@ import { WithdrawAvailableDialog } from 'components/dialogs/WithdrawAvailable';
 import { DIALOGS } from 'consts';
 import { setDialogClose } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
+import { EditTpslDialog } from './EditTpsl';
 
 // Add dialogs that don't really situate in a particular component here
 export const Dialogs = () => {

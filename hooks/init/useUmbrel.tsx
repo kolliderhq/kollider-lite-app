@@ -109,7 +109,7 @@ const processUmbrelMsg = (type: any, msg: any) => {
 		// In theory this should work but the lnd client seems to slow to update balances just after an invoice is settled
 		baseUmbrelSocketClient.socketSend(UMBREL_MESSAGE_TYPES.GET_CHANNEL_BALANCE);
 	}
-	console.log('Umbrel Event', msg);
+	// console.log('Umbrel Event', msg);
 };
 
 const useUmbrelToProcessPayments = () => {

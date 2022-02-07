@@ -12,6 +12,8 @@ import {
 	setNewInvoice,
 	setOrderId,
 	setUserWithdrawlLimits,
+	setAdvancedOrder,
+	deleteAdvancedOrder,
 	storeDispatch,
 } from 'contexts';
 import { setDialog, setPopupClose } from 'contexts/modules/layout';
@@ -219,9 +221,45 @@ const tradingListener = (msg: any) => {
 		// displayToast(<ADLToast data={msg.data} />, 'error', { position: 'top-right' }, 'Auto Deleverage Notice', true);
 	} else if (msg.type === TRADING_TYPES.ORDER_REJECTION) {
 		//	do nothing, toast is displayed at refiner
+	} else if (msg.type === TRADING_TYPES.ADVANCED_ORDER_OPEN) {
+		let data = msg.data.order;
+		storeDispatch(setAdvancedOrder({data}));
+		const priceDp = reduxStore.getState().symbols.symbolData[data.symbol]?.priceDp;
+		if (!data || !priceDp) return;
+		displayToast(
+			<p>
+				{data.advancedOrderType} created @ ${formatNumber(applyDp(data.price, priceDp))}
+			</p>,
+			{
+				type: 'dark',
+				level: TOAST_LEVEL.INFO,
+				toastOptions: {
+					position: 'bottom-center',
+				},
+			}
+		);
+	} else if (msg.type === TRADING_TYPES.ADVANCED_ORDER_DONE) {
+		let orderId = msg.data.order_id
+		storeDispatch(deleteAdvancedOrder({orderId: orderId}));
+		displayToast(
+			<p>
+				TPSL ID: {orderId} Cancelled.
+			</p>,
+			{
+				type: 'dark',
+				level: TOAST_LEVEL.INFO,
+				toastOptions: {
+					position: 'bottom-center',
+				},
+			}
+		);
+	} else if (msg.type === TRADING_TYPES.USER_ADVANCED_ORDERS) {
+		Object.entries(msg.data.orders).map((k, i) => {
+			let order = k[1]
+			storeDispatch(setAdvancedOrder({data: order}));
+		})
 	} else {
 		console.warn('unprocessed msg type', msg?.type);
-		console.log(msg);
 		// if (!includes(TRADING_KEYS, msg?.type)) return;
 		// updateTradingStore({ [msg.type]: msg.data });
 	}

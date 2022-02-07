@@ -1,10 +1,9 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
 import cn from 'clsx';
 import toNumber from 'lodash-es/toNumber';
 
-import { DialogWrapper } from 'components/dialogs/DIalogs';
 import { MakeOrderDialog } from 'components/dialogs/MakeOrder';
 import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
 import { DefaultLoader } from 'components/Loader';
@@ -19,11 +18,13 @@ import { divide, multiply } from 'utils/Big';
 import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, limitNumber, optionalDecimal } from 'utils/format';
 import { isPositiveInteger, isPositiveNumber, isWithinStringDecimalLimit } from 'utils/scripts';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
+import { WrapBaseDialog } from './dialogs';
 
 export const OrderArea = () => {
 	const dispatch = useAppDispatch();
 	const { bestAsk, bestBid } = useOrderbookSelector(askBidSelector);
 	const { priceDp } = useSymbolData();
+	const [showOrderConfirmationDialog, setShowOrderConfirmationDialog] = useState(false);
 
 	const [allowedIp, loggedIn, order, quantity] = useAppSelector(state => [
 		state.misc.allowedIp,
@@ -43,7 +44,6 @@ export const OrderArea = () => {
 				});
 				return;
 			}
-
 			setClickedSide(side);
 			if (!allowedIp) {
 				displayToast(<p className="text-sm">Not Allowed due to IP address from restricted country</p>, {
@@ -61,38 +61,27 @@ export const OrderArea = () => {
 				});
 				return;
 			}
-			dispatch(setDialog(DIALOGS.MAKE_ORDER));
+			setShowOrderConfirmationDialog(true)
+			// dispatch(setDialog(DIALOGS.MAKE_ORDER));
 		},
 		[allowedIp, loggedIn, order, quantity]
 	);
 
-	const confirmationDialog = React.useMemo(() => {
-		return (
-			<DialogWrapper dialogType={DIALOGS.MAKE_ORDER}>
-				<MakeOrderDialog order={order} side={clickedSide} />
-			</DialogWrapper>
-		);
-	}, [clickedSide]);
-
 	return (
-		<section className="w-full flex flex-col items-center xs:grid xs:grid-rows-1 xs:grid-cols-7 h-full xs:h-[200px] w-full gap-4 xs:gap-4">
-			<SellButton
-				onButtonClick={() => onButtonClick(Side.ASK)}
-				className="hidden xs:flex"
-				bestBid={bestBid}
-				priceDp={priceDp}
-			/>
+		<section className="flex flex-col items-center h-full gap-4 w-full">
+			<WrapBaseDialog isOpen={showOrderConfirmationDialog} close={() => setShowOrderConfirmationDialog(false)}>
+				<MakeOrderDialog order={order} side={clickedSide} setIsOpen={setShowOrderConfirmationDialog}/>
+			</WrapBaseDialog>
 			<div className="xs:col-span-3 xs:row-span-1 w-full">
 				<OrderInput />
 			</div>
+			<BuyButton onButtonClick={() => onButtonClick(Side.BID)} bestAsk={bestAsk} priceDp={priceDp} />
 			<SellButton
 				onButtonClick={() => onButtonClick(Side.ASK)}
-				className="flex xs:hidden"
+				className="flex"
 				bestBid={bestBid}
 				priceDp={priceDp}
 			/>
-			<BuyButton onButtonClick={() => onButtonClick(Side.BID)} bestAsk={bestAsk} priceDp={priceDp} />
-			{confirmationDialog}
 		</section>
 	);
 };
@@ -286,7 +275,7 @@ const DisplayLeverage = ({ leverage }: { leverage: string }) => {
 };
 
 const buttonClass =
-	'h-20 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp grid grid-rows-2 xs:flex xs:flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
+	'h-20 py-2 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp grid grid-rows-2 xs:flex xs:flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
 const SellButton = ({
 	onButtonClick,
 	bestBid,

@@ -10,8 +10,9 @@ import { Order, Side } from 'contexts';
 import { setDialogClose } from 'contexts/modules/layout';
 import { useAppDispatch, useSymbolData, useSymbols } from 'hooks';
 import { fixed, multiply } from 'utils/Big';
+import { isNumber } from 'highcharts';
 
-export const MakeOrderDialog = ({ order, side }: { order: Order; side: Side }) => {
+export const MakeOrderDialog = ({ order, side, setIsOpen }: { order: Order; side: Side, setIsOpen: any }) => {
 	const dispatch = useAppDispatch();
 	const { symbolsAssets, symbolIndex, symbol } = useSymbols();
 	const { priceDp, isInversePriced } = useSymbolData();
@@ -30,7 +31,7 @@ export const MakeOrderDialog = ({ order, side }: { order: Order; side: Side }) =
 						'mt-5 border rounded-lg border-transparent w-full px-4 py-3 flex items-center justify-center bg-theme-main'
 					)}
 					onClick={() => {
-						dispatch(setDialogClose());
+						setIsOpen(false)
 						processOrder(order, side, priceDp, symbol, isInversePriced);
 					}}>
 					<p>Confirm Order</p>
@@ -57,7 +58,7 @@ export const processOrder = (order: Order, side: Side, priceDp: number, symbol: 
 
 export const pureCreateOrder = (order: Order, quantity: string, side: Side, priceDp: number, symbol: string) => {
 	const obj = {
-		leverage: toNumber(`${fixed(order.leverage, 1)}`),
+		leverage: order.leverage.toFixed(2),
 		quantity: quantity,
 		orderType: 'market',
 		price: '1',

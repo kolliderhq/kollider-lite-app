@@ -3,7 +3,7 @@ import cloneDeep from 'lodash-es/cloneDeep';
 import each from 'lodash-es/each';
 
 import { Balances, PositionState, ReceivedOrder } from 'utils/refiners/sockets';
-import { OrderTemplate } from 'utils/trading';
+import { AdvancedOrderTemplate, OrderTemplate } from 'utils/trading';
 
 interface InitState {
 	positions: Record<string, Partial<PositionState> & { quantity: string }>;
@@ -12,6 +12,7 @@ interface InitState {
 	balances: Balances;
 	instantOrders: Record<string, Record<string, Partial<OrderTemplate & { extOrderId: string }>>>;
 	orderIds: Record<string, Record<string, Partial<ReceivedOrder>>>;
+	advancedOrders: Record<number, AdvancedOrderTemplate>;
 }
 
 const initialState: InitState = {
@@ -29,6 +30,7 @@ const initialState: InitState = {
 		isolatedMargin: {},
 		orderMargin: {},
 	},
+	advancedOrders: {},
 	instantOrders: {},
 	orderIds: {},
 };
@@ -55,6 +57,22 @@ export const tradingSlice = createSlice({
 		},
 		setPositionClosed: (state, action: PayloadAction<string>) => {
 			state.positions[action.payload].quantity = '0';
+		},
+		setAdvancedOrder: (state, action: PayloadAction<{data: AdvancedOrderTemplate}>) => {
+			console.log("FUUUUUUUUUUUUUUUCCCCCK")
+			console.log(action.payload.data)
+			state.advancedOrders = {...state.advancedOrders, [action.payload.data.orderId]: action.payload.data}
+		},
+		deleteAdvancedOrder: (state, action: PayloadAction<{orderId}>) => {
+			// if (action.payload.advancedOrderType === 'TakeProfit') {
+			// 	delete state.advancedOrders[action.payload.symbol].tp;
+			// } else {
+			// 	delete state.advancedOrders[action.payload.symbol].sl;
+			// }
+			console.log("Deleting AO ----------->>")
+			let newState = {...state}
+			delete newState.advancedOrders[action.payload.orderId];
+			state = newState;
 		},
 		setBalances: (state, action: PayloadAction<Balances>) => {
 			state.balances = { ...action.payload };
@@ -114,5 +132,7 @@ export const {
 	setBalances,
 	setInstantOrder,
 	mergeInstantOrder,
+	setAdvancedOrder,
+	deleteAdvancedOrder,
 } = tradingSlice.actions;
 export default tradingSlice.reducer;

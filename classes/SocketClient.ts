@@ -146,7 +146,6 @@ class SocketClient extends EventEmitter {
 
 	private processMsg(msg: any) {
 		const objMsg = toPlainObject(msg);
-		// LOG(objMsg, 'ws process msg');
 		try {
 			const data = JSON.parse(String(objMsg?.data));
 			// LOG2(data, 'ws process msg');
@@ -194,6 +193,14 @@ class SocketClient extends EventEmitter {
 
 	public sendOrder(body) {
 		this.socketSend(MESSAGE_TYPES.ORDER, body);
+	}
+
+	public sendAdvancedOrder(body) {
+		this.socketSend(MESSAGE_TYPES.ADVANCED_ORDER, body);
+	}
+
+	public cancelAdvancedOrder(body) {
+		this.socketSend(MESSAGE_TYPES.CANCEL_ADVANCED_ORDER, body);
 	}
 
 	private subscribeToChannel(channel: string, symbols: string[]) {

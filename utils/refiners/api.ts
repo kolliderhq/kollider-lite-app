@@ -103,6 +103,56 @@ refiner.set(API_NAMES.PRODUCTS, (data: IPRODUCTS) => {
 	return products;
 });
 
+interface ITRADE {
+	symbol: string;
+	order_id: number;
+	is_maker: string;
+	is_liquidation: string;
+	leverage: number;
+	margin_type: string;
+	order_type: string;
+	price: number;
+	quantity: number;
+	rpnl: number;
+	fees: number;
+	settlement_type: string;
+	side: string,
+	timestamp: number
+}
+
+interface ITRADES {
+	[symbol: string]: ITRADE;
+}
+export interface TRADES {
+	[symbol: string]: KeysToCamelCase<ITRADE>;
+}
+
+refiner.set(API_NAMES.HISTORICAL_TRADES, (data: ITRADES) => {
+	const dataArr = sort(data).desc(v => v.timestamp);
+	const trades = [];
+	// console.log('products data Array >>>>>', dataArr);
+	each(dataArr, v => {
+		trades.push({
+	symbol: v.symbol,
+	orderId: Number(v.order_id),
+	isMaker: v.is_maker,
+	isLiquidation: v.is_liquidation,
+	leverage: Number(v.leverage),
+	marginType: v.margin_type,
+	orderType: v.order_type,
+	price: Number(v.price),
+	quantity: Number(v.quantity),
+	rpnl: Number(v.rpnl),
+	fees: Number(v.fees),
+	settlementType: v.settlement_type,
+	side: v.side,
+	timestamp: Number(v.timestamp),
+		});
+	});
+	LOG2(trades, 'TRADES');
+	return trades;
+});
+
 refiner.set(API_NAMES.WALLET_DEPOSIT, data => {
 	LOG2(data, 'WALLET_DEPOSIT');
 	return camelCaseAllKeys(data);

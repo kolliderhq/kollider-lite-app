@@ -65,7 +65,6 @@ export const simpleFetch = (...args) => {
 	if (API.API[args[0]].method === 'post') return postRequest(...args);
 	const [apiName, ...params] = args;
 	const [method, urls] = makeFetchParams(apiName, ...params);
-	console.log(method, urls);
 	if (urls.length === 1) {
 		return axios[method](urls[0])
 			.then(res => {

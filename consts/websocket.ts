@@ -1,7 +1,7 @@
 import each from 'lodash-es/each';
 import keys from 'lodash-es/keys';
 
-import { OrderTemplate, makeOrder } from 'utils/trading';
+import { OrderTemplate, makeOrder, makeAdvancedOrder, AdvancedOrderTemplate, makeCancelAdvancedOrder, CancelAdvancedOrderTemplate } from 'utils/trading';
 
 let back: string;
 if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
@@ -105,6 +105,9 @@ export enum TRADING_TYPES {
 	RAW_WITHDRAWAL = 'raw_withdrawal',
 	ADL_NOTICE = 'adl_notice',
 	WITHDRAWAL_LIMIT_INFO = 'withdrawal_limit_info',
+	ADVANCED_ORDER_OPEN = 'advanced_order_open',
+	ADVANCED_ORDER_DONE = 'advanced_order_done',
+	USER_ADVANCED_ORDERS = 'user_advanced_orders',
 }
 
 export enum WS_CUSTOM_TYPES {
@@ -138,6 +141,14 @@ export const WS: IWS = Object.freeze({
 		ORDER: {
 			type: 'order',
 			createBody: (input: OrderTemplate) => ({ ...makeOrder(input) }),
+		},
+		ADVANCED_ORDER: {
+			type: 'order',
+			createBody: (input: AdvancedOrderTemplate) => ({ ...makeAdvancedOrder(input) }),
+		},
+		CANCEL_ADVANCED_ORDER: {
+			type: 'cancel_advanced_order',
+			createBody: (input: CancelAdvancedOrderTemplate) => ({ ...makeCancelAdvancedOrder(input) }),
 		},
 		SUBSCRIBE: {
 			type: 'subscribe',

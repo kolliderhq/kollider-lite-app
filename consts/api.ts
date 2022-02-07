@@ -228,6 +228,22 @@ const API: I_API = {
 			stale: API_TIME.ONE_TIME,
 			allowNull: true,
 		},
+		GET_ORDERS: {
+			route: (symbol, start, end, limit) =>
+				`/orders?${applyOptionalParams({ start, end, symbol, limit}, true)}`,
+			method: 'get',
+			base: END_POINTS.BACK,
+			stale: API_TIME.ONE_TIME,
+			allowNull: true,
+		},
+		HISTORICAL_TRADES: {
+			route: (symbol, start, end, limit) =>
+				`/user/trades?${applyOptionalParams({ start, end, symbol, limit: 100}, true)}`,
+			method: 'get',
+			base: END_POINTS.BACK,
+			stale: API_TIME.SHORTEST,
+			allowNull: true,
+		},
 		TRADE_SUMMARY: {
 			route: () => `/user/trade_summary`,
 			method: 'get',

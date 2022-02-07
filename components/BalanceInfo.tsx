@@ -89,7 +89,9 @@ const UmbrelBalance = () => {
 
 	React.useEffect(() => {
 		if (!isUmbrelUsable) return;
-		baseUmbrelSocketClient.socketSend(UMBREL_MESSAGE_TYPES.GET_CHANNEL_BALANCE);
+		baseUmbrelSocketClient.socketSend('GET_CHANNEL_BALANCE', data => {
+			setCash(formatNumber(data.data.local))
+		})
 	}, [isUmbrelUsable]);
 
 	React.useEffect(() => {

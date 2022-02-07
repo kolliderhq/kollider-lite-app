@@ -13,8 +13,8 @@ import { applyDp, roundDecimal } from 'utils/format';
 
 export const EditTpslDialog = ({ position, isOpen }) => {
 	const dispatch = useAppDispatch();
-	const { symbolsAssets, symbolIndex, symbol } = useSymbols();
-	const { priceDp, isInversePriced } = useSymbolData();
+	const { symbolsAssets, symbolIndex, symbol, symbolsAssetsMap } = useSymbols();
+	const { priceDp, isInversePriced } = useSymbolData(position.symbol?position.symbol: null);
 	const [tpp, setTpp] = useState(null);
 	const [slp, setSlp] = useState(null);
 	const [advancedOrders] = useAppSelector(state => [state.trading.advancedOrders]);
@@ -72,7 +72,7 @@ export const EditTpslDialog = ({ position, isOpen }) => {
 	return (
 		<div className="my-auto w-full h-full mt-5">
 			<div className="flex items-center w-full justify-center gap-2">
-				<Img width={32} height={32} src={symbolsAssets[symbolIndex]} />
+				<Img width={32} height={32} src={symbolsAssetsMap[position.symbol? position.symbol: 'BTCUSD.PERP']} />
 				<h2 className={cn('text-center text-2xl xs:text-3xl leading-none')}>Edit TPSL</h2>
 			</div>
 			<div className="p-4">

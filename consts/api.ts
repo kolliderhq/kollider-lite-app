@@ -241,7 +241,7 @@ const API: I_API = {
 				`/user/trades?${applyOptionalParams({ start, end, symbol, limit: 100}, true)}`,
 			method: 'get',
 			base: END_POINTS.BACK,
-			stale: API_TIME.ONE_TIME,
+			stale: API_TIME.SHORTEST,
 			allowNull: true,
 		},
 		TRADE_SUMMARY: {

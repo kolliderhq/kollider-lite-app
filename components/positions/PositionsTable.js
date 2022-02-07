@@ -68,7 +68,7 @@ export const TradingViewTables = () => {
 const TradesTable = () => {
 	return (
 		<table className="table-fixed w-full z-0">
-			<thead className="sticky top-0 bg-gray-900">
+			<thead className="sticky top-0 bg-gray-900 border-b border-gray-600">
 				<tr className="w-full">
 					<th className="w-12 font-thin">Symbol</th>
 					<th className="font-thin">Side</th>
@@ -81,8 +81,8 @@ const TradesTable = () => {
 					<th className="font-thin">
 						RPNL <span className="text-xs font-thin">(Sats)</span>
 					</th>
-					<th className="font-thin">
-						Fees <span className="text-xs">(Sats)</span>
+					<th className="">
+						Fees <span className="text-xs font-thin">(Sats)</span>
 					</th>
 				</tr>
 			</thead>

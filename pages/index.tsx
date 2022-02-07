@@ -25,13 +25,13 @@ export default function Home() {
 		state.payments.paymentInTransit,
 	]);
 	return (
-		<div className="w-full sm:grid sm:grid-rows px-2 sm:px-4 pt-3 relative pb-10 min-h-screen">
+		<div className="w-full sm:grid sm:grid-rows px-2 sm:px-4 pt-3 relative min-h-screen">
 			<Dialogs />
 			<Popups />
 
 			<Header />
 			<div className="hidden sm:block">
-				<div className="grid grid-cols-4 gap-4 pl-12 pr-12">
+				<div className="grid grid-cols-4 gap-4 px-12">
 					{selectedTab === TABS.ORDER && (
 						<>
 							<div className="flex xs:col-span-2 xl:col-span-1">

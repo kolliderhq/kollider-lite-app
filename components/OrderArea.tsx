@@ -4,7 +4,6 @@ import { useSwipeable } from 'react-swipeable';
 import cn from 'clsx';
 import toNumber from 'lodash-es/toNumber';
 
-import { DialogWrapper } from 'components/dialogs/DIalogs';
 import { MakeOrderDialog } from 'components/dialogs/MakeOrder';
 import { ChangeLeverageButton, LeverageArea } from 'components/LeverageArea';
 import { DefaultLoader } from 'components/Loader';
@@ -77,14 +76,13 @@ export const OrderArea = () => {
 			<div className="xs:col-span-3 xs:row-span-1 w-full">
 				<OrderInput />
 			</div>
+			<BuyButton onButtonClick={() => onButtonClick(Side.BID)} bestAsk={bestAsk} priceDp={priceDp} />
 			<SellButton
 				onButtonClick={() => onButtonClick(Side.ASK)}
 				className="flex"
 				bestBid={bestBid}
 				priceDp={priceDp}
 			/>
-			<BuyButton onButtonClick={() => onButtonClick(Side.BID)} bestAsk={bestAsk} priceDp={priceDp} />
-			{/* {confirmationDialog} */}
 		</section>
 	);
 };
@@ -278,7 +276,7 @@ const DisplayLeverage = ({ leverage }: { leverage: string }) => {
 };
 
 const buttonClass =
-	'h-20 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp grid grid-rows-2 xs:flex xs:flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
+	'h-20 py-2 w-full xs:h-full xs:row-span-1 xs:col-span-2 border-2 border-transparent rounded shadow-elevation-08dp grid grid-rows-2 xs:flex xs:flex-col justify-center items-center s-transition-all-fast hover:opacity-80';
 const SellButton = ({
 	onButtonClick,
 	bestBid,

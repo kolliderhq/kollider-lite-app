@@ -71,6 +71,7 @@ const TradesTable = () => {
 			<thead className="sticky top-0 bg-gray-900 border-b border-gray-600">
 				<tr className="w-full">
 					<th className="w-12 font-thin">Symbol</th>
+					<th className="font-thin">Time</th>
 					<th className="font-thin">Side</th>
 					<th className="font-thin">Quantity</th>
 					<th className="font-thin">
@@ -110,7 +111,7 @@ const TradesTableRows = () => {
 		? data.map(trade => {
 				const { priceDp } = symbolData[trade.symbol];
 				return (
-					<tr className="h-12" key={trade.orderId}>
+					<tr className="h-12 text-sm" key={trade.orderId}>
 						<td>
 							<figure className="mr-2 flex items-center h-full">
 								<div className="m-auto">
@@ -118,6 +119,7 @@ const TradesTableRows = () => {
 								</div>
 							</figure>
 						</td>
+						<td className="text-center">{getTimestamp(trade.timestamp)}</td>
 						<td className="text-center">{trade.side === 'Bid' ? 'Buy' : 'Sell'}</td>
 						<td className="text-center">{trade.quantity}</td>
 						<td className="text-center">{roundDecimal(trade.price, priceDp)}</td>
@@ -275,3 +277,10 @@ const findRelevantAO = (advancedOrders, symbol) => {
 	});
 	return { tp, sl };
 };
+
+const getTimestamp = (unixTs) => {
+  const pad = (n,s=2) => (`${new Array(s).fill(0)}${n}`).slice(-s);
+  const d = new Date(unixTs);
+  
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} ${pad(d.getFullYear(),4)}/${pad(d.getMonth()+1)}/${pad(d.getDate())}`;
+}

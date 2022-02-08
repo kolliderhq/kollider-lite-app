@@ -49,7 +49,6 @@ export const tradingSlice = createSlice({
 			state.positions[action.payload.symbol] = action.payload.data;
 			//	change only on quantity change
 			if (state.positions[action.payload.symbol]?.quantity !== action.payload.data.quantity)
-				console.log('positionData change');
 			state.positionChange = {
 				...state.positionChange,
 				[action.payload.symbol]: state.positionChange[action.payload.symbol] + 1,
@@ -59,8 +58,6 @@ export const tradingSlice = createSlice({
 			state.positions[action.payload].quantity = '0';
 		},
 		setAdvancedOrder: (state, action: PayloadAction<{data: AdvancedOrderTemplate}>) => {
-			console.log("FUUUUUUUUUUUUUUUCCCCCK")
-			console.log(action.payload.data)
 			state.advancedOrders = {...state.advancedOrders, [action.payload.data.orderId]: action.payload.data}
 		},
 		deleteAdvancedOrder: (state, action: PayloadAction<{orderId}>) => {
@@ -69,7 +66,6 @@ export const tradingSlice = createSlice({
 			// } else {
 			// 	delete state.advancedOrders[action.payload.symbol].sl;
 			// }
-			console.log("Deleting AO ----------->>")
 			let newState = {...state}
 			delete newState.advancedOrders[action.payload.orderId];
 			state = newState;

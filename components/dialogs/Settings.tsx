@@ -2,17 +2,26 @@ import React from 'react';
 
 import cn from 'clsx';
 
-import { setOnlyWeblnIfEnabled, setWeblnAutoWithdraw } from 'contexts';
+import { defaultLocalStore, setOnlyWeblnIfEnabled, setWeblnAutoWithdraw } from 'contexts';
 import { useAppDispatch, useAppSelector } from 'hooks';
 
 export const SettingsDialog = () => {
 	const dispatch = useAppDispatch();
 	const { weblnAutoWithdraw, onlyWeblnIfEnabled } = useAppSelector(state => state.settings);
 
+	const handleClearCache = React.useCallback(() => {
+		defaultLocalStore.clearAll();
+		window.location.reload();
+	}, []);
 	return (
 		<div className="w-full h-full mt-5">
 			<h2 className="text-center text-2xl xs:text-3xl">Settings</h2>
 			<section className="container-spacious container-children-bottom-border mt-5">
+				<button
+					onClick={handleClearCache}
+					className="px-4 py-2 my-2 border-yellow-300 border rounded-md hover:opacity-80">
+					<p>Clear All App Data</p>
+				</button>
 				<SettingsSwitch
 					label={`Auto withdraw 100+ SATS with ${process.env.NEXT_PUBLIC_UMBREL === '1' ? 'Umbrel' : 'Webln'}`}
 					value={!!weblnAutoWithdraw}
@@ -48,16 +57,14 @@ const Switch = ({ value, onClick }: { value: boolean; onClick: () => void }) => 
 			data-cy="button-instant-toggle"
 			onClick={() => onClick()}
 			className={cn(
-				!!value ? 'bg-green-400' : 'bg-gray-600',
+				value ? 'bg-green-400' : 'bg-gray-600',
 				'relative w-11 h-6 rounded-full border border-gray-400 flex items-center justify-between cursor-pointer s-transition-all'
-			)}
-		>
+			)}>
 			<div
-				style={{ width: '24px', height: '24px', left: !!value ? '19px' : '-1px', top: '-1px' }}
+				style={{ width: '24px', height: '24px', left: value ? '19px' : '-1px', top: '-1px' }}
 				className={cn(
 					's-transition-all absolute rounded-full flex items-center justify-center bg-white border-gray-400 border'
-				)}
-			>
+				)}>
 				<div className="text-xs mr-0.25 px-2" />
 			</div>
 		</div>

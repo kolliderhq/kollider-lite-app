@@ -34,7 +34,7 @@ export interface CancelAdvancedOrderTemplate {
 export const makeOrder = (obj: OrderTemplate) => {
 	return {
 		quantity: Number(obj?.quantity),
-		leverage: obj?.leverage * 100,
+		leverage: Number((obj?.leverage * 100).toFixed(0)),
 		order_type: 'Market',
 		margin_type: 'Isolated',
 		// price: obj?.price ? Number(multiply(obj?.price, Math.pow(10, obj?.priceDp))) : 1,

@@ -63,7 +63,6 @@ export class Processor {
 				.catch(ex => {
 					//	error handling that should only happen while developing
 					console.error('error while processing process', ex);
-					console.log(process);
 					this.forceStop();
 					return;
 				});

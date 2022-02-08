@@ -74,7 +74,7 @@ export default function Home() {
 					</section>
 				</div>
 
-				<div className="pb-10 sm:fixed sm:w-full sm:bottom-0 sm:left-0">
+				<div className="pb-10 sm:fixed sm:w-full sm:bottom-0 sm:left-0 bg-gray-950">
 					<div className="sm:ml-2 sm:mr-2">
 						<BalanceInfo />
 						<UserInfo />
@@ -104,7 +104,7 @@ export default function Home() {
 					{selectedTab === TABS.ORDER && <OrderArea />}
 					{selectedTab === TABS.RANKS && <Leaderboard />}
 				</section>
-				<div className="pb-10">
+				<div className="pb-10 mb-12">
 					<BalanceInfo />
 					<UserInfo />
 				</div>

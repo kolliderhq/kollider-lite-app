@@ -50,7 +50,7 @@ export const DisplaySymbol = ({ asset, value, symbol }) => {
 							<span className="text-sm pr-1">$</span>
 							{formatNumber(markPrice)}
 						</span>
-						<span className={cn('text-sm font-mono tracking-tighter', getNumberColour(priceInc))}>{priceInc}%</span>
+						<span className={cn('text-sm font-mono tracking-tighter', getNumberColour( priceInc))}>{ priceInc}%</span>
 					</p>
 				) : (
 					<DefaultLoader wrapperClass="ml-10" loaderSize={24} />

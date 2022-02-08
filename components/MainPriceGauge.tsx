@@ -40,7 +40,7 @@ export function MainPriceGauge() {
 
 	const priceInc = React.useMemo(() => {
 		if (dayAgoPrice === 0 || isNil(dayAgoPrice)) return NaN;
-		return divide(minus(markPrice, dayAgoPrice, 7), divide(dayAgoPrice, 100, 7), 2);
+		return Math.floor(divide(minus(markPrice, dayAgoPrice, 7), divide(dayAgoPrice, 100, 7), 2) * 100) / 100;
 	}, [dayAgoPrice, markPrice]);
 
 	return (
@@ -53,7 +53,7 @@ export function MainPriceGauge() {
 					</div>
 					<div>
 						<span className={cn('text-2xl font-mono tracking-tighter mt-3', getNumberColour(priceInc))}>
-							{priceInc < 0 ? '- ' : '+ ' + roundDecimal(priceInc, 2)} % (24h)
+							{priceInc < 0 ? '- ' : '+ ' + priceInc} % (24h)
 						</span>
 					</div>
 				</>

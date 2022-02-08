@@ -56,7 +56,7 @@ export default function Home() {
 											<div className="text-xl h-12">
 												<MainPriceGauge />
 											</div>
-											<IndexPriceSparkLine height={400}/>
+											<IndexPriceSparkLine height={370}/>
 										</div>
 										<div className="flex">
 											<div className="mx-auto w-full">

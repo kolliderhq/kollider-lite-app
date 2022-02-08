@@ -26,6 +26,7 @@ class LocalStore {
 				this._currentStore.remove(key);
 			}
 		});
+		this.unset('settings');
 	}
 
 	/**

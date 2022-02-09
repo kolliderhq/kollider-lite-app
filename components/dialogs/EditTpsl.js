@@ -107,7 +107,7 @@ export const EditTpslDialog = ({ position, isOpen }) => {
 							isOpen(false);
 						}
 						if (slp) {
-							if ((existingSl && tpp !== applyDp(existingSl.price, priceDp)) || !existingSl) {
+							if ((existingSl && slp !== applyDp(existingSl.price, priceDp)) || !existingSl) {
 								let side = position.side === 'Bid' ? 'Ask' : 'Bid';
 								pureCreateTPSLOrder(
 									slp,

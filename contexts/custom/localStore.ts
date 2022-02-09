@@ -1,15 +1,32 @@
 import cookie from 'js-cookie';
+import each from 'lodash-es/each';
 import isObject from 'lodash-es/isObject';
-// eslint-disable-next-line prettier/prettier
-import store, { StoreAPI } from 'store2'; //	srsly wtf
+import keys from 'lodash-es/keys';
+import store, { StoreAPI } from 'store2';
 
-import { GENERAL } from '../../consts/misc/general';
+import { CONTEXTS } from 'consts';
+import { GENERAL } from 'consts/misc/general';
 
 class LocalStore {
 	private _currentStore: StoreAPI;
 	constructor(namespace = GENERAL.LOCAL_STORAGE_NAMESPACES.DEFAULT) {
 		this.get = this.get.bind(this);
 		this._currentStore = store.namespace(namespace);
+	}
+
+	/**
+	 * @desc Clears all data from local store
+	 */
+	clearAll() {
+		const allKeys = keys(CONTEXTS.LOCAL_STORAGE);
+		each(allKeys, key => {
+			if (key.includes('USER')) {
+				this.cookieUnset(key);
+			} else {
+				this._currentStore.remove(key);
+			}
+		});
+		this.unset('settings');
 	}
 
 	/**

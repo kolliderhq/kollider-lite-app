@@ -3,10 +3,12 @@ import * as React from 'react';
 import empty from 'is-empty';
 import { useRouter } from 'next/router';
 
-import { CONTEXTS } from 'consts';
+import { API_NAMES, CONTEXTS } from 'consts';
 import { defaultLocalStore } from 'contexts/custom/localStore';
 import { setSymbolLoad, setUtmSource } from 'contexts/modules/misc';
 import { useAppDispatch, useAppSelector } from 'hooks/redux';
+
+import { postRequest } from '../../utils/api';
 
 // import { displayToast } from 'utils/toast';
 
@@ -37,9 +39,16 @@ export default function useQuerySideEffects() {
 	// remember utm_source and symbol
 	React.useEffect(() => {
 		if (history.pathname !== '/' || !history.isReady) return;
-		if (token === '' || empty(history.query)) return;
+		if (empty(history.query)) return;
 		const query = history.query;
-
+		if (query.migrate_account) {
+			const token = query.migrate_account as string;
+			migrateAccountFunc(token);
+			return;
+		}
+		if (token === '') {
+			return;
+		}
 		if (query?.symbol) {
 			alert(`applying short symbol - ${query.symbol}`);
 			dispatch(setSymbolLoad(query.symbol as string));
@@ -52,3 +61,8 @@ export default function useQuerySideEffects() {
 		history.replace('/', undefined, { shallow: true });
 	}, [history, dispatch, token, userType]);
 }
+
+const migrateAccountFunc = async (token: string) => {
+	const res = await postRequest(API_NAMES.POST_MIGRATE_ACCOUNT, [], {}, { Authorization: token });
+	console.log(res.data);
+};

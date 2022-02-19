@@ -1,18 +1,40 @@
 import React from 'react';
 
 import cn from 'clsx';
+import { router } from 'next/client';
 import Img from 'next/image';
+import useSWR from 'swr';
 
 import { auth } from 'classes/Auth';
-import { DIALOGS, USER_TYPE } from 'consts';
+import { API_NAMES, DIALOGS, GENERAL, USER_TYPE } from 'consts';
 import { TABS } from 'consts';
 import { setDialog } from 'contexts/modules/layout';
 import { setTab } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { weblnConnectAttempt } from 'hooks/init/useWebln';
 
+import { fetcher, getSWROptions } from '../../utils/fetchers';
+
 export const Header = () => {
 	const dispatch = useAppDispatch();
+	const [requestLogin, setRequestLogin] = React.useState(false);
+	const userType = useAppSelector(state => state.user.data.type);
+
+	const { data } = useSWR(
+		requestLogin ? [API_NAMES.MIGRATE_ACCOUNT] : undefined,
+		getSWROptions(API_NAMES.MIGRATE_ACCOUNT)
+	);
+
+	React.useEffect(() => {
+		if (!data) return;
+		console.log(data);
+		// TODO : use the data to send the user to pro with query params
+		//	https://pro.kollider.xyz?migrate_account={token}
+		if (process.env.NODE_ENV === 'production')
+			window.open(`https://${GENERAL.URL_PROD}?migrate_account=${data.token}`, '_self');
+		else window.open(`http://pro.staging.kollider.internal?migrate_account=${data.token}`, '_self');
+	}, [data]);
+
 	const [currentDialog, loggedIn] = useAppSelector(state => [
 		state.layout.dialog,
 		state.user.data.token !== '' && state.user.data.type === USER_TYPE.PRO,
@@ -21,6 +43,18 @@ export const Header = () => {
 	const onClickLogin = () => {
 		dispatch(setDialog(DIALOGS.LOGIN));
 	};
+
+	const onClickToPro = React.useCallback(
+		e => {
+			e.preventDefault();
+			if (userType !== USER_TYPE.PRO) {
+				window.open(`https://${GENERAL.URL_PROD}`, '_self');
+				return;
+			}
+			setRequestLogin(true);
+		},
+		[userType]
+	);
 
 	return (
 		<div className="flex items-center justify-between w-full h-16 pb-4">
@@ -50,6 +84,7 @@ export const Header = () => {
 				<div className="flex h-full border-r border-gray-600 hidden sm:block">
 					<div className="m-auto mr-3 transition ease-in-out hover:-translate-y-1 hover:scale-110">
 						<a
+							onClick={onClickToPro}
 							className="m-auto mr-3 transition ease-in-out hover:-translate-y-1 hover:scale-110"
 							href="https://pro.kollider.xyz">
 							{' '}

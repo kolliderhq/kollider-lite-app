@@ -268,7 +268,7 @@ export const useGetMyUserData = () => {
 	const [userType, apiKey] = useAppSelector(state => [state.user.data.type, state.connection.apiKey]);
 	//	get username
 	const { data } = useSWR(
-		userType !== USER_TYPE.LIGHT ? [API_NAMES.USER_ACCOUNT, apiKey] : undefined,
+		userType === USER_TYPE.PRO ? [API_NAMES.USER_ACCOUNT, apiKey] : undefined,
 		getSWROptions(API_NAMES.USER_ACCOUNT)
 	);
 	return data as IUserAccount;

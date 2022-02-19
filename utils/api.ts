@@ -11,11 +11,11 @@ import { API } from '../consts/api';
 import { CustomError } from './error';
 
 export const postRequest = (...args) => {
-	const [apiName, params, bodyParams] = args;
+	const [apiName, params, bodyParams, headers = {}] = args;
 	const url = makeFetchUrl(apiName, ...params);
 	const body = bodyParamsValidation(apiName, bodyParams, API.API);
 	return axios
-		.post(url, body)
+		.post(url, body, { headers })
 		.then(res => {
 			const ret = apiRefiner(apiName, res.data);
 			if (ret?.errObj) {

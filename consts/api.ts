@@ -194,6 +194,24 @@ const API: I_API = {
 			base: END_POINTS.BACK,
 			stale: API_TIME.NONE,
 		},
+		MIGRATE_ACCOUNT: {
+			route: () => `/auth/account_migration`,
+			method: 'get',
+			base: END_POINTS.BACK,
+			stale: API_TIME.NONE,
+		},
+		POST_MIGRATE_ACCOUNT: {
+			route: () => `/auth/account_migration`,
+			method: 'post',
+			base: END_POINTS.BACK,
+			stale: API_TIME.NONE,
+			createBody: params => ({ ...params }),
+			customOptions: {
+				dedupingInterval: 0,
+				revalidateOnFocus: false,
+				revalidateOnMount: true,
+			},
+		},
 		MULTI_USER_DATA: {
 			route: () => `/users`,
 			method: 'post',
@@ -229,8 +247,7 @@ const API: I_API = {
 			allowNull: true,
 		},
 		GET_ORDERS: {
-			route: (symbol, start, end, limit) =>
-				`/orders?${applyOptionalParams({ start, end, symbol, limit}, true)}`,
+			route: (symbol, start, end, limit) => `/orders?${applyOptionalParams({ start, end, symbol, limit }, true)}`,
 			method: 'get',
 			base: END_POINTS.BACK,
 			stale: API_TIME.ONE_TIME,
@@ -238,7 +255,7 @@ const API: I_API = {
 		},
 		HISTORICAL_TRADES: {
 			route: (symbol, start, end, limit) =>
-				`/user/trades?${applyOptionalParams({ start, end, symbol, limit: 100}, true)}`,
+				`/user/trades?${applyOptionalParams({ start, end, symbol, limit: 100 }, true)}`,
 			method: 'get',
 			base: END_POINTS.BACK,
 			stale: API_TIME.SHORTEST,

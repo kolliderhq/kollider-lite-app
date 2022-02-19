@@ -116,8 +116,8 @@ interface ITRADE {
 	rpnl: number;
 	fees: number;
 	settlement_type: string;
-	side: string,
-	timestamp: number
+	side: string;
+	timestamp: number;
 }
 
 interface ITRADES {
@@ -127,26 +127,36 @@ export interface TRADES {
 	[symbol: string]: KeysToCamelCase<ITRADE>;
 }
 
+refiner.set(API_NAMES.MIGRATE_ACCOUNT, data => {
+	LOG(data, 'MIGRATE_ACCOUNT');
+	return camelCaseAllKeys(data);
+});
+
+refiner.set(API_NAMES.POST_MIGRATE_ACCOUNT, data => {
+	LOG(data, 'POST_MIGRATE_ACCOUNT');
+	return camelCaseAllKeys(data);
+});
+
 refiner.set(API_NAMES.HISTORICAL_TRADES, (data: ITRADES) => {
 	const dataArr = sort(data).desc(v => v.timestamp);
 	const trades = [];
 	// console.log('products data Array >>>>>', dataArr);
 	each(dataArr, v => {
 		trades.push({
-	symbol: v.symbol,
-	orderId: Number(v.order_id),
-	isMaker: v.is_maker,
-	isLiquidation: v.is_liquidation,
-	leverage: Number(v.leverage),
-	marginType: v.margin_type,
-	orderType: v.order_type,
-	price: Number(v.price),
-	quantity: Number(v.quantity),
-	rpnl: Number(v.rpnl),
-	fees: Number(v.fees),
-	settlementType: v.settlement_type,
-	side: v.side,
-	timestamp: Number(v.timestamp),
+			symbol: v.symbol,
+			orderId: Number(v.order_id),
+			isMaker: v.is_maker,
+			isLiquidation: v.is_liquidation,
+			leverage: Number(v.leverage),
+			marginType: v.margin_type,
+			orderType: v.order_type,
+			price: Number(v.price),
+			quantity: Number(v.quantity),
+			rpnl: Number(v.rpnl),
+			fees: Number(v.fees),
+			settlementType: v.settlement_type,
+			side: v.side,
+			timestamp: Number(v.timestamp),
 		});
 	});
 	LOG2(trades, 'TRADES');

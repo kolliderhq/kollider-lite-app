@@ -5,6 +5,7 @@
 
 import React from 'react';
 
+import capitalize from 'lodash-es/capitalize';
 import each from 'lodash-es/each';
 import { v4 as uuidv4, v4 } from 'uuid';
 
@@ -78,7 +79,15 @@ class Auth {
 			processFunc: logOutFunc,
 		});
 	}
+
+	public migrateUser(migrateKey: string) {
+		this._processor.requestProcess({
+			processFunc: () => migrateUserProcessFunc(migrateKey),
+		});
+	}
 }
+
+const migrateUserProcessFunc = (key: string) => {};
 
 const proUserLoginProcessFunc = data => {
 	storeDispatch(setDialog(DIALOGS.NONE));

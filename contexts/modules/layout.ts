@@ -8,6 +8,7 @@ interface InitLayout {
 	selectedTab: TABS;
 	selectedTableTab: TABLE_TABS,
 	editingLeverage: boolean;
+	isMaintenance: boolean;
 }
 
 const initialState: InitLayout = {
@@ -16,6 +17,7 @@ const initialState: InitLayout = {
 	selectedTab: TABS.ORDER,
 	selectedTableTab: TABLE_TABS.POSITIONS,
 	editingLeverage: false,
+	isMaintenance: false,
 };
 
 export const layoutSlice = createSlice({
@@ -47,9 +49,12 @@ export const layoutSlice = createSlice({
 		setEditLeverage: (state, action: PayloadAction<boolean>) => {
 			state.editingLeverage = action.payload;
 		},
+		setIsMaintenance: (state, action: PayloadAction<boolean>) => {
+			state.isMaintenance = action.payload
+		}
 	},
 });
 
-export const { setDialog, setDialogClose, setPopup, setTab, setPopupClose, setEditLeverage, setTableTab } = layoutSlice.actions;
+export const { setDialog, setDialogClose, setPopup, setTab, setPopupClose, setEditLeverage, setTableTab, setIsMaintenance } = layoutSlice.actions;
 
 export default layoutSlice.reducer;

@@ -20,6 +20,7 @@ import { useUmbrel } from 'hooks/init/useUmbrel';
 import { useWebln } from 'hooks/init/useWebln';
 import { useAppSelector } from 'hooks/redux';
 import { useStatusChecker } from 'hooks/useStatusChecker';
+import useMaintenance from 'hooks/init/useMaintenance';
 
 export const DataInit = () => {
 	const [loaded, setLoaded] = React.useState(false);
@@ -29,6 +30,7 @@ export const DataInit = () => {
 
 	useGetMiscData();
 	useStatusChecker();
+	useMaintenance();
 
 	const afterhydration = React.useMemo(() => {
 		if (!loaded) return;

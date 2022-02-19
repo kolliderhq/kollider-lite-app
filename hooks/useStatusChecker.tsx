@@ -8,11 +8,15 @@ import { useAppDispatch } from 'hooks/redux';
 import { LOG5 } from 'utils/debug';
 import { getSWROptions, simpleFetch } from 'utils/fetchers';
 import { getMsFromNow } from 'utils/time';
+import { setIsMaintenance } from 'contexts/modules/layout';
+import { setFlagsFromString } from 'v8';
 
 export function useStatusChecker() {
 	const dispatch = useAppDispatch();
 	const { data, error } = useSWR([API_NAMES.STATUS], getSWROptions(API_NAMES.STATUS));
-	const [nextMaintenance, status, msg] = [data?.nextMaintenance, data?.status, data?.msg];
+	// const [nextMaintenance, status, msg] = [data?.nextMaintenance, data?.status, data?.msg];
+	const [status, setStatus] = React.useState("Running")
+	const [message, setMessage] = React.useState("Running")
 
 	const { data: versionData } = useSWR([API_NAMES.CHECK_VERSION], simpleFetch, getSWROptions(API_NAMES.CHECK_VERSION));
 
@@ -24,36 +28,32 @@ export function useStatusChecker() {
 	}, [versionData]);
 
 	React.useEffect(() => {
-		if (!nextMaintenance || !status || status === 'Maintenance') return;
-		const localValue = defaultLocalStore.get(CONTEXTS.LOCAL_STORAGE.HIDE_MAINTENANCE);
-		if (localValue && getMsFromNow(localValue) < 0) return;
-		// displayToast(
-		// 	`${formatExactDate(nextMaintenance)}`,
-		// 	'warn',
-		// 	{
-		// 		autoClose: false,
-		// 		position: 'top-center',
-		// 	},
-		// 	'Maintenance Alert',
-		// 	true
-		// );
-	}, [nextMaintenance, status]);
+		if (!data) return
+		setStatus(data.status)
+		setMessage(data.msg)
+	}, [data])
 
 	const [running, setRunning] = React.useState(null);
 
 	//  refresh site if server reconnects
 	React.useEffect(() => {
 		if (status) {
-			dispatch(setServiceStatus({ status, msg }));
+			dispatch(setServiceStatus({ status, msg: message }));
 			if (status === 'Running') {
 				setRunning(true);
 				dispatch(setIsOnline(true));
+				dispatch(setIsMaintenance(false));
 			} else if (status === 'BetaTesting') {
 				setRunning(true);
 				dispatch(setIsOnline(true));
+				dispatch(setIsMaintenance(false));
 			} else if (status === 'ViewOnly') {
 				// displayToast('Kollider is in ViewOnly Mode', 'info');
 				dispatch(setIsOnline(false));
+				dispatch(setIsMaintenance(false));
+			} else if (status === 'Maintenance') {
+				// displayToast('Kollider is in ViewOnly Mode', 'info');
+				dispatch(setIsMaintenance(true));
 			} else {
 				dispatch(setIsOnline(false));
 				setRunning(false);
@@ -64,5 +64,5 @@ export function useStatusChecker() {
 			// displayToast(`Server is offline`, 'error', { position: 'top-right' }, 'Critical Error');
 			LOG5('Server status offline', 'Critical Error');
 		}
-	}, [status, msg, error, dispatch]);
+	}, [status, error, dispatch]);
 }

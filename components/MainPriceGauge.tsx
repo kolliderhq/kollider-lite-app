@@ -49,7 +49,7 @@ export function MainPriceGauge() {
 	}, [dayAgoPrice, markPrice]);
 
 	return (
-		<div className="w-full flex flex-col gap-2">
+		<div className="w-full flex flex-col gap-2 z-50">
 			{markPrice ? (
 				<>
 					<div className="flex">

@@ -53,10 +53,10 @@ export default function Home() {
 									}>
 									<div className="grid grid-rows-2 relative">
 										<div className="w-full">
-											<div className="text-xl h-12">
+											<div className="text-xl h-12 mb-12">
 												<MainPriceGauge />
 											</div>
-											<IndexPriceSparkLine height={370}/>
+											<IndexPriceSparkLine height={300}/>
 										</div>
 										<div className="flex">
 											<div className="mx-auto w-full">

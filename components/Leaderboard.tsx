@@ -75,12 +75,12 @@ export const Leaderboard = () => {
 				</div>
 			</div>
 			<LeaderboardInfo />
-			<div className="grid grid-rows-auto xs:grid-rows-1 grid-cols-1 xs:grid-cols-2 gap-2 w-full h-full">
+			<div className="flex flex-col w-full h-full">
 				<RankArea rank={myData.rank + 1} volume={myData.volume} data={mergedData} />
-				<section className="py-2">
+				<div className="mt-4">
 					<h5 className="text-center mb-2">Ranking by Volume</h5>
 					<LeaderboardTable data={mergedData} />
-				</section>
+				</div>
 			</div>
 		</div>
 	);
@@ -108,17 +108,72 @@ const LeaderboardInfo = () => {
 	return (
 		<div className="w-full flex items-center justify-center py-4">
 			<div className="p-3 border border-gray-200 rounded-xl">
-				<p className="text-xs text-gray-400 leading-tighter">
-					Rewards for the <span className="text-theme-main">top 3</span> traders with the Highest Volume.
+				<p className="col-span-2 text-gray-500 text-sm w-fit px-4 py-3 rounded-l mb-2 mx-auto">
+					Rewards for the top traders with the Highest Volume.
 					<br />
-					🥇 - <span className="text-gray-200">2,500,000 SATS</span>
+					<div className="flex flex-col w-full mt-2">
+						<div className="mx-auto">
+							<div className="">
+								<span aria-label="emoji" role="img" className="mr-3">
+									🥇
+								</span>
+								<span className="text-md">3,000,000 SATS</span>
+							</div>
+						</div>
+						<div className="grid grid-cols-2 mx-auto gap-8 mt-4 border-b pb-4">
+							<div>
+								<span aria-label="emoji" role="img" className="mr-3">
+									🥈
+								</span>
+								<span className="text-md">1,000,000 SATS</span>
+							</div>
+							<div>
+								<span aria-label="emoji" role="img" className="mr-3">
+									🥉
+								</span>
+								<span className="text-md">500,000 SATS</span>
+							</div>
+						</div>
+						<div className="grid grid-cols-2 mx-auto gap-4 mt-4">
+							<div>
+								<span className="mr-3 font-bold text-gray-300">4th</span>
+								<span className="text-md">100,000 SATS</span>
+							</div>
+
+							<div>
+								<span className="mr-3 font-bold text-gray-300">5th</span>
+								<span className="text-md">95,000 SATS</span>
+							</div>
+
+							<div>
+								<span className="mr-3 font-bold text-gray-300">6th</span>
+								<span className="text-md">80,000 SATS</span>
+							</div>
+
+							<div>
+								<span className="mr-3 font-bold text-gray-300">7th</span>
+								<span className="text-md">70,000 SATS</span>
+							</div>
+
+							<div>
+								<span className="mr-3 font-bold text-gray-300">8th</span>
+								<span className="text-md">60,000 SATS</span>
+							</div>
+
+							<div>
+								<span className="mr-3 font-bold text-gray-300">9th</span>
+								<span className="text-md">50,000 SATS</span>
+							</div>
+						</div>
+						<div className="flex mt-2">
+							<div className="mx-auto">
+								<span className="mr-3 text-gray-300">10th</span>
+								<span className="text-md">45,000 SATS</span>
+							</div>
+						</div>
+					</div>
 					<br />
-					🥈 - <span className="text-gray-300">1,500,000 SATS</span>
-					<br />
-					🥉 - <span className="text-gray-400">1,000,000 SATS</span>
-					<br />
-					Rewards are paid out at{' '}
-					<span className="text-gray-200 whitespace-nowrap">the 1st of every month at 00:00 UTC</span>.
+					Rewards are paid out at the 1st of every month at 00:00 UTC.
 				</p>
 			</div>
 		</div>
@@ -166,7 +221,7 @@ const RankArea = ({ rank, volume, data }: { rank: number; volume: string; data: 
 	const rankDisplay = rank <= 0 ? '-' : `${rank}`;
 	return (
 		<div className="h-full flex flex-col items-center justify-center">
-			<div className="px-5 xs:px-3 py-3 border rounded-lg border-theme-main s-shadow-theme border-opacity-75 flex flex-col items-center gap-2">
+			<div className="px-5 py-3 border rounded-lg border-theme-main s-shadow-theme border-opacity-75 flex flex-col items-center gap-2">
 				<RankDiff rank={rank} volume={volume} data={data}>
 					<div>
 						<p className="text-xl text-center mb-1">

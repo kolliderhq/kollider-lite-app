@@ -10,11 +10,13 @@ import { setDialogClose } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { fixed, multiply } from 'utils/Big';
 import { applyDp, roundDecimal } from 'utils/format';
+import { useMarkPrice } from 'hooks/useMarkPrice';
 
 export const EditTpslDialog = ({ position, isOpen }) => {
 	const dispatch = useAppDispatch();
 	const { symbolsAssets, symbolIndex, symbol, symbolsAssetsMap } = useSymbols();
 	const { priceDp, isInversePriced } = useSymbolData(position.symbol?position.symbol: null);
+	const markPrice = useMarkPrice(position.symbol)
 	const [tpp, setTpp] = useState(null);
 	const [slp, setSlp] = useState(null);
 	const [advancedOrders] = useAppSelector(state => [state.trading.advancedOrders]);
@@ -77,7 +79,7 @@ export const EditTpslDialog = ({ position, isOpen }) => {
 			</div>
 			<div className="p-4">
 				<div>{position.side === 'Bid' ? takeProfitInput() : stopLossInput()}</div>
-				<div className="my-4 text-center w-full text-xl">Entry ${position.entryPrice}</div>
+				<div className="my-4 text-center w-full text-xl">Current Price: ${markPrice}</div>
 				<div>{position.side === 'Bid' ? stopLossInput() : takeProfitInput()}</div>
 				<button
 					className={cn(

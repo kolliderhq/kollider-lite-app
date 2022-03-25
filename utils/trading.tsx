@@ -44,6 +44,7 @@ export const makeOrder = (obj: OrderTemplate) => {
 		ext_order_id: uuidv4(),
 		symbol: obj?.symbol,
 		timestamp: 0,
+		origin: "Lite",
 	};
 };
 
@@ -61,6 +62,7 @@ export const makeAdvancedOrder = (obj: AdvancedOrderTemplate) => {
 		timestamp: 0,
 		advanced_order_type: obj?.advancedOrderType,
 		trigger_price_type: obj?.triggerPriceType,
+		origin: "Lite",
 	};
 };
 

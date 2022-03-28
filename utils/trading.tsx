@@ -32,6 +32,12 @@ export interface CancelAdvancedOrderTemplate {
 }
 
 export const makeOrder = (obj: OrderTemplate) => {
+	let appOrigin;
+	if (process.env.NEXT_PUBLIC_UMBREL === '1') {
+		appOrigin = "UmbrelLite"
+	} else {
+		appOrigin = "Lite"
+	}
 	return {
 		quantity: Number(obj?.quantity),
 		leverage: Number((obj?.leverage * 100).toFixed(0)),
@@ -44,7 +50,7 @@ export const makeOrder = (obj: OrderTemplate) => {
 		ext_order_id: uuidv4(),
 		symbol: obj?.symbol,
 		timestamp: 0,
-		origin: "Lite",
+		origin: appOrigin,
 	};
 };
 

@@ -27,12 +27,13 @@ export function OrderInfo({ side }: { side: Side }) {
 	};
 
 	const askOrderValue = getOrderValue(bestBid, leverage, priceDp, quantity, symbol, contractSize);
+	const askNotionalValue = getOrderValue(bestBid, 1, priceDp, quantity, symbol, contractSize);
 	const [askData, setAskData] = React.useState<SideData>({} as SideData);
 	React.useEffect(() => {
 		setAskData({
 			margin: fixed(askOrderValue, 0),
 			orderValue: fixed(askOrderValue, 0),
-			fees: multiply(CURRENCY.TAKER_FEES, askOrderValue, 0),
+			fees: multiply(CURRENCY.TAKER_FEES, askNotionalValue, 0),
 			isInaccurate: bestAskAmount < Number(quantity),
 			liqPrice: bestBid
 				? fixed(
@@ -52,12 +53,13 @@ export function OrderInfo({ side }: { side: Side }) {
 		});
 	}, [askOrderValue, bestBid, bestAskAmount, quantity, leverage, fundingRate]);
 	const bidOrderValue = getOrderValue(bestAsk, leverage, priceDp, quantity, symbol, contractSize);
+	const bidNotionalValue = getOrderValue(bestAsk, 1, priceDp, quantity, symbol, contractSize);
 	const [bidData, setBidData] = React.useState<SideData>({} as SideData);
 	React.useEffect(() => {
 		setBidData({
 			margin: fixed(bidOrderValue, 0),
 			orderValue: fixed(bidOrderValue, 0),
-			fees: multiply(CURRENCY.TAKER_FEES, bidOrderValue, 0),
+			fees: multiply(CURRENCY.TAKER_FEES, bidNotionalValue, 0),
 			isInaccurate: bestBidAmount < Number(quantity),
 			liqPrice: bestAsk
 				? fixed(
@@ -103,10 +105,9 @@ interface SideData {
 export const getOrderValue = (price, leverage, priceDp, quantity, symbol, contractSize) => {
 	const actualPrice = applyDp(price ? price : 1, priceDp);
 	if (symbol === 'BTCUSD.PERP') {
-		const margin = getDollarsToSATS(quantity);
-		const div = divide(CURRENCY.SATS_PER_BTC, actualPrice, 10);
-		if (Number(margin) < Number(divide(div, leverage))) return divide(actualPrice, leverage, priceDp);
-		return minus(margin, mod(margin, divide(div, leverage)), priceDp);
+		const notionalValue = quantity / actualPrice * CURRENCY.SATS_PER_BTC
+		let realValue = notionalValue / leverage
+		return  realValue
 	}
 	const satContractPrice = multiply(actualPrice, contractSize);
 	const value = divide(

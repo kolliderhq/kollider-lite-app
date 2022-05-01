@@ -213,6 +213,7 @@ type TTradeLeaderboard = {
 	number_of_trades: number;
 	total_rpnl: number;
 	total_volume: number;
+	score: number;
 	uid: string;
 }[];
 

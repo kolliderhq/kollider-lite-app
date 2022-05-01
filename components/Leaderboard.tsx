@@ -52,7 +52,7 @@ export const Leaderboard = () => {
 			}
 			return ret;
 		});
-		return fastSort(merged).desc(user => user?.totalVolume);
+		return fastSort(merged).desc(user => user?.score);
 	}, [userData, leaderboardData]);
 
 	const [myData, setMyData] = React.useState({ rank: -1, volume: '0' });
@@ -62,13 +62,13 @@ export const Leaderboard = () => {
 	React.useEffect(() => {
 		if (!myUserData || empty(mergedData)) return;
 		const rank = mergedData.findIndex(v => v.username === myUsername);
-		const volume = fixed(mergedData[rank]?.totalVolume, 0);
+		const volume = fixed(mergedData[rank]?.score, 0);
 		setMyData({ rank, volume });
 	}, [myUsername, mergedData]);
 
 	return (
 		<div className="w-full">
-			<div className="flex flex-col justify-center items-center mt-2">
+			<div className="flex flex-col justify-center items-center">
 				<p className="text-sm text-gray-200 text-center sm:float-right leading-loose">Competition end time</p>
 				<div className="flex items-center">
 					<LeaderboardCountdown countdownEnd={end} />
@@ -78,18 +78,25 @@ export const Leaderboard = () => {
 			<div className="flex flex-col w-full h-full">
 				<RankArea rank={myData.rank + 1} volume={myData.volume} data={mergedData} />
 				<div className="mt-4">
-					<h5 className="text-center mb-2">Ranking by Volume</h5>
+					<h5 className="text-center mb-2">Ranking by Score</h5>
 					<LeaderboardTable data={mergedData} />
 				</div>
 			</div>
 		</div>
 	);
 };
+const floorModPad = (value, mod, pad) => {
+	return String(Math.floor(value) % mod).padStart(pad, '0');
+};
 
 const LeaderboardCountdown = ({ countdownEnd }) => {
 	const countdown = useCountdown(countdownEnd);
-	const time = dayjs.duration(countdown, 'millisecond').format('D-HH-mm-ss');
-	const [day, hour, minute, second] = time.split('-');
+	const duration = dayjs.duration(countdown, 'millisecond');
+	const day = floorModPad(duration.asDays(), 3650, 0);
+	const hour = floorModPad(duration.asHours(), 24, 2);
+	const minute = floorModPad(duration.asMinutes(), 60, 2);
+	const second = floorModPad(duration.asSeconds(), 60, 2);
+	// const [day, hour, minute, second] = time.split('-');
 	return (
 		<h4 className="flex items-center font-mono">
 			{day}
@@ -109,8 +116,16 @@ const LeaderboardInfo = () => {
 		<div className="w-full flex items-center justify-center py-4">
 			<div className="p-3 border border-gray-200 rounded-xl">
 				<p className="col-span-2 text-gray-500 text-sm w-fit px-4 py-3 rounded-l mb-2 mx-auto">
-					Rewards for the top traders with the Highest Volume.
-					<br />
+					<div className="flex flex-col">
+					<div className="text-2xl text-white m-auto">Streak Competition ⚡</div>
+							<div className="mt-2">
+								<span className="font-bold text-white">Score </span>= Sum(daily volume * Streak Multiplier that day)
+								<div className="mt-2">
+								The <span className="font-bold text-white">Streak Multiplier </span> starts with <span className="text-white font-bold">1</span> and increments by <span className="font-bold text-white">0.1 </span>every day, if you make <span className="text-white font-bold">at least one trade that day</span>. If you don't make a trade it resets to  1. To achieve this you have to trade every day for 31 days.	
+								Hence the max multiplier that anyone could get on day 31 is 3.
+								</div>
+							</div>	
+							</div>
 					<div className="flex flex-col w-full mt-2">
 						<div className="mx-auto">
 							<div className="">
@@ -144,37 +159,9 @@ const LeaderboardInfo = () => {
 								<span className="mr-3 font-bold text-gray-300">5th</span>
 								<span className="text-md">95,000 SATS</span>
 							</div>
-
-							<div>
-								<span className="mr-3 font-bold text-gray-300">6th</span>
-								<span className="text-md">80,000 SATS</span>
-							</div>
-
-							<div>
-								<span className="mr-3 font-bold text-gray-300">7th</span>
-								<span className="text-md">70,000 SATS</span>
-							</div>
-
-							<div>
-								<span className="mr-3 font-bold text-gray-300">8th</span>
-								<span className="text-md">60,000 SATS</span>
-							</div>
-
-							<div>
-								<span className="mr-3 font-bold text-gray-300">9th</span>
-								<span className="text-md">50,000 SATS</span>
-							</div>
-						</div>
-						<div className="flex mt-2">
-							<div className="mx-auto">
-								<span className="mr-3 text-gray-300">10th</span>
-								<span className="text-md">45,000 SATS</span>
-							</div>
 						</div>
 					</div>
-					<br />
-					Rewards are paid out at the 1st of every month at 00:00 UTC.
-				</p>
+					</p>
 			</div>
 		</div>
 	);
@@ -184,6 +171,7 @@ interface LeaderboardValue {
 	meanLeverage: number;
 	numberofTrades: number;
 	totalRpnl: number;
+	score: number;
 	totalVolume: number;
 	uid: string;
 	username: string;
@@ -208,7 +196,7 @@ const LeaderboardRow = ({ data, rank }: { data: LeaderboardValue; rank: number }
 				</li>
 				<li className="my-auto overflow-x-auto">
 					<p className="text-xs text-center">
-						{formatNumber(fixed(data?.totalVolume, 0))}
+						{formatNumber(fixed(data?.score, 0))}
 						<span className="pl-1 text-[10px]">SATS</span>
 					</p>
 				</li>
@@ -265,13 +253,13 @@ const RankDiff = ({
 		let above, below;
 		if (rank === 1) {
 			above = { rank: 0, diff: '0' };
-			below = { rank: 2, diff: abs(minus(data[1]?.totalVolume, volume)) };
+			below = { rank: 2, diff: abs(minus(data[1]?.score, volume)) };
 		} else if (rank === data.length) {
-			above = { rank: data.length - 1, diff: abs(minus(data[data.length - 2]?.totalVolume, volume)) };
+			above = { rank: data.length - 1, diff: abs(minus(data[data.length - 2]?.score, volume)) };
 			below = { rank: 0, diff: volume };
 		} else {
-			above = { rank: rank - 1, diff: abs(minus(data[rank - 2]?.totalVolume, volume)) };
-			below = { rank: rank + 1, diff: abs(minus(data[rank]?.totalVolume, volume)) };
+			above = { rank: rank - 1, diff: abs(minus(data[rank - 2]?.score, volume)) };
+			below = { rank: rank + 1, diff: abs(minus(data[rank]?.score, volume)) };
 		}
 		return [above, below];
 	}, [rank, data, volume]) as FixedLengthArray<[RankUser, RankUser]>;

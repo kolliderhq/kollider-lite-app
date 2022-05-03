@@ -42,18 +42,8 @@ export const MakeOrderDialog = ({ order, side, setIsOpen }: { order: Order; side
 };
 
 export const processOrder = (order: Order, side: Side, priceDp: number, symbol: string, isInversePriced: boolean) => {
-	let contractQuantity;
-	//	inverse price means dollar == quantity
-	if (isInversePriced) {
-		contractQuantity = Math.floor(Number(multiply(order.quantity, order.leverage)));
-	} else {
-		contractQuantity = order.quantity;
-	}
-	if (contractQuantity < 1) {
-		contractQuantity = 1;
-	}
-	console.log('processOrder', order, contractQuantity, side, priceDp, symbol);
-	pureCreateOrder(order, contractQuantity, side, priceDp, symbol);
+	console.log('processOrder', order, order.quantity, side, priceDp, symbol);
+	pureCreateOrder(order, order.quantity, side, priceDp, symbol);
 };
 
 export const pureCreateOrder = (order: Order, quantity: string, side: Side, priceDp: number, symbol: string) => {

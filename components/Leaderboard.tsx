@@ -121,7 +121,7 @@ const LeaderboardInfo = () => {
 							<div className="mt-2">
 								<span className="font-bold text-white">Score </span>= Sum(daily volume * Streak Multiplier that day)
 								<div className="mt-2">
-								The <span className="font-bold text-white">Streak Multiplier </span> starts with <span className="text-white font-bold">1</span> and increments by <span className="font-bold text-white">0.1 </span>every day, if you make <span className="text-white font-bold">at least one trade that day</span>. If you don't make a trade it resets to  1. To achieve this you have to trade every day for 31 days.	
+								The <span className="font-bold text-white">Streak Multiplier </span> starts with <span className="text-white font-bold">1</span> and increments by <span className="font-bold text-white">0.1 </span>every day, if you make <span className="text-white font-bold">at least one trade that day</span>. If you don't make a trade it resets to  1.	
 								Hence the max multiplier that anyone could get on day 31 is 3.
 								</div>
 							</div>	

@@ -7,8 +7,9 @@ import { CURRENCY } from 'consts/misc/currency';
 import { Side, askBidSelector, useOrderbookSelector } from 'contexts';
 import { useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { divide, fixed, minus, mod, multiply } from 'utils/Big';
-import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, limitNumber } from 'utils/format';
+import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, limitNumber, symbolToCurrencySymbol } from 'utils/format';
 import { calcLiquidationPriceFromMargin } from 'utils/liqPriceCalculate';
+import { SymbolsLoadedWrapper } from './wrappers/SymbolsLoadedWrapper';
 
 export function OrderInfo({ side }: { side: Side }) {
 	const [{ quantity, leverage }, fundingRates] = useAppSelector(state => [
@@ -83,11 +84,11 @@ export function OrderInfo({ side }: { side: Side }) {
 		<div className="w-full">
 			{side === Side.ASK ? (
 				<div className="border border-red-600 border-opacity-75 rounded-lg bg-gray-950 p-4">
-					<DisplayOrderData price={applyDp(bestBid, priceDp)} loaded={!!bestBid} data={askData} />
+					<DisplayOrderData price={applyDp(bestBid, priceDp)} loaded={!!bestBid} data={askData} symbol={symbol}/>
 				</div>
 			) : (
 				<div className="border border-green-600 border-opacity-75 rounded-lg bg-gray-950 p-4">
-					<DisplayOrderData price={applyDp(bestAsk, priceDp)} loaded={!!bestAsk} data={bidData} />
+					<DisplayOrderData price={applyDp(bestAsk, priceDp)} loaded={!!bestAsk} data={bidData} symbol={symbol}/>
 				</div>
 			)}
 		</div>
@@ -123,11 +124,13 @@ const DisplayOrderData = ({
 	data,
 	className = '',
 	price,
+	symbol,
 }: {
 	loaded: boolean;
 	data: SideData;
 	className?: string;
 	price: string;
+	symbol: string;
 }) => {
 	return (
 		<ul className={cn('grid grid-rows-auto gap-3', className)}>
@@ -136,13 +139,13 @@ const DisplayOrderData = ({
 					<li className="flex items-center justify-between">
 						<div>
 							<LabelledValue childClass="text-base" label={'Price'} innacurate={data.isInaccurate}>
-								<span className="pr-0.5 text-sm break-normal">$</span>
+								<span className="pr-0.5 text-sm break-normal">{symbolToCurrencySymbol(symbol)}</span>
 								{formatNumber(price)}
 							</LabelledValue>
 						</div>
 						<div className="text-right">
 							<LabelledValue childClass="text-base" label={'Liq. Price'} innacurate={data.isInaccurate}>
-								<span className="pr-0.5 text-sm break-normal">$</span>
+								<span className="pr-0.5 text-sm break-normal">{symbolToCurrencySymbol(symbol)}</span>
 								{formatNumber(limitNumber(data.liqPrice))}
 							</LabelledValue>
 						</div>
@@ -152,7 +155,7 @@ const DisplayOrderData = ({
 							{formatNumber(data.margin)}
 							<span className="pl-1 text-sm break-normal">SATS</span>
 							<span className="pl-2 text-sm">
-								{getSatsToDollar(data.margin) === '0.00' ? '>' : '≈'}${getSatsToDollar(data.margin)}
+								{getSatsToDollar(data.margin) === '0.00' ? '>' : '≈'}{symbolToCurrencySymbol(symbol)}{getSatsToDollar(data.margin)}
 							</span>
 						</LabelledValue>
 					</li>
@@ -161,7 +164,7 @@ const DisplayOrderData = ({
 							{formatNumber(data.fees)}
 							<span className="pl-1 text-sm break-normal">SATS</span>
 							<span className="pl-2 text-sm">
-								{getSatsToDollar(data.fees) === '0.00' ? '>' : '≈'}${getSatsToDollar(data.fees)}
+								{getSatsToDollar(data.fees) === '0.00' ? '>' : '≈'}{symbolToCurrencySymbol(symbol)}{getSatsToDollar(data.fees)}
 							</span>
 						</LabelledValue>
 					</li>

@@ -8,8 +8,9 @@ export const useMarkPrice = symbol => {
 	const { symbolData } = useSymbols();
 	const priceDp = symbolData[symbol]?.priceDp;
 	const markPriceObj = useAppSelector(state => state.prices.markPrices);
+	console.log(markPriceObj)
 	return React.useMemo(() => {
-		if (markPriceObj[symbol] === '' || !priceDp) return null;
+		if (markPriceObj[symbol] === '') return null;
 		return fixed(markPriceObj[symbol], priceDp);
 	}, [markPriceObj, symbol, priceDp]);
 };

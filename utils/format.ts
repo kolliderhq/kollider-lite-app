@@ -45,6 +45,20 @@ export const getNumberColour = (value: TBigInput): string => {
 	else return 'text-gray-100';
 };
 
+export const symbolToCurrencySymbol = (symbol: string) => {
+	if (symbol === "BTCUSD.PER") {
+		return "$"
+	} else if (symbol === "BTCEUR.PERP") {
+		return "€"
+	} else if (symbol === "ETHUSD.PERP") {
+		return "$"
+	} else if (symbol === "BTCGBP.PERP") {
+		return "£"
+	} else {
+		return "$"
+	}
+}
+
 export const setAmountStyle = (
 	amount: TBigInput,
 	sizeInt: number,

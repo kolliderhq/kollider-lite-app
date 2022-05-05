@@ -19,7 +19,7 @@ export const MakeOrderDialog = ({ order, side, setIsOpen }: { order: Order; side
 	return (
 		<div className="w-full h-full mt-5">
 			<div className="flex items-center w-full justify-center gap-2">
-				<Img width={32} height={32} src={symbolsAssets[symbolIndex]} />
+				<Img width={64} height={32} src={symbolsAssets[symbolIndex]} />
 				<h2 className={cn('text-center text-2xl xs:text-3xl leading-none')}>
 					<span className="leading-none pr-3">{side === Side.ASK ? 'Sell' : 'Buy'}</span>Order
 				</h2>

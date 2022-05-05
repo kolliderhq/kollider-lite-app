@@ -11,14 +11,14 @@ export function useSymbols() {
 	const { symbols, symbolIndex, symbolData } = useAppSelector(state => state.symbols);
 	const symbolsDisplay = React.useMemo(() => map(symbols, v => v.split('.')?.[0]), [symbols]);
 	const symbolsAssets = React.useMemo(
-		() => map(symbolsDisplay, v => UI.RESOURCES.getSymbol(v.substring(0, 3))),
+		() => map(symbolsDisplay, v => UI.RESOURCES.getSymbol(v.substring(0, 6))),
 		[symbolsDisplay]
 	);
 
 	const symbolsAssetsMap = React.useMemo(() => {
 		let m = {};
 		symbols.map(sym => {
-			m[sym] = UI.RESOURCES.getSymbol(sym.substring(0, 3))
+			m[sym] = UI.RESOURCES.getSymbol(sym.substring(0, 6))
 		})
 		return m
 	}, [symbols]);

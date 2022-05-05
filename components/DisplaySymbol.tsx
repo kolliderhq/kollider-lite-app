@@ -13,7 +13,7 @@ import { useSymbols } from 'hooks';
 import { useMarkPrice } from 'hooks/useMarkPrice';
 import { divide, minus } from 'utils/Big';
 import { getSWROptions } from 'utils/fetchers';
-import { formatNumber, getNumberColour } from 'utils/format';
+import { formatNumber, getNumberColour, symbolToCurrencySymbol } from 'utils/format';
 import { dispSymbol, timestampByInterval } from 'utils/scripts';
 
 export const DisplaySymbol = ({ asset, value, symbol }) => {
@@ -47,7 +47,7 @@ export const DisplaySymbol = ({ asset, value, symbol }) => {
 				{!isValidating && markPrice && !isNil(priceInc) ? (
 					<p className="flex flex-col items-end px-3">
 						<span className="text-xl tracking-tighter font-mono">
-							<span className="text-sm pr-1">$</span>
+							<span className="text-sm pr-1">{symbolToCurrencySymbol(symbol)}</span>
 							{formatNumber(markPrice)}
 						</span>
 						<span className={cn('text-sm font-mono tracking-tighter', getNumberColour( priceInc))}>{ priceInc}%</span>
@@ -58,7 +58,7 @@ export const DisplaySymbol = ({ asset, value, symbol }) => {
 			</div>
 			<div className="flex items-center mr-2">
 				<figure className="mr-2 flex items-center">
-					<Img width={28} height={28} src={asset} />
+					<Img width={56} height={28} src={asset} />
 				</figure>
 				<p className="text-base text-gray-100">{dispSymbol(value)}</p>
 			</div>

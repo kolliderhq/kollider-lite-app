@@ -11,7 +11,7 @@ import { useSymbols } from 'hooks';
 import { useMarkPrice } from 'hooks/useMarkPrice';
 import { minus } from 'utils/Big';
 import { getSWROptions } from 'utils/fetchers';
-import { formatNumber, roundDecimal } from 'utils/format';
+import { formatNumber, roundDecimal, symbolToCurrencySymbol } from 'utils/format';
 import { getNumberColour } from 'utils/format';
 import { timestampByInterval } from 'utils/scripts';
 
@@ -53,7 +53,7 @@ export function MainPriceGauge() {
 			{markPrice ? (
 				<>
 					<div className="flex">
-						<div className="font-mono">$</div>
+						<div className="font-mono">{symbolToCurrencySymbol(symbol)}</div>
 						<div className="text-6xl font-mono ml-2">{formatNumber(markPrice)}</div>
 					</div>
 					<div>

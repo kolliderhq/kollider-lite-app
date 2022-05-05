@@ -9,7 +9,7 @@ import { Side } from 'contexts';
 import { setDialogClose } from 'contexts/modules/layout';
 import { useAppDispatch, useAppSelector, useSymbolData, useSymbols } from 'hooks';
 import { fixed, multiply } from 'utils/Big';
-import { applyDp, roundDecimal } from 'utils/format';
+import { applyDp, roundDecimal, symbolToCurrencySymbol } from 'utils/format';
 import { useMarkPrice } from 'hooks/useMarkPrice';
 
 export const EditTpslDialog = ({ position, isOpen }) => {
@@ -74,12 +74,12 @@ export const EditTpslDialog = ({ position, isOpen }) => {
 	return (
 		<div className="my-auto w-full h-full mt-5">
 			<div className="flex items-center w-full justify-center gap-2">
-				<Img width={32} height={32} src={symbolsAssetsMap[position.symbol? position.symbol: 'BTCUSD.PERP']} />
+				<Img width={64} height={32} src={symbolsAssetsMap[position.symbol? position.symbol: 'BTCUSD.PERP']} />
 				<h2 className={cn('text-center text-2xl xs:text-3xl leading-none')}>Edit TPSL</h2>
 			</div>
 			<div className="p-4">
 				<div>{position.side === 'Bid' ? takeProfitInput() : stopLossInput()}</div>
-				<div className="my-4 text-center w-full text-xl">Current Price: ${markPrice}</div>
+				<div className="my-4 text-center w-full text-xl">Current Price: {symbolToCurrencySymbol(position.symbol)}{markPrice}</div>
 				<div>{position.side === 'Bid' ? stopLossInput() : takeProfitInput()}</div>
 				<button
 					className={cn(

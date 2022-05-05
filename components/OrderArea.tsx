@@ -15,7 +15,7 @@ import { useGetLiqPrice } from 'hooks/useGetLiqPrice';
 import { useMarkPrice } from 'hooks/useMarkPrice';
 import usePrevious from 'hooks/usePrevious';
 import { divide, multiply } from 'utils/Big';
-import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, limitNumber, optionalDecimal } from 'utils/format';
+import { applyDp, formatNumber, getDollarsToSATS, getSatsToDollar, limitNumber, optionalDecimal, symbolToCurrencySymbol } from 'utils/format';
 import { isPositiveInteger, isPositiveNumber, isWithinStringDecimalLimit } from 'utils/scripts';
 import { TOAST_LEVEL, displayToast } from 'utils/toast';
 import { WrapBaseDialog } from './dialogs';
@@ -23,7 +23,7 @@ import { WrapBaseDialog } from './dialogs';
 export const OrderArea = () => {
 	const dispatch = useAppDispatch();
 	const { bestAsk, bestBid } = useOrderbookSelector(askBidSelector);
-	const { priceDp } = useSymbolData();
+	const { priceDp, symbol } = useSymbolData();
 	const [showOrderConfirmationDialog, setShowOrderConfirmationDialog] = useState(false);
 
 	const [allowedIp, loggedIn, order, quantity] = useAppSelector(state => [
@@ -75,12 +75,13 @@ export const OrderArea = () => {
 			<div className="xs:col-span-3 xs:row-span-1 w-full">
 				<OrderInput />
 			</div>
-			<BuyButton onButtonClick={() => onButtonClick(Side.BID)} bestAsk={bestAsk} priceDp={priceDp} />
+			<BuyButton onButtonClick={() => onButtonClick(Side.BID)} bestAsk={bestAsk} priceDp={priceDp} symbol={symbol} />
 			<SellButton
 				onButtonClick={() => onButtonClick(Side.ASK)}
 				className="flex"
 				bestBid={bestBid}
 				priceDp={priceDp}
+				symbol={symbol}
 			/>
 		</section>
 	);
@@ -280,11 +281,13 @@ const SellButton = ({
 	onButtonClick,
 	bestBid,
 	priceDp,
+	symbol,
 	className,
 }: {
 	onButtonClick: () => void;
 	bestBid: string;
 	priceDp: number;
+	symbol: string;
 	className?: string;
 }) => {
 	const quantity = useAppSelector(state => state.orders.order.quantity);
@@ -312,7 +315,7 @@ const SellButton = ({
 			>
 				<p className="text-[10px] leading-none mb-0.5">Price</p>
 				<p className=" leading-none xs:leading-none text-base xs:text-lg">
-					{bestBid ? <>${formatNumber(applyDp(bestBid, priceDp))}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
+					{bestBid ? <>{symbolToCurrencySymbol(symbol)}{formatNumber(applyDp(bestBid, priceDp))}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
 				</p>
 			</div>
 			{quantity !== '' && (
@@ -320,7 +323,7 @@ const SellButton = ({
 					<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
 					<p className="leading-none xs:leading-none text-base xs:text-lg">
 						{bestBid ? (
-							<>${Number(liqPrice) > 0 || !isNaN(Number(liqPrice)) ? formatNumber(limitNumber(liqPrice)) : '-'}</>
+							<>{symbolToCurrencySymbol(symbol)}{Number(liqPrice) > 0 || !isNaN(Number(liqPrice)) ? formatNumber(limitNumber(liqPrice)) : '-'}</>
 						) : (
 							<DefaultLoader wrapperClass="h-5 pt-2" />
 						)}
@@ -335,11 +338,13 @@ const BuyButton = ({
 	onButtonClick,
 	bestAsk,
 	priceDp,
+	symbol,
 	className,
 }: {
 	onButtonClick: () => void;
 	bestAsk: string;
 	priceDp: number;
+	symbol: string;
 	className?: string;
 }) => {
 	const quantity = useAppSelector(state => state.orders.order.quantity);
@@ -370,7 +375,7 @@ const BuyButton = ({
 			>
 				<p className="text-[10px] leading-none mb-0.5">Price</p>
 				<p className=" leading-none xs:leading-none text-base xs:text-lg">
-					{bestAsk ? <>${formatNumber(applyDp(bestAsk, priceDp))}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
+					{bestAsk ? <>{symbolToCurrencySymbol(symbol)}{formatNumber(applyDp(bestAsk, priceDp))}</> : <DefaultLoader wrapperClass="h-5 pt-2" />}
 				</p>
 			</div>
 			{quantity !== '' && (
@@ -378,7 +383,7 @@ const BuyButton = ({
 					<p className="text-[10px] leading-none mb-0.5">Liq. Price</p>
 					<p className="leading-none xs:leading-none text-base xs:text-lg">
 						{bestAsk ? (
-							<>${Number(liqPrice) > 0 ? formatNumber(limitNumber(liqPrice)) : '-'}</>
+							<>{symbolToCurrencySymbol(symbol)}{Number(liqPrice) > 0 ? formatNumber(limitNumber(liqPrice)) : '-'}</>
 						) : (
 							<DefaultLoader wrapperClass="h-5 pt-2" />
 						)}

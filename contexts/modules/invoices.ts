@@ -12,6 +12,7 @@ interface InitState {
 	settlement: Nullable<Settlement>;
 	invoices: Record<string, Partial<OrderInvoice>>;
 	symbol: string; //	last symbol used
+	numberWithdrawalsRejected: number,
 }
 
 const initialState: InitState = {
@@ -19,6 +20,7 @@ const initialState: InitState = {
 	settlement: null,
 	invoices: {},
 	symbol: '',
+	numberWithdrawalsRejected: 0,
 };
 
 export const invoicesSlice = createSlice({
@@ -46,9 +48,12 @@ export const invoicesSlice = createSlice({
 			state.symbol = action.payload.symbol;
 			state.viewing = true;
 		},
+		setNumberWithdrawalsRejected: (state, action: PayloadAction<number>) => {
+			state.numberWithdrawalsRejected = action.payload
+		}
 	},
 });
 
-export const { setInitSymbols, setInvoiceSettled, setSettlement, setViewing, setNewInvoice } = invoicesSlice.actions;
+export const { setInitSymbols, setInvoiceSettled, setSettlement, setViewing, setNewInvoice, setNumberWithdrawalsRejected } = invoicesSlice.actions;
 
 export default invoicesSlice.reducer;

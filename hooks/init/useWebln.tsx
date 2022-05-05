@@ -94,11 +94,12 @@ const withdrawWebln = (inputAmount: TBigInput) => {
 };
 
 const useProcessAutoWithdrawWebln = () => {
-	const [isWeblnConnected, balances, weblnAutoWithdraw] = useAppSelector(state => [
+	const [isWeblnConnected, balances, weblnAutoWithdraw, numberWithdrawalsRejected] = useAppSelector(state => [
 		state.connection.isWeblnConnected,
 		state.trading.balances,
 		state.settings.weblnAutoWithdraw,
-	]) as FixedLengthArray<[boolean, Balances, number]>;
+		state.invoices.numberWithdrawalsRejected,
+	]) as FixedLengthArray<[boolean, Balances, number, number]>;
 	const cash = balances?.cash;
 
 	// throttles withdrawals for WEBLN_WITHDRAW_TIMEOUT_MS and checks if there were new changes to cash.
@@ -115,7 +116,7 @@ const useProcessAutoWithdrawWebln = () => {
 			ref.current.timeout = setTimeout(() => {
 				if (current !== ref.current.timestamp) return;
 				withdrawWebln(cash);
-			}, SETTINGS.LIMITS.WEBLN_WITHDRAW_TIMEOUT_MS);
+			}, SETTINGS.LIMITS.WEBLN_WITHDRAW_TIMEOUT_MS * Math.pow(2, numberWithdrawalsRejected));
 		} else {
 			//	cash was below the limit when requested
 			if (ref.current.timeout) clearTimeout(ref.current.timeout);

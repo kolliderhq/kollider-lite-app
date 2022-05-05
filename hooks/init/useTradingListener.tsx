@@ -15,6 +15,7 @@ import {
 	setAdvancedOrder,
 	deleteAdvancedOrder,
 	storeDispatch,
+	setNumberWithdrawalsRejected,
 } from 'contexts';
 import { setDialog, setPopupClose } from 'contexts/modules/layout';
 import { useAppSelector } from 'hooks/redux';
@@ -180,6 +181,12 @@ const tradingListener = (msg: any) => {
 		console.log('LIQUIDATION', msg.data);
 		// displayToast(<LiquidationToast data={msg.data} />, 'dark', { autoClose: 7000 }, 'Liquidation', true);
 	} else if (msg.type === TRADING_TYPES.WITHDRAWAL_REJECTION) {
+
+		const store = reduxStore.getState();
+		let numberWithdrawalsRejected = store.invoices.numberWithdrawalsRejected;
+		numberWithdrawalsRejected += 1;
+		storeDispatch(setNumberWithdrawalsRejected(numberWithdrawalsRejected));
+
 		displayToast(<p className="text-sm">Withdrawal Rejection</p>, {
 			type: 'dark',
 			level: TOAST_LEVEL.CRITICAL,

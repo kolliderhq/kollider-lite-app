@@ -121,8 +121,8 @@ const LeaderboardInfo = () => {
 							<div className="mt-2">
 								<span className="font-bold text-white">Score </span>= Sum(daily volume * Streak Multiplier that day)
 								<div className="mt-2">
-								The <span className="font-bold text-white">Streak Multiplier </span> starts with <span className="text-white font-bold">1</span> and increments by <span className="font-bold text-white">0.1 </span>every day, if you make <span className="text-white font-bold">at least one trade that day</span>. If you don't make a trade it resets to  1.	
-								Hence the max multiplier that anyone could get on day 31 is 3.
+								The <span className="font-bold text-white">Streak Multiplier </span> starts with <span className="text-white font-bold">1.0</span> and increments by <span className="font-bold text-white">0.067</span> every day, if you make <span className="text-white font-bold">at least one trade that day</span>. If you don't make a trade it resets to  1.	
+								Hence the max multiplier that anyone could get on day 31 is 3.01
 								</div>
 							</div>	
 							</div>
@@ -197,7 +197,6 @@ const LeaderboardRow = ({ data, rank }: { data: LeaderboardValue; rank: number }
 				<li className="my-auto overflow-x-auto">
 					<p className="text-xs text-center">
 						{formatNumber(fixed(data?.score, 0))}
-						<span className="pl-1 text-[10px]">SATS</span>
 					</p>
 				</li>
 			</ul>

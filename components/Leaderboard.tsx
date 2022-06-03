@@ -128,9 +128,10 @@ const LeaderboardInfo = () => {
 							<span className="text-white font-bold">at least one trade that day</span>. If you don't make a
 							trade it resets to 1. Hence the max multiplier that anyone could get on day 30 is 2.943. On top of
 							that there is a bonus for RPnL which is being added to the score. The bonus is equal to{' '}
-							<span className="font-bold text-white">sigmoid(total_rpnl / 1,000,000.0)</span> where{' '}
-							<span className="font-bold text-white">total_rpnl</span> is realised profit or loss during the
-							competition.
+							<span className="font-bold text-white">sigmoid(total_rpnl / 1,000,000.0) * total_volume</span> where{' '}
+							<span className="font-bold text-white">total_rpnl</span> and{' '}
+							<span className="font-bold text-white">total_volume</span> are realised profit or loss and volume
+							achieved during the competition respectively.
 						</div>
 					</div>
 					</div>

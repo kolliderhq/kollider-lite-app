@@ -29,7 +29,7 @@ export const useGetLiqPrice = (side: Side) => {
 	const liqPrice = calcLiquidationPriceFromMargin(
 		Number(applyDp(sideBest, priceDp)),
 		Number(fixed(sideOrderValue, 0)),
-		contractInfo.isInverse ? Number(multiply(quantity, leverage)) : Number(quantity),
+		quantity,
 		side === Side.ASK ? 'ask' : 'bid',
 		contractInfo.isInverse,
 		contractInfo.contractSize,

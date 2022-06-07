@@ -41,7 +41,7 @@ export function OrderInfo({ side }: { side: Side }) {
 						calcLiquidationPriceFromMargin(
 							Number(applyDp(bestBid, priceDp)),
 							Number(fixed(askOrderValue, 0)),
-							contractInfo.isInverse ? Number(multiply(quantity, leverage)) : Number(quantity),
+							quantity,
 							'ask',
 							contractInfo.isInverse,
 							contractInfo.contractSize,
@@ -67,7 +67,7 @@ export function OrderInfo({ side }: { side: Side }) {
 						calcLiquidationPriceFromMargin(
 							Number(applyDp(bestAsk, priceDp)),
 							Number(fixed(bidOrderValue, 0)),
-							contractInfo.isInverse ? Number(multiply(quantity, leverage)) : Number(quantity),
+							quantity,
 							'bid',
 							contractInfo.isInverse,
 							contractInfo.contractSize,

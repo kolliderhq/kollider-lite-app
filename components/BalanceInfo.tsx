@@ -15,7 +15,7 @@ import { umbrelWithdraw } from 'utils/umbrel';
 export const BalanceInfo = () => {
 	const dispatch = useAppDispatch();
 	const balances = useAppSelector(state => state.trading.balances);
-	const cash = fixed(balances.cash, 0);
+	const cash = fixed(balances.cash.SAT, 0);
 	const isUmbrel = process.env.NEXT_PUBLIC_UMBREL === '1';
 	return (
 		<div className="mt-3 gap-x-5 flex flex-wrap xs:flex-nowrap items-center justify-between">

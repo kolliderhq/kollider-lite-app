@@ -25,7 +25,7 @@ const initialState: InitState = {
 		['BTCUSD.PERP']: 0,
 	},
 	balances: {
-		cash: '0',
+		cash: {SAT: '0', KKP: '0'},
 		crossMargin: '0',
 		isolatedMargin: {},
 		orderMargin: {},

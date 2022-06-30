@@ -3,6 +3,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "cross-env NEXT_PUBLIC_BACK_ENV=dev NEXT_PUBLIC_DEBUG_MODE=1 PORT=3000 next dev",
+		"dev-local": "cross-env NEXT_PUBLIC_LOCAL_DEV=1 NEXT_PUBLIC_DEBUG_MODE=1 PORT=3000 next dev",
 		"dev:umbrel": "cross-env NEXT_PUBLIC_BACK_ENV=dev NEXT_PUBLIC_UMBREL=1 NEXT_PUBLIC_DEBUG_MODE=1 PORT=3000 next dev",
 		"build": "cross-env NEXT_PUBLIC_BACK_ENV=production next build",
 		"build:umbrel": "cross-env NEXT_PUBLIC_BACK_ENV=production NEXT_PUBLIC_UMBREL=1 next build",

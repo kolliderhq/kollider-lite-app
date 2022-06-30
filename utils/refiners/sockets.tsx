@@ -225,7 +225,7 @@ refiner.set(TRADING_TYPES.WITHDRAWAL_REJECTION, v => {
 // CHANNELS
 export interface RAW_BALANCES extends SocketMsgWrapper {
 	data: {
-		cash: string;
+		cash: {[currency: string]: string};
 		cross_margin: string;
 		isolated_margin: {
 			[symbol: string]: string;
@@ -237,7 +237,7 @@ export interface RAW_BALANCES extends SocketMsgWrapper {
 }
 
 export interface Balances {
-	cash: string;
+	cash: {[currency: string]: string};
 	crossMargin: string;
 	isolatedMargin: {
 		[symbol: string]: string;
@@ -252,7 +252,7 @@ refiner.set(CHANNELS.BALANCES, (balances: RAW_BALANCES) => {
 	return {
 		...balances,
 		data: {
-			cash: balances.data.cash,
+			cash: {SAT: balances.data.cash.SAT, KKT: balances.data.cash.KKT},
 			isolatedMargin: balances.data.isolated_margin,
 			orderMargin: balances.data.order_margin,
 			crossMargin: balances.data.cross_margin,

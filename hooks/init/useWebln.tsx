@@ -67,7 +67,7 @@ export const useWebln = () => {
 	React.useEffect(() => {
 		if (currentDialog !== DIALOGS.SETTLE_INVOICE) return;
 		if (!isWeblnConnected) return;
-		withdrawWebln(balances.cash);
+		withdrawWebln(balances.cash.SAT);
 	}, [currentDialog, balances]);
 };
 
@@ -100,7 +100,7 @@ const useProcessAutoWithdrawWebln = () => {
 		state.settings.weblnAutoWithdraw,
 		state.invoices.numberWithdrawalsRejected,
 	]) as FixedLengthArray<[boolean, Balances, number, number]>;
-	const cash = balances?.cash;
+	const cash = balances?.cash.SAT;
 
 	// throttles withdrawals for WEBLN_WITHDRAW_TIMEOUT_MS and checks if there were new changes to cash.
 	// Only withdraws after no changes in WEBLN_WITHDRAW_TIMEOUT_MS

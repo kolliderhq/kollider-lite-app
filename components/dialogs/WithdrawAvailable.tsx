@@ -20,7 +20,7 @@ export const WithdrawAvailableDialog = () => {
 
 	React.useEffect(() => {
 		if (amount || !balances) return;
-		setAmount(Math.floor(Number(balances?.cash)));
+		setAmount(Math.floor(Number(balances?.cash.SAT)));
 	}, [balances, amount]);
 
 	React.useEffect(() => {

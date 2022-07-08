@@ -117,23 +117,15 @@ const LeaderboardInfo = () => {
 			<div className="p-3 border border-gray-200 rounded-xl">
 				<p className="col-span-2 text-gray-500 text-sm w-fit px-4 py-3 rounded-l mb-2 mx-auto">
 					<div className="flex flex-col">
-					<div className="text-2xl text-white m-auto">Streak Competition ⚡</div>
-					<div className="mt-2">
-						<span className="font-bold text-white">Score </span>= Sum(daily volume * Streak Multiplier that day)
-						+ RPnL bonus
+						<div className="text-2xl text-white m-auto">Karma Competition ⚡</div>
 						<div className="mt-2">
-							The <span className="font-bold text-white">Streak Multiplier </span> starts with{' '}
-							<span className="text-white font-bold">1.0</span> and increments by{' '}
-							<span className="font-bold text-white">0.067</span> every day, if you make{' '}
-							<span className="text-white font-bold">at least one trade that day</span>. If you don't make a
-							trade it resets to 1. Hence the max multiplier that anyone could get on day 30 is 2.943. On top of
-							that there is a bonus for RPnL which is being added to the score. The bonus is equal to{' '}
-							<span className="font-bold text-white">sigmoid(total_rpnl / 1,000,000.0) * total_volume</span> where{' '}
-							<span className="font-bold text-white">total_rpnl</span> and{' '}
-							<span className="font-bold text-white">total_volume</span> are realised profit or loss and volume
-							achieved during the competition respectively.
+							<div className="mt-2">
+								The goal of this competition is to accumulate{' '}
+								<span className="text-white font-bold">as much Karma as possible</span>. Karma is awarded through either{' '}
+								<span className="text-white font-bold">winning challenges or through trading fees</span>. We pay 1 basis
+								point reward on trading fees paid. You'll earn 0.0001 Karma for every Sat spent on fees.
+							</div>
 						</div>
-					</div>
 					</div>
 					<div className="flex flex-col w-full mt-2">
 						<div className="mx-auto">
@@ -170,7 +162,7 @@ const LeaderboardInfo = () => {
 							</div>
 						</div>
 					</div>
-					</p>
+				</p>
 			</div>
 		</div>
 	);
@@ -204,9 +196,7 @@ const LeaderboardRow = ({ data, rank }: { data: LeaderboardValue; rank: number }
 					<p className="text-center">{getRankMedal(`${rank + 1}`)}</p>
 				</li>
 				<li className="my-auto overflow-x-auto">
-					<p className="text-xs text-center">
-						{formatNumber(fixed(data?.score, 0))}
-					</p>
+					<p className="text-xs text-center">{formatNumber(fixed(data?.score, 0))}</p>
 				</li>
 			</ul>
 		</li>

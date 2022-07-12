@@ -14,7 +14,6 @@ interface ConnectionState {
 	isWsAuthenticated: boolean;
 
 	isUmbrelConnected: boolean;
-	isUmbrelAuthenticated: boolean;
 
 	isWeblnConnected: Nullable<boolean>;
 }
@@ -31,7 +30,6 @@ const initialState: ConnectionState = {
 	isWsAuthenticated: false,
 
 	isUmbrelConnected: false,
-	isUmbrelAuthenticated: false,
 
 	isWeblnConnected: null,
 	// webln is removed - instead it is re-requested each time it is used
@@ -66,16 +64,12 @@ export const connectionSlice = createSlice({
 		setIsUmbrelConnected: (state, action: PayloadAction<boolean>) => {
 			state.isUmbrelConnected = action.payload;
 		},
-		setIsUmbrelAuthenticated: (state, action: PayloadAction<boolean>) => {
-			state.isUmbrelAuthenticated = action.payload;
-		},
 	},
 });
 
 export const {
 	setIsOnline,
 	setIsUmbrelConnected,
-	setIsUmbrelAuthenticated,
 	setApiKey,
 	setIsWsConnected,
 	setIsWsAuthenticated,

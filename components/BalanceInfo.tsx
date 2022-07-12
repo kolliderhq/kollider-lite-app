@@ -82,7 +82,7 @@ interface GetChannelBalanceResponse {
 
 const UmbrelBalance = () => {
 	const [isUmbrelUsable, localBalance] = useAppSelector(state => [
-		state.connection.isUmbrelAuthenticated && state.connection.isUmbrelConnected,
+		state.connection.isUmbrelConnected,
 		state.umbrel.localBalance,
 	]);
 	const [cash, setCash] = React.useState<string>();

@@ -260,7 +260,7 @@ async function registerAnonUser() {
  */
 const createAnonymousUser = () => {
 	const id = v4();
-	const password = id.slice(0, 15) + "K$"
+	const password = id.slice(0, 8) + "K$"
 	return {
 		username: 'username-' + id,
 		email: id + '@kollider.xyz',

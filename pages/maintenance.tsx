@@ -20,7 +20,7 @@ export default function Maintenance() {
 		<>
 			<NextSeo title="Maintenance" />
 			<section className="relative w-full h-full">
-				<figure className="absolute left-0 top-0 flex items-center my-3">
+				<figure className="absolute left-0 top-0 flex items-center my-3 ml-6">
 					<Img alt="logo" src="/assets/logos/kollider_icon_white.png" width={20} height={20} />
 					<div className="text-lg ml-2">Kollider Pro</div>
 				</figure>

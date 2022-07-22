@@ -29,8 +29,8 @@ const SocketStatus = () => {
 	const online = useAppSelector(state => state.connection.isOnline);
 	const ticker = useSafeInterval(1000);
 	React.useEffect(() => {
-		if (process.env.NEXT_PUBLIC_UMBREL === '1' && window.location.hostname !== "umbrel.local") {
-			alert("Kollider Lite only supports being loaded from umbrel.local:4243")
+		if (process.env.NEXT_PUBLIC_UMBREL === '1' && (window.location.hostname !== "umbrel.local" || window.location.hostname !== "citadel.local")) {
+			alert("Kollider Lite only supports being loaded from umbrel.local:4243 and citadel.local:4243")
 		}
 	}, [])
 	React.useEffect(() => {

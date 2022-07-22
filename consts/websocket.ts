@@ -26,7 +26,7 @@ export const SOCKET_END_POINTS = Object.freeze({ BACK: back });
 const UMBREL_URL = {
 	DEV: 'ws://localhost:8080',
 	// PROD: 'ws://localhost:8080',
-	PROD: 'ws://umbrel.local:4244',
+	PROD: 'ws://' + location.host + ':4244',
 };
 
 export const WS_UMBREL = {

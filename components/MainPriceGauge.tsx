@@ -32,7 +32,7 @@ export function MainPriceGauge() {
 		getSWROptions(API_NAMES.HISTORICAL_OHLC)
 	);
 	React.useEffect(() => {
-		if (!data || !priceDp) return;
+		if (!data || !priceDp && priceDp !== 0) return;
 		if (data?.data?.[0]) {
 			setDayAgoPrice(divide(getClosestOpen(data?.data), Math.pow(10, priceDp - 1), priceDp));
 		} else setDayAgoPrice(0);

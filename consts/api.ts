@@ -59,6 +59,9 @@ if (process.env.NEXT_PUBLIC_BACK_ENV === 'production') {
 			console[method] = noop;
 		}
 	})();
+}
+else if (process.env.NEXT_PUBLIC_LOCAL_DEV) {
+	back = 'http://localhost:8443';
 } else {
 	back = 'http://api.staging.kollider.internal/v1';
 }

@@ -13,13 +13,35 @@ export const Footer = () => {
 			<div className="w-full flex items-center z-80">
 				<TabSelect />
 			</div>
-			<div className="w-full flex items-center bg-gray-800 h-8 border-t border-gray-600 z-80">
-				<div className="max-w-sm min-w-xxxs mx-auto w-full flex items-center gap-5 sm:gap-10 px-5 sm:px-8">
-					<SocketStatus />
-					{process.env.NEXT_PUBLIC_UMBREL === '1' ? <UmbrelStatus /> : <WeblnStatus />}
+			<div className="w-full grid grid-cols-2 items-center bg-gray-800 h-8 border-t border-gray-600 z-80">
+				<div className='flex flex-row justify-start w-full'>
+					<div className="max-w-sm min-w-xxxs mx-auto w-full flex items-center gap-5 sm:gap-10 px-5 sm:px-8">
+						<SocketStatus />
+						{process.env.NEXT_PUBLIC_UMBREL === '1' ? <UmbrelStatus /> : <WeblnStatus />}
+					</div>
+				</div>
+				<div className='w-full flex flex-row justify-end'>
+					<Terms/>
 				</div>
 			</div>
 		</footer>
+	);
+};
+
+const Terms = () => {
+	return (
+		<div className="flex items-center flex-row text-xs divide-x divide-gray-600 mr-4">
+			<div
+				className="pr-2 cursor-pointer"
+				onClick={() => window.open('https://cdn.kollider.xyz/privacy/kollider_privacy_policy.html')}>
+				Privacy Policy
+			</div>
+			<div
+				className="pl-2 cursor-pointer"
+				onClick={() => window.open('https://cdn.kollider.xyz/tos/kollider_terms_of_service.html')}>
+				Terms of Service
+			</div>
+		</div>
 	);
 };
 

@@ -10,7 +10,7 @@ export const ContractInfoDialog = () => {
 
 	useEffect(() => {
 		if (!symbol) return
-		setBaseCurrency(symbol.substring(4, 6));
+		setBaseCurrency(symbol.substring(3, 6));
 	}, [symbol])
 
 	return (

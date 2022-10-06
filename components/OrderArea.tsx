@@ -203,7 +203,9 @@ const ContractsInput = () => {
 
 const DollarInput = () => {
 	const dispatch = useAppDispatch();
+	const { symbol } = useSymbols();
 	const [quantity, leverage] = useAppSelector(state => [state.orders.order.quantity, state.orders.order.leverage]);
+	const [baseCurrency, setBaseCurrency] = useState("");
 
 	//	convert SATS input to dollars
 	React.useEffect(() => {
@@ -211,6 +213,11 @@ const DollarInput = () => {
 		dispatch(setOrderQuantity(''));
 		// dispatch(setOrderQuantity(roundDecimal(getSatsToDollar(Number(quantity)), 1)));
 	}, []);
+
+	React.useEffect(() => {
+		if (!symbol) return
+		setBaseCurrency(symbol.substring(3, 6));
+	}, [symbol])
 
 	const tapHandler = useSwipeable({
 		onTap: () => {
@@ -229,7 +236,7 @@ const DollarInput = () => {
 						onClick={() => dispatch(setDialog(DIALOGS.CONTRACT_INFO))}
 						className="border border-theme-main rounded-lg px-2 py-1 flex items-center justify-center hover:opacity-80"
 					>
-						<p className="text-xs">USD</p>
+						<p className="text-xs">{baseCurrency}</p>
 					</button>
 				</div>
 				<input

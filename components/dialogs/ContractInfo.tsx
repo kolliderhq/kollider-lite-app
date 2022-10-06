@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import cn from 'clsx';
 
@@ -6,6 +6,12 @@ import { useSymbolData } from 'hooks';
 
 export const ContractInfoDialog = () => {
 	const { symbol, contractSize, isInversePriced, tickSize, maintenanceMargin, maxLeverage } = useSymbolData();
+	const [baseCurrency, setBaseCurrency] = useState("");
+
+	useEffect(() => {
+		if (!symbol) return
+		setBaseCurrency(symbol.substring(4, 6));
+	}, [symbol])
 
 	return (
 		<div className="w-full h-full mt-5">
@@ -19,7 +25,7 @@ export const ContractInfoDialog = () => {
 				</LabelledValue>
 				<LabelledValue label="Contract Size">
 					<p className="text-sm">
-						{contractSize} {isInversePriced ? 'USD : Contract' : 'SATS : USD'}
+						{contractSize} {isInversePriced ? `${baseCurrency} : Contract` : 'SATS : USD'}
 					</p>
 				</LabelledValue>
 				<LabelledValue label={'Tick Size'}>

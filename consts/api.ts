@@ -59,11 +59,10 @@ if (process.env.NEXT_PUBLIC_BACK_ENV === 'production') {
 			console[method] = noop;
 		}
 	})();
-}
-else if (process.env.NEXT_PUBLIC_LOCAL_DEV) {
+} else if (process.env.NEXT_PUBLIC_LOCAL_DEV) {
 	back = 'http://localhost:8443';
 } else {
-	back = 'http://api.staging.kollider.internal/v1';
+	back = 'https://api.staging.kollider.internal/v1';
 }
 
 const END_POINTS: Record<string, string> = Object.freeze({
@@ -232,6 +231,20 @@ const API: I_API = {
 			method: 'get',
 			base: END_POINTS.BACK,
 			stale: API_TIME.LONGER,
+		},
+		GET_COMPETITIONS: {
+			route: () => `/competitions`,
+			method: 'get',
+			base: END_POINTS.BACK,
+			stale: API_TIME.LONGER,
+			allowNull: true,
+		},
+		GET_LEADERBOARD: {
+			route: competitionId => `/leaderboard?competition_id=${competitionId}`,
+			method: 'get',
+			base: END_POINTS.BACK,
+			stale: API_TIME.LONGER,
+			allowNull: true,
 		},
 		HISTORICAL_MARK_PRICES: {
 			route: (symbol, intervalSize, start, end) =>

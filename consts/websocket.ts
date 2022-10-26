@@ -17,7 +17,7 @@ if (process.env.NEXT_PUBLIC_LOCAL_DEV === '1') {
 		back = 'wss://api.kollider.xyz/v1/ws/';
 		// back = 'ws://api.staging.kollider.internal/v1/ws/';
 	} else {
-		back = 'ws://api.staging.kollider.internal/v1/ws/';
+		back = 'wss://api.staging.kollider.internal/v1/ws/';
 	}
 }
 

@@ -240,6 +240,17 @@ refiner.set(API_NAMES.USER_ACCOUNT, (data: IUserAccount) => {
 	LOG(data, 'USER_ACCOUNT');
 	return { ...camelCaseAllKeys(data) };
 });
+
+refiner.set(API_NAMES.GET_COMPETITIONS, data => {
+	LOG(data, 'GET_COMPETITIONS');
+	return camelCaseAllKeys(data);
+});
+
+refiner.set(API_NAMES.GET_LEADERBOARD, data => {
+	LOG(data, 'GET_COMPETITIONS');
+	return camelCaseAllKeys(data);
+});
+
 type TUserData = {
 	uid: number;
 	username: string;

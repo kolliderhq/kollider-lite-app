@@ -25,22 +25,50 @@ import { IUserAccount } from '../utils/refiners/api';
 dayjs.extend(utc);
 
 export const Leaderboard = () => {
-	const [leaderboardData, end] = useGetLeaderboardData();
-
 	const [requestBody, setRequestBody] = React.useState({ uids: null });
 
-	React.useEffect(() => {
-		if (!leaderboardData) return;
-		setRequestBody(prevState => {
-			prevState.uids = map(leaderboardData, v => Number(v.uid));
-			return { ...prevState };
-		});
-	}, [leaderboardData]);
+	const [competitionIds, setCompetitionIds] = React.useState(null);
+	const [start, setStart] = React.useState(null);
+	const [end, setEnd] = React.useState(null);
+	const [rewards, setRewards] = React.useState([]);
+	const [description, setDescription] = React.useState('');
+	const [compName, setCompName] = React.useState('');
+
+	const { data: leaderboardData, isValidating: isLeaderboardDataValidating } = useSWR(
+		competitionIds ? [API_NAMES.GET_LEADERBOARD, competitionIds] : null,
+		getSWROptions(API_NAMES.GET_LEADERBOARD)
+	);
+
+	// React.useEffect(() => {
+	// 	if (!leaderboardData) return;
+	// 	setRequestBody(prevState => {
+	// 		prevState.uids = map(leaderboardData, v => Number(v.uid));
+	// 		return { ...prevState };
+	// 	});
+	// }, [leaderboardData]);
 
 	const { data: userData } = useSWR(
 		requestBody.uids ? [API_NAMES.MULTI_USER_DATA, GENERAL.DEFAULT.ARR, requestBody] : undefined,
 		getSWROptions(API_NAMES.MULTI_USER_DATA)
 	);
+
+	const { data: competitionsData, isValidating: isCompetionsDataValidating } = useSWR(
+		[API_NAMES.GET_COMPETITIONS, null],
+		getSWROptions(API_NAMES.GET_COMPETITIONS)
+	);
+
+	React.useEffect(() => {
+		if (!competitionsData) return;
+		if (competitionsData.competitions.length > 0) {
+			let comp = competitionsData.competitions[0];
+			setCompetitionIds(comp.id);
+			setStart(comp.startEpochMs);
+			setEnd(comp.endEpochMs);
+			setRewards(comp.rewards);
+			setDescription(comp.description);
+			setCompName(comp.name);
+		}
+	}, [competitionsData]);
 
 	const mergedData = React.useMemo(() => {
 		if (empty(userData) || empty(leaderboardData)) return GENERAL.DEFAULT.ARR;
@@ -69,22 +97,48 @@ export const Leaderboard = () => {
 	return (
 		<div className="w-full">
 			<div className="flex flex-col justify-center items-center">
-				<p className="text-sm text-gray-200 text-center sm:float-right leading-loose">Competition end time</p>
-				<div className="flex items-center">
-					<LeaderboardCountdown countdownEnd={end} />
+				<div className="text-3xl font-bold">{compName} ⚡</div>
+				<div className="mt-2 flex flex-col">
+					<p className="text-sm text-gray-200 text-center sm:float-right leading-loose">Competition end time</p>
+					<div className="flex items-center">
+						<LeaderboardCountdown countdownEnd={end} />
+					</div>
 				</div>
 			</div>
-			<LeaderboardInfo />
-			<div className="flex flex-col w-full h-full">
-				<RankArea rank={myData.rank + 1} volume={myData.volume} data={mergedData} />
-				<div className="mt-4">
-					<h5 className="text-center mb-2">Ranking by Score</h5>
-					<LeaderboardTable data={mergedData} />
+			<div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mt-4">
+				<div className="lg:col-span-3">
+					<div className="rounded-xl bg-gray-800 min-h-full">
+						<p className="col-span-2 text-gray-500 text-sm w-fit p-3 rounded-l mx-auto">
+							<div className="flex flex-col">
+								<div className="text-gray-500 font-bold">Description</div>
+								<div className="text-left text-white">{description}</div>
+							</div>
+						</p>
+					</div>
+				</div>
+				<div>
+					<div className="flex flex-col w-full text-left bg-gray-800 rounded-xl p-3 text-sm min-h-full">
+						<div className="text-gray-500 font-bold">Rewards</div>
+						{rewards.map((reward, idx) => (
+							<div className="">
+								<div className="">
+									<span aria-label="emoji" role="img" className="mr-3">
+										{idx + 1}.
+									</span>
+									<span className="text-md">{reward} SATS</span>
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+				<div className="lg:col-span-4">
+					<LeaderboardTable data={leaderboardData} />
 				</div>
 			</div>
 		</div>
 	);
 };
+
 const floorModPad = (value, mod, pad) => {
 	return String(Math.floor(value) % mod).padStart(pad, '0');
 };
@@ -111,63 +165,6 @@ const LeaderboardCountdown = ({ countdownEnd }) => {
 	);
 };
 
-const LeaderboardInfo = () => {
-	return (
-		<div className="w-full flex items-center justify-center py-4">
-			<div className="p-3 border border-gray-200 rounded-xl">
-				<p className="col-span-2 text-gray-500 text-sm w-fit px-4 py-3 rounded-l mb-2 mx-auto">
-					<div className="flex flex-col">
-						<div className="text-2xl text-white m-auto">Karma Competition ⚡</div>
-						<div className="mt-2">
-							<div className="mt-2">
-								The goal of this competition is to accumulate{' '}
-								<span className="text-white font-bold">as much Karma as possible</span>. Karma is awarded through either{' '}
-								<span className="text-white font-bold">winning challenges or through trading fees</span>. We pay 1 basis
-								point reward on trading fees paid. You'll earn 0.0001 Karma for every Sat spent on fees.
-							</div>
-						</div>
-					</div>
-					<div className="flex flex-col w-full mt-2">
-						<div className="mx-auto">
-							<div className="">
-								<span aria-label="emoji" role="img" className="mr-3">
-									🥇
-								</span>
-								<span className="text-md">3,000,000 SATS</span>
-							</div>
-						</div>
-						<div className="grid grid-cols-2 mx-auto gap-8 mt-4 border-b pb-4">
-							<div>
-								<span aria-label="emoji" role="img" className="mr-3">
-									🥈
-								</span>
-								<span className="text-md">1,000,000 SATS</span>
-							</div>
-							<div>
-								<span aria-label="emoji" role="img" className="mr-3">
-									🥉
-								</span>
-								<span className="text-md">500,000 SATS</span>
-							</div>
-						</div>
-						<div className="grid grid-cols-2 mx-auto gap-4 mt-4">
-							<div>
-								<span className="mr-3 font-bold text-gray-300">4th</span>
-								<span className="text-md">100,000 SATS</span>
-							</div>
-
-							<div>
-								<span className="mr-3 font-bold text-gray-300">5th</span>
-								<span className="text-md">95,000 SATS</span>
-							</div>
-						</div>
-					</div>
-				</p>
-			</div>
-		</div>
-	);
-};
-
 interface LeaderboardValue {
 	meanLeverage: number;
 	numberofTrades: number;
@@ -180,8 +177,13 @@ interface LeaderboardValue {
 
 const LeaderboardTable = ({ data }: { data: LeaderboardValue[] }) => {
 	return (
-		<div className="h-[125px] overflow-y-auto w-full grid grid-rows-auto grid-cols-1 p-2 border rounded-lg border-theme-main s-shadow-theme border-opacity-75">
-			<ul className="w-full">
+		<div className="h-[125px] overflow-y-auto flex flex-col w-full  p-2 border rounded-lg border-theme-main s-shadow-theme border-opacity-75 h-64">
+			<div className="grid grid-cols-3 border-b border-gray-800 pb-2">
+				<div>Rank</div>
+				<div>Username</div>
+				<div>Score</div>
+			</div>
+			<ul className="w-full flex">
 				{empty(data) ? <Loader /> : map(data, (v, i) => <LeaderboardRow key={i} data={v} rank={i} />)}
 			</ul>
 		</div>
@@ -191,12 +193,15 @@ const LeaderboardTable = ({ data }: { data: LeaderboardValue[] }) => {
 const LeaderboardRow = ({ data, rank }: { data: LeaderboardValue; rank: number }) => {
 	return (
 		<li className="w-full pt-1 pb-1 last:pb-0 border-b border-gray-600 last:border-b-0">
-			<ul className="grid gap-2 grid-cols-[15%,85%] mx-2">
+			<ul className="grid gap-2 grid-cols-3">
 				<li>
-					<p className="text-center">{getRankMedal(`${rank + 1}`)}</p>
+					<p className="text-left">{getRankMedal(`${rank + 1}`)}</p>
 				</li>
 				<li className="my-auto overflow-x-auto">
-					<p className="text-xs text-center">{formatNumber(fixed(data?.score, 0))}</p>
+					<p className="text-xs">{data?.username}</p>
+				</li>
+				<li className="my-auto overflow-x-auto">
+					<p className="text-xs">{formatNumber(fixed(data?.score, 0))}</p>
 				</li>
 			</ul>
 		</li>
@@ -206,10 +211,10 @@ const LeaderboardRow = ({ data, rank }: { data: LeaderboardValue; rank: number }
 const RankArea = ({ rank, volume, data }: { rank: number; volume: string; data: LeaderboardValue[] }) => {
 	const rankDisplay = rank <= 0 ? '-' : `${rank}`;
 	return (
-		<div className="h-full flex flex-col items-center justify-center">
-			<div className="px-5 py-3 border rounded-lg border-theme-main s-shadow-theme border-opacity-75 flex flex-col items-center gap-2">
+		<div className="h-full flex flex-col h-64">
+			<div className="px-5 py-3 border h-full rounded-lg border-theme-main s-shadow-theme border-opacity-75 flex flex-col items-center gap-2">
 				<RankDiff rank={rank} volume={volume} data={data}>
-					<div>
+					<div className="m-auto">
 						<p className="text-xl text-center mb-1">
 							Rank
 							<span className="pl-1.5">
@@ -319,6 +324,6 @@ const useGetLeaderboardData = () => {
 	const weekDay = dayjs().utc().day();
 	const start = dayjs().utc().startOf('month').valueOf();
 	const end = dayjs().utc().endOf('month').valueOf();
-	const { data } = useSWR([API_NAMES.TRADE_LEADERBOARD, null, start, end], getSWROptions(API_NAMES.TRADE_LEADERBOARD));
+	const { data } = useSWR([API_NAMES.GET_LEADERBOARD, null, start, end], getSWROptions(API_NAMES.GET_LEADERBOARD));
 	return [data, end];
 };

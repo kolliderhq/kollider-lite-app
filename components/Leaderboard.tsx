@@ -184,7 +184,7 @@ const LeaderboardTable = ({ data }: { data: LeaderboardValue[] }) => {
 				<div>Score</div>
 			</div>
 			<ul className="w-full">
-				{empty(data) ? <Loader /> : map(data, (v, i) => <LeaderboardRow key={i} data={v} rank={i} />)}
+				{empty(data) ? <Loader /> : map(data.reverse(), (v, i) => <LeaderboardRow key={i} data={v} rank={i} />)}
 			</ul>
 		</div>
 	);

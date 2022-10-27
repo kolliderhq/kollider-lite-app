@@ -183,7 +183,7 @@ const LeaderboardTable = ({ data }: { data: LeaderboardValue[] }) => {
 				<div>Username</div>
 				<div>Score</div>
 			</div>
-			<ul className="w-full flex">
+			<ul className="w-full">
 				{empty(data) ? <Loader /> : map(data, (v, i) => <LeaderboardRow key={i} data={v} rank={i} />)}
 			</ul>
 		</div>

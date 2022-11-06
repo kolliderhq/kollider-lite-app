@@ -7,7 +7,6 @@ import { baseSocketClient } from 'classes/SocketClient';
 import { baseUmbrelSocketClient } from 'classes/UmbrelSocketClient';
 import { API_NAMES, DIALOGS, MESSAGE_TYPES, SETTINGS, UMBREL_MESSAGE_TYPES, USER_TYPE, WS_CUSTOM_TYPES } from 'consts';
 import {
-	setIsUmbrelAuthenticated,
 	setIsUmbrelConnected,
 	setPaymentInTransit,
 	setViewing,
@@ -28,15 +27,8 @@ import { umbrelSendPayment, umbrelWithdraw } from 'utils/umbrel';
  */
 export function useUmbrel() {
 	const dispatch = useAppDispatch();
-	const isUmbrelAuthenticated = useAppSelector(state => state.connection.isUmbrelAuthenticated);
 
 	useUmbrelAutoLogin();
-
-	//	auto umbrel auth popup
-	React.useEffect(() => {
-		if (isUmbrelAuthenticated === true) return;
-		dispatch(setIsUmbrelAuthenticated(false));
-	}, [isUmbrelAuthenticated]);
 
 	React.useEffect(() => {
 		if (process.env.NEXT_PUBLIC_UMBREL !== '1') return;
@@ -47,7 +39,6 @@ export function useUmbrel() {
 			},
 			() => {
 				dispatch(setIsUmbrelConnected(false));
-				dispatch(setIsUmbrelAuthenticated(false));
 				baseUmbrelSocketClient.removeAnyEventListener(processUmbrelMsg);
 				displayToast('Umbrel Connection Disconnected', {
 					type: 'error',
@@ -65,7 +56,7 @@ const useUmbrelAutoLogin = () => {
 	const [loggedIn, apiKey, isUmbrelUsable] = useAppSelector(state => [
 		state.user.data.type === USER_TYPE.PRO,
 		state.connection.apiKey,
-		state.connection.isUmbrelConnected && state.connection.isUmbrelAuthenticated,
+		state.connection.isUmbrelConnected,
 	]);
 	const { data } = useSWR(
 		apiKey && isUmbrelUsable ? [API_NAMES.AUTH_LNURL, apiKey] : undefined,
@@ -145,7 +136,7 @@ const useUmbrelToProcessPayments = () => {
 
 const useProcessAutoWithdrawUmbrel = () => {
 	const [isUmbrelUsable, balances, weblnAutoWithdraw] = useAppSelector(state => [
-		state.connection.isUmbrelConnected && state.connection.isUmbrelAuthenticated,
+		state.connection.isUmbrelConnected,
 		state.trading.balances,
 		state.settings.weblnAutoWithdraw,
 	]) as FixedLengthArray<[boolean, Balances, number]>;

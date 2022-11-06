@@ -107,7 +107,7 @@ const WeblnStatus = () => {
 };
 
 const UmbrelStatus = () => {
-	const isUmbrelAvailable  = useAppSelector(state => state.connection.isUmbrelConnected && state.connection.isUmbrelAuthenticated);
+	const isUmbrelAvailable  = useAppSelector(state => state.connection.isUmbrelConnected);
 	console.log(isUmbrelAvailable)
 	return (
 		<div className="h-full flex items-center">

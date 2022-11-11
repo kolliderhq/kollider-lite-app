@@ -5,6 +5,7 @@ export const SLIDER: { PRESETS: Record<number, number[]>; MAX: number } = {
 		25: [1, 2, 3, 5, 10, 15, 20, 25],
 		20: [1, 2, 3, 5, 8, 10, 15, 20],
 		10: [1, 2, 3, 5, 6, 7, 8, 10],
+		5: [1, 2, 3, 4, 5],
 	},
 	MAX: 140,
 };

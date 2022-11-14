@@ -47,7 +47,12 @@ export const Terms = ({ setHasAcceptedTOC, setHasAcceptedPP, hasAcceptedTOC, has
 	};
 	return (
 		<div className="text-white">
-			<div className='w-46'>Please Accept our Privacy Policy and Terms of Service first.</div>
+
+							<div className="text-sm text-red-500">
+						<span className="font-bold">Attention: </span>By accepting the Terms of Service you're confirming that
+						you're not a resident of the United States of America.
+					</div>
+			<div className='w-46 mt-1'>Please Accept our Privacy Policy and Terms of Service first.</div>
 			<div className="flex items-center mb-4 mt-4">
 				{/* <input type="checkbox" onClick={() => console.log('click')} /> */}
 				<input
